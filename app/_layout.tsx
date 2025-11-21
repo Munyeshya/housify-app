@@ -8,20 +8,23 @@ import { AuthProvider, useAuth } from "../contexts/AuthContext";
 const queryClient = new QueryClient();
 
 // ---- AUTH GUARD ---- //
+import { useRootNavigationState } from "expo-router";
+
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
-  // Get current route safely
-  const current = segments?.[0];
+  // THIS is the real fix:
+  const navReady = useRootNavigationState();
 
-  // Public screens
+  // Router not ready → don't run any redirects
+  if (!navReady?.key) return null;
+
+  // Now safe:
+  const current = segments[0];
   const publicRoutes = ["signin", "signup"];
   const isPublic = publicRoutes.includes(current);
-
-  // Segments undefined on first render — wait 1 cycle
-  if (current === undefined) return null;
 
   if (!isAuthenticated && !isPublic) {
     router.replace("/signin");
