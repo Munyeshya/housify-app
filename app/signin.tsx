@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "../contexts/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -61,10 +62,16 @@ export default function SignInScreen() {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push("/signup")}>
-        <Text style={{ textAlign: "center", marginTop: 10 }}>
-          Don’t have an account? Sign Up
-        </Text>
+      <TouchableOpacity
+        onPress={async () => {
+          await AsyncStorage.clear();
+          alert("Storage cleared. Restart the app.");
+        }}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={{ textAlign: "center", color: "red" }}>
+          Reset Session (Dev Only)
+        </Text> 
       </TouchableOpacity>
     </View>
   );
