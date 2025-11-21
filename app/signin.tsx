@@ -93,7 +93,6 @@ export default function SignInScreen() {
         }}
         style={{ marginTop: 20 }}
       >
-        <Text style={{ textAlign: "center", color: "red" }}>Reset Session (Dev Only)</Text>
       </TouchableOpacity>
     </View>
   );
