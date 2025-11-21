@@ -13,20 +13,23 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
   const router = useRouter();
 
-  useEffect(() => {
-    const current = segments[0];
+  // Get the current route name (first segment)
+  const current = segments[0];
 
-    const isAuthPage =
-      current === "signin" || current === "signup";
+  // Public pages (no login required)
+  const publicRoutes = ["signin", "signup"];
 
-    if (!isAuthenticated && !isAuthPage) {
-      router.replace("/signin");
-    }
+  const isPublic = publicRoutes.includes(current);
 
-    if (isAuthenticated && isAuthPage) {
-      router.replace("/");
-    }
-  }, [isAuthenticated, segments]);
+  if (!isAuthenticated && !isPublic) {
+    router.replace("/signin");
+    return null;
+  }
+
+  if (isAuthenticated && isPublic) {
+    router.replace("/");
+    return null;
+  }
 
   return <>{children}</>;
 }
