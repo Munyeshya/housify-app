@@ -13,13 +13,15 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
   const router = useRouter();
 
-  // Prevent running before router knows where we are
-  const ready = segments.length > 0;
-  if (!ready) return null;
+  // Get current route safely
+  const current = segments?.[0];
 
-  const current = segments[0];
+  // Public screens
   const publicRoutes = ["signin", "signup"];
   const isPublic = publicRoutes.includes(current);
+
+  // Segments undefined on first render — wait 1 cycle
+  if (current === undefined) return null;
 
   if (!isAuthenticated && !isPublic) {
     router.replace("/signin");
