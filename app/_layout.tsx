@@ -13,12 +13,12 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
   const router = useRouter();
 
-  // Get the current route name (first segment)
+  // Prevent running before router knows where we are
+  const ready = segments.length > 0;
+  if (!ready) return null;
+
   const current = segments[0];
-
-  // Public pages (no login required)
   const publicRoutes = ["signin", "signup"];
-
   const isPublic = publicRoutes.includes(current);
 
   if (!isAuthenticated && !isPublic) {
