@@ -16,52 +16,65 @@ export default function SignUpScreen() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
-      <Text style={{ fontSize: 28, fontWeight: "bold", marginBottom: 20 }}>
-        Create Account
+    <View style={{ flex: 1, backgroundColor: "#FFFFFF", paddingHorizontal: 24, justifyContent: "center" }}>
+      
+      <Text style={{ fontSize: 32, fontWeight: "800", color: "#111", marginBottom: 6 }}>
+        Create your
+      </Text>
+      <Text style={{ fontSize: 32, fontWeight: "800", color: "#5271FF", marginBottom: 32 }}>
+        Account
       </Text>
 
       <TextInput
-        placeholder="Email"
-        autoCapitalize="none"
+        placeholder="Email address"
+        placeholderTextColor="#8a8a8a"
         value={email}
         onChangeText={setEmail}
+        autoCapitalize="none"
         style={{
           borderWidth: 1,
-          borderRadius: 8,
-          padding: 12,
-          marginBottom: 12,
+          borderColor: "#dcdcdc",
+          backgroundColor: "#fafafa",
+          borderRadius: 12,
+          padding: 14,
+          marginBottom: 14,
+          fontSize: 16,
         }}
       />
 
       <TextInput
         placeholder="Password"
+        placeholderTextColor="#8a8a8a"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
         style={{
           borderWidth: 1,
-          borderRadius: 8,
-          padding: 12,
-          marginBottom: 20,
+          borderColor: "#dcdcdc",
+          backgroundColor: "#fafafa",
+          borderRadius: 12,
+          padding: 14,
+          marginBottom: 24,
+          fontSize: 16,
         }}
       />
 
       <TouchableOpacity
         onPress={handleSignUp}
         style={{
-          backgroundColor: "black",
-          padding: 14,
-          borderRadius: 8,
+          backgroundColor: "#5271FF",
+          paddingVertical: 16,
+          borderRadius: 12,
+          marginBottom: 16,
         }}
       >
-        <Text style={{ color: "white", textAlign: "center", fontSize: 16 }}>
-          Sign Up
+        <Text style={{ color: "white", fontSize: 18, fontWeight: "700", textAlign: "center" }}>
+          Create Account
         </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push("/signin")}>
-        <Text style={{ textAlign: "center", marginTop: 10 }}>
+        <Text style={{ textAlign: "center", marginTop: 6, color: "#5271FF", fontSize: 15 }}>
           Already have an account? Sign In
         </Text>
       </TouchableOpacity>
