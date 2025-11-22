@@ -1,9 +1,17 @@
-import { View, Text } from "react-native";
+import AppHeader from "../../components/AppHeader";
+import ScreenContainer from "../../components/ScreenContainer";
+import { Text } from "react-native";
 
 export default function Settings() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 22 }}>Settings</Text>
-    </View>
+    <>
+      <AppHeader title="Settings" />
+
+      <ScreenContainer>
+        <Text style={{ fontSize: 20 }}>
+          Account & app settings will appear here.
+        </Text>
+      </ScreenContainer>
+    </>
   );
 }

@@ -1,9 +1,15 @@
-import { View, Text } from "react-native";
+import AppHeader from "../../components/AppHeader";
+import ScreenContainer from "../../components/ScreenContainer";
+import { Text } from "react-native";
 
 export default function Issues() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 22 }}>Issues</Text>
-    </View>
+    <>
+      <AppHeader title="Issues" />
+
+      <ScreenContainer>
+        <Text style={{ fontSize: 20 }}>Your issues will appear here.</Text>
+      </ScreenContainer>
+    </>
   );
 }

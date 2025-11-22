@@ -1,9 +1,17 @@
-import { View, Text } from "react-native";
+import AppHeader from "../../components/AppHeader";
+import ScreenContainer from "../../components/ScreenContainer";
+import { Text } from "react-native";
 
 export default function Payments() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 22 }}>Payments</Text>
-    </View>
+    <>
+      <AppHeader title="Payments" />
+
+      <ScreenContainer>
+        <Text style={{ fontSize: 20 }}>
+          Your rent payments will appear here.
+        </Text>
+      </ScreenContainer>
+    </>
   );
 }

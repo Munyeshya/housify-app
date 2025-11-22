@@ -1,9 +1,17 @@
-import { View, Text } from "react-native";
+import AppHeader from "../../components/AppHeader";
+import ScreenContainer from "../../components/ScreenContainer";
+import { Text } from "react-native";
 
 export default function Properties() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 22 }}>Properties</Text>
-    </View>
+    <>
+      <AppHeader title="Properties" />
+
+      <ScreenContainer>
+        <Text style={{ fontSize: 20 }}>
+          Your managed properties will appear here.
+        </Text>
+      </ScreenContainer>
+    </>
   );
 }
