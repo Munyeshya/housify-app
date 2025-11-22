@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function SignUpScreen() {
@@ -21,26 +21,28 @@ export default function SignUpScreen() {
       {/* Blue Header */}
       <View
         style={{
-          backgroundColor: "#3153ffff",
+          backgroundColor: "#5271FF",
           height: 220,
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        {/* Logo */}
+        {/* Real Logo */}
         <View
           style={{
-            width: 56,
-            height: 56,
-            borderRadius: 28,
+            width: 70,
+            height: 70,
+            borderRadius: 35,
             backgroundColor: "white",
             justifyContent: "center",
             alignItems: "center",
+            overflow: "hidden",
           }}
         >
-          <Text style={{ fontSize: 28, fontWeight: "800", color: "#3153ffff" }}>
-            U
-          </Text>
+          <Image
+            source={require("../assets/images/logo.png")}
+            style={{ width: 48, height: 48, resizeMode: "contain" }}
+          />
         </View>
 
         <Text
@@ -68,12 +70,8 @@ export default function SignUpScreen() {
       </View>
 
       {/* Card Section */}
-      <View
-        style={{
-          marginTop: -40,
-          padding: 20,
-        }}
-      >
+      <View style={{ marginTop: -40, padding: 20 }}>
+        
         {/* Google Button */}
         <TouchableOpacity
           style={{
@@ -145,7 +143,7 @@ export default function SignUpScreen() {
         <TouchableOpacity
           onPress={handleSignUp}
           style={{
-            backgroundColor: "#3153ffff",
+            backgroundColor: "#5271FF",
             paddingVertical: 16,
             borderRadius: 12,
             marginBottom: 16,
@@ -163,9 +161,9 @@ export default function SignUpScreen() {
           </Text>
         </TouchableOpacity>
 
-        {/* Switch to Sign In */}
+        {/* Switch */}
         <TouchableOpacity onPress={() => router.push("/signin")}>
-          <Text style={{ textAlign: "center", color: "#3153ffff", fontSize: 15 }}>
+          <Text style={{ textAlign: "center", color: "#5271FF", fontSize: 15 }}>
             Already have an account? Sign In
           </Text>
         </TouchableOpacity>
