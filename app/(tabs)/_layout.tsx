@@ -42,29 +42,29 @@ export default function TabsLayout() {
         }}
       />
 
-      {isLandlord && (
-        <Tabs.Screen
-          name="properties"
-          options={{
-            title: "Properties",
-            tabBarIcon: ({ color }) => (
-              <Feather name="home" size={24} color={color} />
-            ),
-          }}
-        />
-      )}
+      {/* LANDLORD TAB */}
+      <Tabs.Screen
+        name="properties"
+        options={{
+          title: "Properties",
+          tabBarIcon: ({ color }) => (
+            <Feather name="home" size={24} color={color} />
+          ),
+          href: isLandlord ? "/(tabs)/properties" : null, // hide from tenant
+        }}
+      />
 
-      {!isLandlord && (
-        <Tabs.Screen
-          name="payments"
-          options={{
-            title: "Payments",
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="payment" size={24} color={color} />
-            ),
-          }}
-        />
-      )}
+      {/* TENANT TAB */}
+      <Tabs.Screen
+        name="payments"
+        options={{
+          title: "Payments",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="payment" size={24} color={color} />
+          ),
+          href: !isLandlord ? "/(tabs)/payments" : null, // hide from landlord
+        }}
+      />
 
       <Tabs.Screen
         name="settings"
