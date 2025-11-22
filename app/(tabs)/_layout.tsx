@@ -2,38 +2,29 @@ import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 
 // ---- TYPES ---- //
 type TabItemProps = {
   focused: boolean;
   icon: React.ReactNode;
-  label: string;
 };
 
-// ---- CUSTOM TAB ITEM ---- //
-function TabItem({ focused, icon, label }: TabItemProps) {
+// ---- CUSTOM TAB ITEM (ICONS ONLY) ---- //
+function TabItem({ focused, icon }: TabItemProps) {
   return (
     <View
       style={{
-        flexDirection: "row",
         backgroundColor: focused ? "#ffffff" : "transparent",
-        paddingHorizontal: focused ? 16 : 10,
-        paddingVertical: focused ? 8 : 8,
-        borderRadius: 25,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 30,
         alignItems: "center",
         justifyContent: "center",
-        minWidth: focused ? 90 : 45,
-        gap: focused ? 8 : 0,
+        minWidth: 50,
       }}
     >
       {icon}
-
-      {focused && (
-        <Text style={{ color: "#5271FF", fontWeight: "700", fontSize: 14 }}>
-          {label}
-        </Text>
-      )}
     </View>
   );
 }
@@ -43,14 +34,14 @@ export default function TabsLayout() {
   const { user } = useAuth();
   const isLandlord = user?.role === "landlord";
 
-  if (!user) return null; // Prevent flicker
+  if (!user) return null;
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
 
-        // ---- FLOATING ROUNDED TAB BAR ---- //
+        // FLOATING ROUNDED TAB BAR
         tabBarStyle: {
           position: "absolute",
           bottom: 20,
@@ -71,7 +62,7 @@ export default function TabsLayout() {
 
         tabBarActiveTintColor: "#5271FF",
         tabBarInactiveTintColor: "#ffffff",
-        tabBarShowLabel: false,
+        tabBarShowLabel: false, // no labels
       }}
     >
       {/* HOME */}
@@ -85,11 +76,10 @@ export default function TabsLayout() {
               icon={
                 <AntDesign
                   name="home"
-                  size={20}
+                  size={22}
                   color={focused ? "#5271FF" : "#ffffff"}
                 />
               }
-              label="Home"
             />
           ),
         }}
@@ -106,17 +96,16 @@ export default function TabsLayout() {
               icon={
                 <Feather
                   name="alert-circle"
-                  size={20}
+                  size={22}
                   color={focused ? "#5271FF" : "#ffffff"}
                 />
               }
-              label="Issues"
             />
           ),
         }}
       />
 
-      {/* ---- LANDLORD ONLY: PROPERTIES ---- */}
+      {/* LANDLORD ONLY — PROPERTIES */}
       <Tabs.Screen
         name="properties"
         options={{
@@ -129,17 +118,16 @@ export default function TabsLayout() {
                 icon={
                   <Feather
                     name="home"
-                    size={20}
+                    size={22}
                     color={focused ? "#5271FF" : "#ffffff"}
                   />
                 }
-                label="Properties"
               />
             ) : null,
         }}
       />
 
-      {/* ---- TENANT ONLY: PAYMENTS ---- */}
+      {/* TENANT ONLY — PAYMENTS */}
       <Tabs.Screen
         name="payments"
         options={{
@@ -152,11 +140,10 @@ export default function TabsLayout() {
                 icon={
                   <MaterialIcons
                     name="payment"
-                    size={20}
+                    size={22}
                     color={focused ? "#5271FF" : "#ffffff"}
                   />
                 }
-                label="Payments"
               />
             ) : null,
         }}
@@ -173,11 +160,10 @@ export default function TabsLayout() {
               icon={
                 <Feather
                   name="settings"
-                  size={20}
+                  size={22}
                   color={focused ? "#5271FF" : "#ffffff"}
                 />
               }
-              label="Settings"
             />
           ),
         }}
