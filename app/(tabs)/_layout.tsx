@@ -1,8 +1,8 @@
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { View } from "react-native";
 import { useAuth } from "../../contexts/AuthContext";
+import { View } from "react-native";
 
 export default function TabsLayout() {
   const { user } = useAuth();
@@ -15,26 +15,38 @@ export default function TabsLayout() {
       screenOptions={{
         headerShown: false,
 
-        // ---- CLEAN WHITE TAB BAR ---- //
+        // ---- FLOATING BLUE ROUNDED TAB BAR ---- //
         tabBarStyle: {
-          backgroundColor: "#FFFFFF",
-          height: 80,
+          position: "absolute",
+          bottom: 20,
+          left: 20,
+          right: 20,
+          height: 85,
+          backgroundColor: "#3153FF",
+          borderRadius: 22,
+
+          // No top border
           borderTopWidth: 0,
-          elevation: 10,
+
+          // Shadow for floating effect
+          elevation: 8,
           shadowColor: "#000",
-          shadowOpacity: 0.06,
-          shadowOffset: { width: 0, height: -2 },
-          shadowRadius: 8,
+          shadowOpacity: 0.2,
+          shadowOffset: { width: 0, height: 4 },
+          shadowRadius: 10,
+
+          paddingBottom: 10,
         },
 
         tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 12,
           marginTop: 2,
+          color: "#ffffff",
         },
 
-        tabBarActiveTintColor: "#3153ffff",
-        tabBarInactiveTintColor: "#B0B0B0",
+        tabBarActiveTintColor: "#ffffff",
+        tabBarInactiveTintColor: "#E1E1E1",
       }}
     >
       {/* HOME */}
@@ -42,14 +54,12 @@ export default function TabsLayout() {
         name="home"
         options={{
           title: "Home",
-          tabBarIcon: ({ focused, color }) => (
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <AntDesign
-                name="home"
-                size={24}
-                color={focused ? "#3153ffff" : "#B0B0B0"}
-              />
-            </View>
+          tabBarIcon: ({ focused }) => (
+            <AntDesign
+              name="home"
+              size={24}
+              color={focused ? "#ffffff" : "#E1E1E1"}
+            />
           ),
         }}
       />
@@ -60,13 +70,11 @@ export default function TabsLayout() {
         options={{
           title: "Issues",
           tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Feather
-                name="alert-circle"
-                size={24}
-                color={focused ? "#3153ffff" : "#B0B0B0"}
-              />
-            </View>
+            <Feather
+              name="alert-circle"
+              size={24}
+              color={focused ? "#ffffff" : "#E1E1E1"}
+            />
           ),
         }}
       />
@@ -79,13 +87,11 @@ export default function TabsLayout() {
           href: isLandlord ? "/(tabs)/properties" : null,
           tabBarIcon: ({ focused }) =>
             isLandlord ? (
-              <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Feather
-                  name="home"
-                  size={24}
-                  color={focused ? "#3153ffff" : "#B0B0B0"}
-                />
-              </View>
+              <Feather
+                name="home"
+                size={24}
+                color={focused ? "#ffffff" : "#E1E1E1"}
+              />
             ) : null,
         }}
       />
@@ -98,13 +104,11 @@ export default function TabsLayout() {
           href: !isLandlord ? "/(tabs)/payments" : null,
           tabBarIcon: ({ focused }) =>
             !isLandlord ? (
-              <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <MaterialIcons
-                  name="payment"
-                  size={24}
-                  color={focused ? "#3153ffff" : "#B0B0B0"}
-                />
-              </View>
+              <MaterialIcons
+                name="payment"
+                size={26}
+                color={focused ? "#ffffff" : "#E1E1E1"}
+              />
             ) : null,
         }}
       />
@@ -115,13 +119,11 @@ export default function TabsLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Feather
-                name="settings"
-                size={24}
-                color={focused ? "#3153ffff" : "#B0B0B0"}
-              />
-            </View>
+            <Feather
+              name="settings"
+              size={24}
+              color={focused ? "#ffffff" : "#E1E1E1"}
+            />
           ),
         }}
       />
