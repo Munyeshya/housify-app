@@ -2,7 +2,9 @@ import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import CustomTabBar from "../CustomTabBar"; // IMPORTANT: custom bar outside tabs folder
+
+// MUST BE CORRECT PATH
+import CustomTabBar from "../CustomTabBar";
 
 export default function TabsLayout() {
   const { user } = useAuth();
@@ -12,33 +14,15 @@ export default function TabsLayout() {
 
   return (
     <Tabs
-      // Use custom floating tab bar wrapper
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-
-        // ACTIVE / INACTIVE ICON + LABEL COLORS
-        tabBarActiveTintColor: "#3153FF",  // white icons/labels on blue bar
-        tabBarInactiveTintColor: "#E1E1E1", // light grey icons/labels
-
-        // INTERNAL PADDING INSIDE THE FLOATING BAR
-        tabBarItemStyle: {
-          paddingVertical: 6,
-          paddingHorizontal: 10,
-        },
-
-        tabBarIconStyle: {
-          marginBottom: 2,
-        },
-
-        tabBarLabelStyle: {
-          paddingTop: 2,
-          fontSize: 12,
-          fontWeight: "600",
-        },
+        tabBarActiveTintColor: "#3153FF",
+        tabBarInactiveTintColor: "#8a8a8a",
+        tabBarShowLabel: true,
+        tabBarLabelStyle: { fontSize: 12 },
       }}
     >
-      {/* HOME */}
       <Tabs.Screen
         name="home"
         options={{
@@ -49,7 +33,6 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* ISSUES */}
       <Tabs.Screen
         name="issues"
         options={{
@@ -60,7 +43,6 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* LANDLORD ONLY */}
       <Tabs.Screen
         name="properties"
         options={{
@@ -72,19 +54,17 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* TENANT ONLY — FIXED BEHAVIOR */}
       <Tabs.Screen
         name="payments"
         options={{
           title: "Payments",
-          href: isLandlord ? null : undefined,  // FIXED: preserves alignment + hides correctly
+          href: isLandlord ? null : undefined,
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="payment" size={24} color={color} />
           ),
         }}
       />
 
-      {/* SETTINGS */}
       <Tabs.Screen
         name="settings"
         options={{
