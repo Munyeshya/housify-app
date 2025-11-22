@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -22,7 +21,7 @@ export default function SignInScreen() {
       {/* Blue Header */}
       <View
         style={{
-          backgroundColor: "#5271FF",
+          backgroundColor: "#3153ffff",
           height: 220,
           justifyContent: "center",
           alignItems: "center",
@@ -39,7 +38,7 @@ export default function SignInScreen() {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 28, fontWeight: "800", color: "#5271FF" }}>
+          <Text style={{ fontSize: 28, fontWeight: "800", color: "#3153ffff" }}>
             U
           </Text>
         </View>
@@ -152,7 +151,7 @@ export default function SignInScreen() {
         >
           <Text style={{ color: "#6b6b6b" }}>Remember me</Text>
           <TouchableOpacity>
-            <Text style={{ color: "#5271FF" }}>Forgot password?</Text>
+            <Text style={{ color: "#3153ffff" }}>Forgot password?</Text>
           </TouchableOpacity>
         </View>
 
@@ -160,7 +159,7 @@ export default function SignInScreen() {
         <TouchableOpacity
           onPress={handleSignIn}
           style={{
-            backgroundColor: "#5271FF",
+            backgroundColor: "#3153ffff",
             paddingVertical: 16,
             borderRadius: 12,
             marginBottom: 16,
@@ -180,7 +179,7 @@ export default function SignInScreen() {
 
         {/* Create account */}
         <TouchableOpacity onPress={() => router.push("/signup")}>
-          <Text style={{ textAlign: "center", color: "#5271FF", fontSize: 15 }}>
+          <Text style={{ textAlign: "center", color: "#3153ffff", fontSize: 15 }}>
             Don’t have an account? Sign Up
           </Text>
         </TouchableOpacity>

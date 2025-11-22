@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function SignUpScreen() {
@@ -21,7 +21,7 @@ export default function SignUpScreen() {
       {/* Blue Header */}
       <View
         style={{
-          backgroundColor: "#5271FF",
+          backgroundColor: "#3153ffff",
           height: 220,
           justifyContent: "center",
           alignItems: "center",
@@ -38,7 +38,7 @@ export default function SignUpScreen() {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 28, fontWeight: "800", color: "#5271FF" }}>
+          <Text style={{ fontSize: 28, fontWeight: "800", color: "#3153ffff" }}>
             U
           </Text>
         </View>
@@ -145,7 +145,7 @@ export default function SignUpScreen() {
         <TouchableOpacity
           onPress={handleSignUp}
           style={{
-            backgroundColor: "#5271FF",
+            backgroundColor: "#3153ffff",
             paddingVertical: 16,
             borderRadius: 12,
             marginBottom: 16,
@@ -165,7 +165,7 @@ export default function SignUpScreen() {
 
         {/* Switch to Sign In */}
         <TouchableOpacity onPress={() => router.push("/signin")}>
-          <Text style={{ textAlign: "center", color: "#5271FF", fontSize: 15 }}>
+          <Text style={{ textAlign: "center", color: "#3153ffff", fontSize: 15 }}>
             Already have an account? Sign In
           </Text>
         </TouchableOpacity>
