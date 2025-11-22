@@ -2,6 +2,8 @@ import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import CustomTabBar from "../CustomTabBar";
+
 
 export default function TabsLayout() {
   const { user } = useAuth();
@@ -11,41 +13,14 @@ export default function TabsLayout() {
 
   return (
     <Tabs
+      tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-
         tabBarActiveTintColor: "#3153FF",
         tabBarInactiveTintColor: "#8a8a8a",
-
-        // ---- FLOATING ROUNDED TAB BAR WITH 20PX SIDE SPACING ---- //
-        tabBarStyle: {
-          position: "absolute",
-          bottom: 20,
-
-          // *** This now works on iOS + Android + Web ***
-          left: 20,
-          right: 20,
-          width: "auto",
-          alignSelf: "center",
-
-          height: 75,
-          paddingTop: 10,
-          paddingBottom: 10,
-
-          backgroundColor: "#FFFFFF",
-          borderRadius: 22,
-          borderTopWidth: 0,
-
-          elevation: 10,
-          shadowColor: "#000",
-          shadowOpacity: 0.12,
-          shadowOffset: { width: 0, height: 2 },
-          shadowRadius: 8,
-
-          overflow: "hidden",
-        },
       }}
     >
+
       {/* HOME */}
       <Tabs.Screen
         name="home"
