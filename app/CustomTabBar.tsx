@@ -12,7 +12,7 @@ export default function CustomTabBar(props: BottomTabBarProps) {
         right: 20,
         height: 75,
 
-        backgroundColor: "#3153FF", // ← NEW BLUE BACKGROUND
+        backgroundColor: "#ffffffff", // ← NEW BLUE BACKGROUND
         borderRadius: 22,
         overflow: "hidden",
 

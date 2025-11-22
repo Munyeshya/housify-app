@@ -18,7 +18,7 @@ export default function TabsLayout() {
         headerShown: false,
 
         // ACTIVE / INACTIVE ICON + LABEL COLORS
-        tabBarActiveTintColor: "#FFFFFF",  // white icons/labels on blue bar
+        tabBarActiveTintColor: "#3153FF",  // white icons/labels on blue bar
         tabBarInactiveTintColor: "#E1E1E1", // light grey icons/labels
 
         // INTERNAL PADDING INSIDE THE FLOATING BAR
