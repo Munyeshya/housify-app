@@ -1,7 +1,6 @@
+import { BottomTabBar, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { View } from "react-native";
-import { BottomTabBar } from "@react-navigation/bottom-tabs";
 
 export default function CustomTabBar(props: BottomTabBarProps) {
   return (
@@ -10,16 +9,18 @@ export default function CustomTabBar(props: BottomTabBarProps) {
         position: "absolute",
         bottom: 20,
 
-        left: 20,   // ✔ Side spacing works now
-        right: 20,  // ✔ Side spacing works now
-
+        // Perfect floating width spacing
+        left: 20,
+        right: 20,
         height: 75,
-        borderRadius: 22,
-        backgroundColor: "#FFFFFF",
 
+        backgroundColor: "#3153FF",
+        borderRadius: 22,
         overflow: "hidden",
+
+        // Floating shadow
         elevation: 10,
-        shadowColor: "#000",
+        shadowColor: "#666666ff",
         shadowOpacity: 0.12,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 8,

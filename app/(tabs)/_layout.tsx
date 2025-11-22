@@ -4,7 +4,6 @@ import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import CustomTabBar from "../CustomTabBar";
 
-
 export default function TabsLayout() {
   const { user } = useAuth();
   const isLandlord = user?.role === "landlord";
@@ -16,11 +15,27 @@ export default function TabsLayout() {
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
+
         tabBarActiveTintColor: "#3153FF",
         tabBarInactiveTintColor: "#8a8a8a",
+
+        // Inner padding for icons & labels
+        tabBarItemStyle: {
+          paddingVertical: 6,
+          paddingHorizontal: 10,
+        },
+
+        tabBarIconStyle: {
+          marginBottom: 2,
+        },
+
+        tabBarLabelStyle: {
+          paddingTop: 2,
+          fontSize: 12,
+          fontWeight: "600",
+        },
       }}
     >
-
       {/* HOME */}
       <Tabs.Screen
         name="home"
@@ -55,12 +70,12 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* TENANT ONLY */}
+      {/* TENANT ONLY — FIXED BEHAVIOR */}
       <Tabs.Screen
         name="payments"
         options={{
           title: "Payments",
-          href: !isLandlord ? "/(tabs)/payments" : null,
+          href: isLandlord ? null : undefined, // FIXED: preserves proper alignment + hides when needed
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="payment" size={24} color={color} />
           ),
