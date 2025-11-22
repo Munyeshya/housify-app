@@ -1,56 +1,65 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AppHeader({ title }: { title: string }) {
-  const insets = useSafeAreaInsets(); // top notch safe area
+  const insets = useSafeAreaInsets();
 
   return (
     <View
       style={[
-        styles.headerContainer,
-        { paddingTop: insets.top + 15 } // dynamic safe-area + padding
+        styles.header,
+        { paddingTop: insets.top + 20 }
       ]}
     >
       <Text style={styles.title}>{title}</Text>
 
-      <TouchableOpacity style={styles.iconWrapper}>
+      <TouchableOpacity style={styles.icon}>
         <Feather name="bell" size={26} color="#fff" />
       </TouchableOpacity>
+
+      {/* The large bottom curve */}
+      <View style={styles.curveContainer}>
+        <View style={styles.curveShape} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    width: "100%",
-    backgroundColor: "#6322FF", // your purple/blue gradient color
+  header: {
+    backgroundColor: "#6322FF",
     paddingHorizontal: 20,
-    paddingBottom: 30,
-
-    // 👇 curved bottom shape
-    borderBottomLeftRadius: 35,
-    borderBottomRightRadius: 35,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-
-    // subtle shadow
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 }
+    paddingBottom: 50,   // ❤️ deeper header like screenshot
+    position: "relative",
   },
 
   title: {
-    color: "#fff",
-    fontSize: 28,
+    color: "white",
+    fontSize: 26,
     fontWeight: "700",
   },
 
-  iconWrapper: {
-    padding: 8,
-  }
+  icon: {
+    position: "absolute",
+    right: 20,
+    top: 50,
+  },
+
+  curveContainer: {
+    position: "absolute",
+    bottom: -40,   // ❤️ pulls curve down to create that “dip”
+    left: 0,
+    right: 0,
+    height: 80,
+    overflow: "hidden",
+  },
+
+  curveShape: {
+    flex: 1,
+    backgroundColor: "white",
+    borderTopLeftRadius: 45,   // ❤️ VERY LARGE radius
+    borderTopRightRadius: 45,  // ❤️ creates big soft curves
+  },
 });

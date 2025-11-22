@@ -16,7 +16,7 @@ import { useAuth } from "../contexts/AuthContext";
  * Sign In screen
  * - validates fields
  * - shows red message + shakes form-area (inputs + login button) when invalid
- * - uses design system colors (#3153ffff)
+ * - uses design system colors (#6322FF)
  */
 
 export default function SignInScreen() {
@@ -137,7 +137,7 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#FFFFFF" },
   header: {
-    backgroundColor: "#3153ffff",
+    backgroundColor: "#6322FF",
     height: 220,
     justifyContent: "center",
     alignItems: "center",
@@ -188,10 +188,10 @@ const styles = StyleSheet.create({
 
   rowRight: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 20 },
 
-  forgot: { color: "#3153ffff" },
+  forgot: { color: "#6322FF" },
 
-  primaryButton: { backgroundColor: "#3153ffff", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
+  primaryButton: { backgroundColor: "#6322FF", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
   primaryButtonText: { color: "white", textAlign: "center", fontSize: 18, fontWeight: "700" },
 
-  switchText: { textAlign: "center", color: "#3153ffff", fontSize: 15 },
+  switchText: { textAlign: "center", color: "#6322FF", fontSize: 15 },
 });

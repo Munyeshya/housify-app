@@ -113,7 +113,7 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#FFFFFF" },
   header: {
-    backgroundColor: "#3153ffff",
+    backgroundColor: "#6322FF",
     height: 220,
     justifyContent: "center",
     alignItems: "center",
@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
 
-  primaryButton: { backgroundColor: "#3153ffff", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
+  primaryButton: { backgroundColor: "#6322FF", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
   primaryButtonText: { color: "white", textAlign: "center", fontSize: 18, fontWeight: "700" },
 
-  switchText: { textAlign: "center", color: "#3153ffff", fontSize: 15 },
+  switchText: { textAlign: "center", color: "#6322FF", fontSize: 15 },
 });
