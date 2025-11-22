@@ -1,18 +1,22 @@
+// app/CustomTabBar.tsx
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { BottomTabBar, BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
+/**
+ * Custom wrapper that provides floating rounded background.
+ * We DO NOT rely on props.style (React Navigation types don't expose it reliably).
+ * Instead make the inner BottomTabBar transparent so the wrapper shows through.
+ */
 export default function CustomTabBar(props: BottomTabBarProps) {
   return (
     <View style={styles.wrapper}>
-      {/* We DO NOT use props.style — we override everything manually */}
       <BottomTabBar
         {...props}
         style={{
-          backgroundColor: "transparent",
+          backgroundColor: "transparent", // <-- KEY: let wrapper color show through
           borderTopWidth: 0,
           elevation: 0,
-          shadowOpacity: 0,
         }}
       />
     </View>
@@ -27,16 +31,15 @@ const styles = StyleSheet.create({
     bottom: 20,
     height: 75,
 
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#3153FF", // your blue background
     borderRadius: 22,
+    overflow: "hidden",
 
-    // Shadow for floating effect
+    // floating shadow
     elevation: 10,
     shadowColor: "#000",
     shadowOpacity: 0.15,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 12,
-
-    overflow: "hidden",
   },
 });

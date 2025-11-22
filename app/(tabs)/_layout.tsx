@@ -1,10 +1,9 @@
+// app/(tabs)/_layout.tsx
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
-
-// MUST BE CORRECT PATH
-import CustomTabBar from "../CustomTabBar";
+import CustomTabBar from "../CustomTabBar"; // one level up from (tabs)
 
 export default function TabsLayout() {
   const { user } = useAuth();
@@ -14,22 +13,30 @@ export default function TabsLayout() {
 
   return (
     <Tabs
-      tabBar={(props) => <CustomTabBar {...props} />}
+      tabBar={(props) => <CustomTabBar {...props} />} // <- correct spread
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#3153FF",
-        tabBarInactiveTintColor: "#8a8a8a",
-        tabBarShowLabel: true,
-        tabBarLabelStyle: { fontSize: 12 },
+        tabBarActiveTintColor: "#FFFFFF",   // icons/labels on blue
+        tabBarInactiveTintColor: "#E1E1E1",
+        tabBarItemStyle: {
+          paddingVertical: 6,
+          paddingHorizontal: 10,
+        },
+        tabBarIconStyle: {
+          marginBottom: 2,
+        },
+        tabBarLabelStyle: {
+          paddingTop: 2,
+          fontSize: 12,
+          fontWeight: "600",
+        },
       }}
     >
       <Tabs.Screen
         name="home"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <AntDesign name="home" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <AntDesign name="home" size={24} color={color} />,
         }}
       />
 
@@ -37,9 +44,7 @@ export default function TabsLayout() {
         name="issues"
         options={{
           title: "Issues",
-          tabBarIcon: ({ color }) => (
-            <Feather name="alert-circle" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <Feather name="alert-circle" size={24} color={color} />,
         }}
       />
 
@@ -48,9 +53,7 @@ export default function TabsLayout() {
         options={{
           title: "Properties",
           href: isLandlord ? "/(tabs)/properties" : null,
-          tabBarIcon: ({ color }) => (
-            <Feather name="home" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <Feather name="home" size={24} color={color} />,
         }}
       />
 
@@ -59,9 +62,7 @@ export default function TabsLayout() {
         options={{
           title: "Payments",
           href: isLandlord ? null : undefined,
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="payment" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <MaterialIcons name="payment" size={24} color={color} />,
         }}
       />
 
@@ -69,9 +70,7 @@ export default function TabsLayout() {
         name="settings"
         options={{
           title: "Settings",
-          tabBarIcon: ({ color }) => (
-            <Feather name="settings" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <Feather name="settings" size={24} color={color} />,
         }}
       />
     </Tabs>
