@@ -2,7 +2,7 @@ import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 
 export default function TabsLayout() {
   const { user } = useAuth();
@@ -24,29 +24,27 @@ export default function TabsLayout() {
           height: 85,
           backgroundColor: "#3153FF",
           borderRadius: 22,
-
-          // No top border
           borderTopWidth: 0,
 
-          // Shadow for floating effect
           elevation: 8,
           shadowColor: "#000",
-          shadowOpacity: 0.2,
-          shadowOffset: { width: 0, height: 4 },
-          shadowRadius: 10,
+          shadowOpacity: 0.18,
+          shadowOffset: { width: 0, height: 3 },
+          shadowRadius: 8,
 
-          paddingBottom: 10,
+          paddingTop: 8,
+          paddingBottom: 8,
         },
 
         tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 12,
           marginTop: 2,
-          color: "#ffffff",
+          fontWeight: "600",
         },
 
-        tabBarActiveTintColor: "#ffffff",
-        tabBarInactiveTintColor: "#E1E1E1",
+        tabBarActiveTintColor: "#FFFFFF",
+        tabBarInactiveTintColor: "#D6D6D6",
       }}
     >
       {/* HOME */}
@@ -54,12 +52,14 @@ export default function TabsLayout() {
         name="home"
         options={{
           title: "Home",
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="home"
-              size={24}
-              color={focused ? "#ffffff" : "#E1E1E1"}
-            />
+          tabBarIcon: ({ focused, color }) => (
+            <CenteredIcon>
+              <AntDesign
+                name="home"
+                size={24}
+                color={focused ? "#FFFFFF" : "#D6D6D6"}
+              />
+            </CenteredIcon>
           ),
         }}
       />
@@ -70,11 +70,13 @@ export default function TabsLayout() {
         options={{
           title: "Issues",
           tabBarIcon: ({ focused }) => (
-            <Feather
-              name="alert-circle"
-              size={24}
-              color={focused ? "#ffffff" : "#E1E1E1"}
-            />
+            <CenteredIcon>
+              <Feather
+                name="alert-circle"
+                size={24}
+                color={focused ? "#FFFFFF" : "#D6D6D6"}
+              />
+            </CenteredIcon>
           ),
         }}
       />
@@ -87,11 +89,13 @@ export default function TabsLayout() {
           href: isLandlord ? "/(tabs)/properties" : null,
           tabBarIcon: ({ focused }) =>
             isLandlord ? (
-              <Feather
-                name="home"
-                size={24}
-                color={focused ? "#ffffff" : "#E1E1E1"}
-              />
+              <CenteredIcon>
+                <Feather
+                  name="home"
+                  size={24}
+                  color={focused ? "#FFFFFF" : "#D6D6D6"}
+                />
+              </CenteredIcon>
             ) : null,
         }}
       />
@@ -104,11 +108,13 @@ export default function TabsLayout() {
           href: !isLandlord ? "/(tabs)/payments" : null,
           tabBarIcon: ({ focused }) =>
             !isLandlord ? (
-              <MaterialIcons
-                name="payment"
-                size={26}
-                color={focused ? "#ffffff" : "#E1E1E1"}
-              />
+              <CenteredIcon>
+                <MaterialIcons
+                  name="payment"
+                  size={26}
+                  color={focused ? "#FFFFFF" : "#D6D6D6"}
+                />
+              </CenteredIcon>
             ) : null,
         }}
       />
@@ -119,14 +125,34 @@ export default function TabsLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ focused }) => (
-            <Feather
-              name="settings"
-              size={24}
-              color={focused ? "#ffffff" : "#E1E1E1"}
-            />
+            <CenteredIcon>
+              <Feather
+                name="settings"
+                size={24}
+                color={focused ? "#FFFFFF" : "#D6D6D6"}
+              />
+            </CenteredIcon>
           ),
         }}
       />
     </Tabs>
+  );
+}
+
+/* ---- Centered Icon Wrapper ---- */
+function CenteredIcon({ children }) {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+
+        // Ensures icon stays centered vertically
+        paddingBottom: 2,
+      }}
+    >
+      {children}
+    </View>
   );
 }
