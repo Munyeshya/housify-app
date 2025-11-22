@@ -1,11 +1,21 @@
+import React from "react";
 import { Tabs } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 
+/**
+ * Tabs layout — role-based tabs.
+ * - waits for user via useAuth
+ * - shows landlord tabs (properties) or tenant tabs (payments)
+ */
+
 export default function TabsLayout() {
   const { user } = useAuth();
-
   const isLandlord = user?.role === "landlord";
+
+  // If user is not yet available, show nothing (AuthGuard at root prevents this normally)
+  // But this ensures no flicker if called directly.
+  if (!user) return null;
 
   return (
     <Tabs
@@ -20,66 +30,47 @@ export default function TabsLayout() {
         headerShown: false,
       }}
     >
-
-      {/* HOME / DASHBOARD */}
       <Tabs.Screen
         name="home"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <AntDesign name="home" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <AntDesign name="home" size={24} color={color} />,
         }}
       />
 
-      {/* ISSUES */}
       <Tabs.Screen
         name="issues"
         options={{
           title: "Issues",
-          tabBarIcon: ({ color }) => (
-            <Feather name="alert-circle" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <Feather name="alert-circle" size={24} color={color} />,
         }}
       />
 
-      {/* LANDLORD ONLY → PROPERTIES */}
-      {isLandlord && (
+      {isLandlord ? (
         <Tabs.Screen
           name="properties"
           options={{
             title: "Properties",
-            tabBarIcon: ({ color }) => (
-              <Feather name="home" size={24} color={color} />
-            ),
+            tabBarIcon: ({ color }) => <Feather name="home" size={24} color={color} />,
           }}
         />
-      )}
-
-      {/* TENANT ONLY → PAYMENTS */}
-      {!isLandlord && (
+      ) : (
         <Tabs.Screen
           name="payments"
           options={{
             title: "Payments",
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="payment" size={24} color={color} />
-            ),
+            tabBarIcon: ({ color }) => <MaterialIcons name="payment" size={24} color={color} />,
           }}
         />
       )}
 
-      {/* SETTINGS */}
       <Tabs.Screen
         name="settings"
         options={{
           title: "Settings",
-          tabBarIcon: ({ color }) => (
-            <Feather name="settings" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <Feather name="settings" size={24} color={color} />,
         }}
       />
-
     </Tabs>
   );
 }
