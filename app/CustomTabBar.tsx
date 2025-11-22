@@ -8,21 +8,18 @@ export default function CustomTabBar(props: BottomTabBarProps) {
       style={{
         position: "absolute",
         bottom: 20,
-
-        // Perfect floating width spacing
         left: 20,
         right: 20,
         height: 75,
 
-        backgroundColor: "#3153FF",
+        backgroundColor: "#3153FF", // ← NEW BLUE BACKGROUND
         borderRadius: 22,
         overflow: "hidden",
 
-        // Floating shadow
         elevation: 10,
-        shadowColor: "#666666ff",
-        shadowOpacity: 0.12,
-        shadowOffset: { width: 0, height: 2 },
+        shadowColor: "#000",
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 3 },
         shadowRadius: 8,
       }}
     >

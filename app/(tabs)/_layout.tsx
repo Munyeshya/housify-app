@@ -2,7 +2,7 @@ import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import CustomTabBar from "../CustomTabBar";
+import CustomTabBar from "../CustomTabBar"; // IMPORTANT: custom bar outside tabs folder
 
 export default function TabsLayout() {
   const { user } = useAuth();
@@ -12,14 +12,16 @@ export default function TabsLayout() {
 
   return (
     <Tabs
+      // Use custom floating tab bar wrapper
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
 
-        tabBarActiveTintColor: "#3153FF",
-        tabBarInactiveTintColor: "#8a8a8a",
+        // ACTIVE / INACTIVE ICON + LABEL COLORS
+        tabBarActiveTintColor: "#FFFFFF",  // white icons/labels on blue bar
+        tabBarInactiveTintColor: "#E1E1E1", // light grey icons/labels
 
-        // Inner padding for icons & labels
+        // INTERNAL PADDING INSIDE THE FLOATING BAR
         tabBarItemStyle: {
           paddingVertical: 6,
           paddingHorizontal: 10,
@@ -75,7 +77,7 @@ export default function TabsLayout() {
         name="payments"
         options={{
           title: "Payments",
-          href: isLandlord ? null : undefined, // FIXED: preserves proper alignment + hides when needed
+          href: isLandlord ? null : undefined,  // FIXED: preserves alignment + hides correctly
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="payment" size={24} color={color} />
           ),
