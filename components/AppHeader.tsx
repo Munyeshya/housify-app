@@ -1,65 +1,57 @@
-import { Feather } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AppHeader({ title }: { title: string }) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View
-      style={[
-        styles.header,
-        { paddingTop: insets.top + 20 }
-      ]}
-    >
-      <Text style={styles.title}>{title}</Text>
+    <View style={[styles.wrapper, { paddingTop: insets.top + 15 }]}>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>{title}</Text>
 
-      <TouchableOpacity style={styles.icon}>
-        <Feather name="bell" size={26} color="#fff" />
-      </TouchableOpacity>
-
-      {/* The large bottom curve */}
-      <View style={styles.curveContainer}>
-        <View style={styles.curveShape} />
+        <TouchableOpacity>
+          <Feather name="bell" size={26} color="#fff" />
+        </TouchableOpacity>
       </View>
+
+      {/* Bottom curve */}
+      <View style={styles.curve} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
+  wrapper: {
     backgroundColor: "#6322FF",
-    paddingHorizontal: 20,
-    paddingBottom: 50,   // ❤️ deeper header like screenshot
-    position: "relative",
+    paddingHorizontal: 25,
+    paddingBottom: 40,
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 
   title: {
-    color: "white",
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "700",
+    color: "white",
   },
 
-  icon: {
-    position: "absolute",
-    right: 20,
-    top: 50,
-  },
-
-  curveContainer: {
-    position: "absolute",
-    bottom: -40,   // ❤️ pulls curve down to create that “dip”
-    left: 0,
-    right: 0,
-    height: 80,
-    overflow: "hidden",
-  },
-
-  curveShape: {
-    flex: 1,
+  curve: {
+    height: 40,
     backgroundColor: "white",
-    borderTopLeftRadius: 45,   // ❤️ VERY LARGE radius
-    borderTopRightRadius: 45,  // ❤️ creates big soft curves
+
+    // This creates the SAME curve on web + mobile
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+
+    marginTop: 20,
+
+    // Web + Native consistent clipping
+    overflow: "hidden",
   },
 });
