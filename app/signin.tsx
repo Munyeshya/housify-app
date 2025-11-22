@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function SignInScreen() {
@@ -17,11 +17,11 @@ export default function SignInScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      
+
       {/* Blue Header */}
       <View
         style={{
-          backgroundColor: "#5271FF",
+          backgroundColor: "#3153ffff",
           height: 220,
           justifyContent: "center",
           alignItems: "center",
@@ -41,7 +41,8 @@ export default function SignInScreen() {
         >
           <Image
             source={require("../assets/images/logo.png")}
-            style={{ width: 48, height: 48, resizeMode: "contain" }}
+            resizeMode="contain"
+            style={{ width: 48, height: 48 }}
           />
         </View>
 
@@ -57,7 +58,7 @@ export default function SignInScreen() {
           Sign in to your{"\n"}Account
         </Text>
 
-        <Text
+        {/* <Text
           style={{
             marginTop: 6,
             fontSize: 14,
@@ -66,7 +67,7 @@ export default function SignInScreen() {
           }}
         >
           Enter your email and password to log in
-        </Text>
+        </Text> */}
       </View>
 
       {/* Card Section */}
@@ -146,9 +147,9 @@ export default function SignInScreen() {
             marginBottom: 20,
           }}
         >
-          <Text style={{ color: "#6b6b6b" }}>Remember me</Text>
+          {/* <Text style={{ color: "#6b6b6b" }}>Remember me</Text> */}
           <TouchableOpacity>
-            <Text style={{ color: "#5271FF" }}>Forgot password?</Text>
+            <Text style={{ color: "#3153ffff" }}>Forgot password?</Text>
           </TouchableOpacity>
         </View>
 
@@ -156,7 +157,7 @@ export default function SignInScreen() {
         <TouchableOpacity
           onPress={handleSignIn}
           style={{
-            backgroundColor: "#5271FF",
+            backgroundColor: "#3153ffff",
             paddingVertical: 16,
             borderRadius: 12,
             marginBottom: 16,
@@ -176,7 +177,7 @@ export default function SignInScreen() {
 
         {/* Create account */}
         <TouchableOpacity onPress={() => router.push("/signup")}>
-          <Text style={{ textAlign: "center", color: "#5271FF", fontSize: 15 }}>
+          <Text style={{ textAlign: "center", color: "#3153ffff", fontSize: 15 }}>
             Don’t have an account? Sign Up
           </Text>
         </TouchableOpacity>
