@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -7,8 +7,14 @@ export default function AppHeader({ title }: { title: string }) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.wrapper, { paddingTop: insets.top + 15 }]}>
-      <View style={styles.headerRow}>
+    <View style={{ backgroundColor: "#6322FF" }}>
+      {/* Actual header area */}
+      <View
+        style={[
+          styles.headerContainer,
+          { paddingTop: insets.top + 20 }
+        ]}
+      >
         <Text style={styles.title}>{title}</Text>
 
         <TouchableOpacity>
@@ -16,42 +22,32 @@ export default function AppHeader({ title }: { title: string }) {
         </TouchableOpacity>
       </View>
 
-      {/* Bottom curve */}
-      <View style={styles.curve} />
+      {/* The large round curve that matches your screenshot */}
+      <View style={styles.bottomCurve} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: "#6322FF",
+  headerContainer: {
     paddingHorizontal: 25,
-    paddingBottom: 40,
-  },
-
-  headerRow: {
+    paddingBottom: 30,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
 
   title: {
+    color: "white",
     fontSize: 28,
     fontWeight: "700",
-    color: "white",
   },
 
-  curve: {
+  bottomCurve: {
+    width: "100%",
     height: 40,
     backgroundColor: "white",
-
-    // This creates the SAME curve on web + mobile
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-
-    marginTop: 20,
-
-    // Web + Native consistent clipping
-    overflow: "hidden",
+    borderTopLeftRadius: 80,
+    borderTopRightRadius: 80,
   },
 });
