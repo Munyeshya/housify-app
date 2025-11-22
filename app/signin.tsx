@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -84,12 +85,16 @@ export default function SignInScreen() {
             justifyContent: "center",
             alignItems: "center",
             marginBottom: 20,
+            gap: 10
           }}
         >
-          <Text style={{ marginLeft: 8, fontSize: 16, fontWeight: "600" }}>
+          <AntDesign name="google" size={20} color="#000" />
+
+          <Text style={{ fontSize: 16, fontWeight: "600" }}>
             Continue with Google
           </Text>
         </TouchableOpacity>
+
 
         {/* Divider */}
         <View
