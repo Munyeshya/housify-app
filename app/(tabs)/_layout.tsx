@@ -1,7 +1,7 @@
-import React from "react";
-import { Tabs } from "expo-router";
-import { useAuth } from "../../contexts/AuthContext";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import React from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 /**
  * Tabs layout — role-based tabs.
@@ -20,7 +20,7 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#5271FF",
+        tabBarActiveTintColor: "#3153ffff",
         tabBarInactiveTintColor: "#8a8a8a",
         tabBarStyle: {
           height: 70,

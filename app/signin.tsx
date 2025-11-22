@@ -1,22 +1,22 @@
+import { AntDesign } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
   Animated,
   Image,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  StyleSheet,
 } from "react-native";
-import { useRouter } from "expo-router";
 import { useAuth } from "../contexts/AuthContext";
-import { AntDesign } from "@expo/vector-icons";
 
 /**
  * Sign In screen
  * - validates fields
  * - shows red message + shakes form-area (inputs + login button) when invalid
- * - uses design system colors (#5271FF)
+ * - uses design system colors (#3153ffff)
  */
 
 export default function SignInScreen() {
@@ -137,7 +137,7 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#FFFFFF" },
   header: {
-    backgroundColor: "#5271FF",
+    backgroundColor: "#3153ffff",
     height: 220,
     justifyContent: "center",
     alignItems: "center",
@@ -188,10 +188,10 @@ const styles = StyleSheet.create({
 
   rowRight: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 20 },
 
-  forgot: { color: "#5271FF" },
+  forgot: { color: "#3153ffff" },
 
-  primaryButton: { backgroundColor: "#5271FF", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
+  primaryButton: { backgroundColor: "#3153ffff", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
   primaryButtonText: { color: "white", textAlign: "center", fontSize: 18, fontWeight: "700" },
 
-  switchText: { textAlign: "center", color: "#5271FF", fontSize: 15 },
+  switchText: { textAlign: "center", color: "#3153ffff", fontSize: 15 },
 });

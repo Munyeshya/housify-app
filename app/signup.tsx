@@ -1,16 +1,16 @@
+import { AntDesign } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
   Animated,
   Image,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  StyleSheet,
 } from "react-native";
-import { useRouter } from "expo-router";
 import { useAuth } from "../contexts/AuthContext";
-import { AntDesign } from "@expo/vector-icons";
 
 /**
  * Sign Up screen — same behavior as Sign In
@@ -113,7 +113,7 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#FFFFFF" },
   header: {
-    backgroundColor: "#5271FF",
+    backgroundColor: "#3153ffff",
     height: 220,
     justifyContent: "center",
     alignItems: "center",
@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
 
-  primaryButton: { backgroundColor: "#5271FF", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
+  primaryButton: { backgroundColor: "#3153ffff", paddingVertical: 16, borderRadius: 12, marginBottom: 16 },
   primaryButtonText: { color: "white", textAlign: "center", fontSize: 18, fontWeight: "700" },
 
-  switchText: { textAlign: "center", color: "#5271FF", fontSize: 15 },
+  switchText: { textAlign: "center", color: "#3153ffff", fontSize: 15 },
 });
