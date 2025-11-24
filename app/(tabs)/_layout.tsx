@@ -16,8 +16,8 @@ export default function TabsLayout() {
       tabBar={(props) => <CustomTabBar {...props} />} // <- correct spread
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#FFFFFF",   // icons/labels on blue
-        tabBarInactiveTintColor: "#E1E1E1",
+        tabBarActiveTintColor: "#4d2ee8ff",   // icons/labels on blue
+        tabBarInactiveTintColor: "#b1a3f8ff",
         tabBarItemStyle: {
           paddingVertical: 6,
           paddingHorizontal: 10,
