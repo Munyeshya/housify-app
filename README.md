@@ -2,7 +2,8 @@
 
 Monorepo for the Housify platform.
 
-Planned apps:
-- Django backend
-- React web frontend
-- React Native mobile app with Expo
+## Structure
+
+- `apps/backend` - Django project
+- `apps/web` - React web app created with Vite
+- `apps/mobile` - React Native app created with Expo
