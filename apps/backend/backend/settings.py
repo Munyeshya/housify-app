@@ -17,6 +17,7 @@ ALLOWED_HOSTS = env.list(
 
 INSTALLED_APPS = [
     "agents",
+    "bookmarks",
     "corsheaders",
     "rest_framework",
     "accounts",
