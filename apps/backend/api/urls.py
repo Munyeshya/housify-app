@@ -6,6 +6,7 @@ urlpatterns = [
     path("health/", HealthCheckView.as_view(), name="health-check"),
     path("accounts/", include("accounts.urls")),
     path("agents/", include("agents.urls")),
+    path("bookmarks/", include("bookmarks.urls")),
     path("complaints/", include("complaints.urls")),
     path("payments/", include("payments.urls")),
     path("properties/", include("properties.urls")),
