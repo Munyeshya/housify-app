@@ -17,6 +17,7 @@ The goal is to help landlords manage rental portfolios more cleanly while giving
 
 Landlords create and manage properties under their account. They can:
 - register properties with names, descriptions, types, prices, and visibility settings
+- set property locations so they can be found and viewed on maps
 - assign tenants to properties
 - remove tenants from properties without losing historical records
 - track occupation status
@@ -85,6 +86,18 @@ Each property or unit should be easy to identify through:
 - a clear name
 - a type such as apartment, house, compound, room, or unit
 - a status such as available, occupied, hidden, archived, or under maintenance
+- a stored location that supports map display and GPS-based discovery
+
+## Location and Map Features
+
+Properties should support geographic location data so the system can offer mapping and navigation features.
+
+This includes:
+- landlord-defined property locations
+- map display of available public properties for users
+- GPS-assisted discovery so users can locate properties on a map
+- landlord map views showing their properties scattered and marked across locations
+- location-aware property browsing as part of the public experience
 
 ## Tenant History and Identity Rules
 
@@ -149,6 +162,7 @@ Public listing features should include:
 - property details and descriptions
 - availability status
 - property type
+- property location on a map
 - bookmarking or saving properties for later
 
 ## Cross-Platform Direction
@@ -165,6 +179,7 @@ The backend is the central source of truth and must supply:
 - complaint APIs
 - agent management APIs
 - public listing APIs
+- property location and map-related APIs
 
 ## Planned Core Modules
 
@@ -179,6 +194,7 @@ The platform is currently expected to grow around these backend domains:
 - bookmarks
 - documents
 - history
+- locations
 - public_listings
 
 ## MVP Direction
@@ -187,6 +203,7 @@ The first practical version of Housify should focus on:
 - account creation and role management
 - landlord property registration and organization
 - public listing visibility controls
+- property location capture and map display
 - tenant assignment and unassignment
 - tenant history lookup by unique identifier
 - legal ID document requirement for assignment
@@ -204,6 +221,7 @@ In addition to the core MVP, Housify is also intended to include these role-base
 - rent reminders and agreement reminders
 - agent performance metrics
 - printable payment history
+- landlord property map overviews
 
 ## Future Opportunities
 
