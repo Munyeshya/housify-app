@@ -195,15 +195,19 @@ The first practical version of Housify should focus on:
 - public and private agent management
 - bookmarking of public properties
 
-## Future Opportunities
+## Included Product Enhancements
 
-Potential feature expansions include:
+In addition to the core MVP, Housify is also intended to include these role-based benefits as part of the product direction:
 - tenant trust indicators or profile completeness scores
 - landlord occupancy dashboards
 - saved search alerts
 - rent reminders and agreement reminders
 - agent performance metrics
 - printable payment history
+
+## Future Opportunities
+
+Potential feature expansions include:
 - AI-based property suggestions from user preferences
 - AI-assisted tenant recommendations based on wider platform history and patterns
 
