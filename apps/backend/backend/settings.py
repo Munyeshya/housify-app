@@ -18,6 +18,7 @@ ALLOWED_HOSTS = env.list(
 INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
+    "accounts",
     "api",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -104,6 +105,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+AUTH_USER_MODEL = "accounts.User"
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
