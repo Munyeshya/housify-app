@@ -113,12 +113,17 @@ class PrivateAgentDeleteView(APIView):
         agent = get_object_or_404(
             AgentProfile.objects.select_related("user", "created_by_landlord"),
             id=agent_id,
-            created_by_landlord_id=landlord_id,
         )
 
         if agent.agent_type != AgentType.PRIVATE:
             return Response(
                 {"detail": "Public agents cannot be deleted by a landlord."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if str(agent.created_by_landlord_id) != str(landlord_id):
+            return Response(
+                {"detail": "Private agents can only be deleted by the landlord who created them."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
