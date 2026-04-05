@@ -140,8 +140,13 @@ class TenantHistoryApiTests(TestCase):
         self.assertEqual(response.data["summary"]["total_tenancies"], 2)
         self.assertEqual(response.data["summary"]["active_tenancies"], 1)
         self.assertEqual(response.data["summary"]["completed_tenancies"], 1)
-        self.assertEqual(response.data["summary"]["history"][0]["payments_count"], 1)
-        self.assertEqual(response.data["summary"]["history"][0]["complaints_count"], 1)
+        active_entry = next(
+            entry
+            for entry in response.data["summary"]["history"]
+            if entry["property_title"] == self.active_tenancy.property.title
+        )
+        self.assertEqual(active_entry["payments_count"], 1)
+        self.assertEqual(active_entry["complaints_count"], 1)
 
     def test_lookup_fails_for_unknown_identifier(self):
         response = self.client.post(
