@@ -65,6 +65,15 @@ class PropertyAgentAssignment(models.Model):
         if self.agent.agent_type == AgentType.PRIVATE and self.agent.created_by_landlord_id != self.landlord_id:
             raise ValidationError("Private agents can only be assigned by the landlord who created them.")
 
+        if self.status == AgentAssignmentStatus.ACTIVE:
+            duplicate_exists = PropertyAgentAssignment.objects.filter(
+                agent=self.agent,
+                property=self.property,
+                status=AgentAssignmentStatus.ACTIVE,
+            ).exclude(pk=self.pk).exists()
+            if duplicate_exists:
+                raise ValidationError("This agent already has active access to the property.")
+
     @builtins.property
     def can_view_payments(self):
         return True
@@ -80,6 +89,10 @@ class PropertyAgentAssignment(models.Model):
     @builtins.property
     def can_view_legal_id(self):
         return self.agent.agent_type == AgentType.PRIVATE
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.agent.user.full_name} -> {self.property.title}"
