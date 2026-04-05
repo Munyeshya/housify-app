@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "accounts",
     "api",
     "properties",
+    "tenancies",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
