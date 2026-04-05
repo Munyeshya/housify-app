@@ -8,6 +8,7 @@ urlpatterns = [
     path("agents/", include("agents.urls")),
     path("bookmarks/", include("bookmarks.urls")),
     path("complaints/", include("complaints.urls")),
+    path("history/", include("history.urls")),
     path("payments/", include("payments.urls")),
     path("properties/", include("properties.urls")),
     path("tenancies/", include("tenancies.urls")),
