@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "accounts",
     "api",
+    "properties",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
