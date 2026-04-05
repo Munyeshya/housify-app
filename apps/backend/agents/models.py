@@ -1,3 +1,5 @@
+import builtins
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -63,19 +65,19 @@ class PropertyAgentAssignment(models.Model):
         if self.agent.agent_type == AgentType.PRIVATE and self.agent.created_by_landlord_id != self.landlord_id:
             raise ValidationError("Private agents can only be assigned by the landlord who created them.")
 
-    @property
+    @builtins.property
     def can_view_payments(self):
         return True
 
-    @property
+    @builtins.property
     def can_view_complaints(self):
         return True
 
-    @property
+    @builtins.property
     def can_view_occupancy(self):
         return True
 
-    @property
+    @builtins.property
     def can_view_legal_id(self):
         return self.agent.agent_type == AgentType.PRIVATE
 
