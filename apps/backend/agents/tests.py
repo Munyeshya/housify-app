@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from rest_framework.test import APIClient
 
@@ -288,6 +289,24 @@ class AgentsApiTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+    def test_model_blocks_duplicate_active_assignment(self):
+        PropertyAgentAssignment.objects.create(
+            landlord=self.landlord,
+            agent=self.public_agent,
+            property=self.property,
+            status=AgentAssignmentStatus.ACTIVE,
+            granted_by=self.landlord_user,
+        )
+
+        with self.assertRaises(ValidationError):
+            PropertyAgentAssignment.objects.create(
+                landlord=self.landlord,
+                agent=self.public_agent,
+                property=self.property,
+                status=AgentAssignmentStatus.ACTIVE,
+                granted_by=self.landlord_user,
+            )
 
     def test_public_agent_cannot_be_deleted_by_landlord(self):
         response = self.client.delete(
