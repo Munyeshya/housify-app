@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from accounts.models import AgentProfile, LandlordProfile, TenantProfile
 
-from .models import TenantLegalDocument
+from .models import LandlordDocumentVerificationAccess, TenantLegalDocument
 
 
 class TenantLegalDocumentSerializer(serializers.ModelSerializer):
@@ -98,3 +98,52 @@ class TenantLegalDocumentAccessSerializer(serializers.Serializer):
             raise serializers.ValidationError("The tenant does not have a legal document on file.") from exc
 
         return attrs
+
+
+class LandlordDocumentVerificationAccessSerializer(serializers.ModelSerializer):
+    landlord_name = serializers.CharField(source="landlord.display_name", read_only=True)
+    granted_by_name = serializers.CharField(source="granted_by.full_name", read_only=True)
+
+    class Meta:
+        model = LandlordDocumentVerificationAccess
+        fields = (
+            "id",
+            "landlord",
+            "landlord_name",
+            "is_enabled",
+            "provider_code",
+            "notes",
+            "granted_by",
+            "granted_by_name",
+            "granted_at",
+            "updated_at",
+        )
+        read_only_fields = ("granted_by", "granted_at", "updated_at")
+
+
+class LandlordDocumentVerificationAccessUpdateSerializer(serializers.ModelSerializer):
+    landlord = serializers.PrimaryKeyRelatedField(queryset=LandlordProfile.objects.select_related("user"))
+
+    class Meta:
+        model = LandlordDocumentVerificationAccess
+        fields = ("landlord", "is_enabled", "provider_code", "notes")
+
+
+class TenantDocumentVerificationRequestSerializer(serializers.Serializer):
+    tenant = serializers.PrimaryKeyRelatedField(queryset=TenantProfile.objects.select_related("user"))
+
+    def validate(self, attrs):
+        tenant = attrs["tenant"]
+        try:
+            attrs["document"] = tenant.legal_document
+        except TenantLegalDocument.DoesNotExist as exc:
+            raise serializers.ValidationError("The tenant does not have a legal document on file.") from exc
+        return attrs
+
+
+class TenantDocumentVerificationResultSerializer(serializers.Serializer):
+    is_available = serializers.BooleanField()
+    is_valid = serializers.BooleanField(allow_null=True)
+    provider_code = serializers.CharField()
+    message = serializers.CharField()
+    raw_payload = serializers.JSONField(allow_null=True)
