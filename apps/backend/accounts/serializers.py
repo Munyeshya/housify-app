@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from documents.models import TenantLegalDocument
+
 from .models import AgentProfile, AgentType, LandlordProfile, TenantProfile, User, UserRole
 
 
@@ -51,7 +53,14 @@ class TenantRegistrationSerializer(serializers.ModelSerializer):
         }
         password = validated_data.pop("password")
         user = User.objects.create_user(password=password, role=UserRole.TENANT, **validated_data)
-        TenantProfile.objects.create(user=user, **tenant_profile_data)
+        tenant = TenantProfile.objects.create(user=user, **tenant_profile_data)
+        if tenant_profile_data["legal_id_document_url"]:
+            TenantLegalDocument.objects.create(
+                tenant=tenant,
+                document_type=tenant_profile_data["legal_id_type"] or "National ID",
+                document_number=tenant_profile_data["legal_id_number"],
+                document_url=tenant_profile_data["legal_id_document_url"],
+            )
         return user
 
 
