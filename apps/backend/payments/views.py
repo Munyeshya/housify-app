@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
@@ -179,7 +180,7 @@ class PaymentAdjustmentDecisionView(APIView):
         if not is_admin_user(request.user):
             raise PermissionDenied("Only platform admins can approve or reject payment adjustments.")
 
-        adjustment = generics.get_object_or_404(
+        adjustment = get_object_or_404(
             PaymentAdjustment.objects.select_related("payment", "payment__tenancy"),
             id=adjustment_id,
         )
@@ -231,7 +232,7 @@ class PaymentIntegritySummaryView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, payment_id):
-        payment = generics.get_object_or_404(
+        payment = get_object_or_404(
             Payment.objects.select_related(
                 "tenancy__property",
                 "tenancy__tenant__user",
