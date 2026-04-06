@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "complaints",
     "payments",
     "properties",
+    "security",
     "tenancies",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -117,6 +118,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.User"
+AUTH_TOKEN_TTL_SECONDS = env.int("DJANGO_AUTH_TOKEN_TTL_SECONDS", default=60 * 60 * 12)
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
@@ -126,10 +128,13 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.JSONParser",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+        "accounts.authentication.ExpiringTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "api.pagination.StandardResultsSetPagination",
     "EXCEPTION_HANDLER": "api.exceptions.custom_exception_handler",
     "PAGE_SIZE": 20,
+    "DEFAULT_THROTTLE_RATES": {
+        "login": env("DJANGO_LOGIN_THROTTLE_RATE", default="5/minute"),
+    },
 }
