@@ -129,4 +129,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
+    "DEFAULT_PAGINATION_CLASS": "api.pagination.StandardResultsSetPagination",
+    "EXCEPTION_HANDLER": "api.exceptions.custom_exception_handler",
+    "PAGE_SIZE": 20,
 }
