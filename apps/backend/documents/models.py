@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from accounts.models import AgentType, TenantProfile
+from accounts.models import AgentType, LandlordProfile, TenantProfile, User
 from agents.models import AgentAssignmentStatus, PropertyAgentAssignment
 from tenancies.models import TenancyStatus
 
@@ -61,6 +61,10 @@ class TenantLegalDocument(models.Model):
         return result
 
     @classmethod
+    def can_admin_view(cls, user):
+        return bool(user and user.is_authenticated and (user.is_superuser or user.role == "admin"))
+
+    @classmethod
     def can_landlord_view(cls, landlord, tenant):
         return tenant.tenancies.filter(
             landlord=landlord,
@@ -84,3 +88,30 @@ class TenantLegalDocument(models.Model):
 
     def __str__(self):
         return f"{self.tenant.user.full_name} legal document"
+
+
+class LandlordDocumentVerificationAccess(models.Model):
+    landlord = models.OneToOneField(
+        LandlordProfile,
+        on_delete=models.CASCADE,
+        related_name="document_verification_access",
+    )
+    is_enabled = models.BooleanField(default=False)
+    granted_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="granted_document_verification_access",
+    )
+    granted_at = models.DateTimeField(null=True, blank=True)
+    provider_code = models.CharField(max_length=100, default="national-registry")
+    notes = models.TextField(blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("landlord__display_name",)
+
+    def __str__(self):
+        status = "enabled" if self.is_enabled else "disabled"
+        return f"{self.landlord.display_name} verification access ({status})"
