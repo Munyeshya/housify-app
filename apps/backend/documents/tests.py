@@ -69,6 +69,7 @@ class DocumentsApiTests(TestCase):
         )
 
     def test_tenant_can_create_or_update_legal_document(self):
+        self.client.force_authenticate(user=self.tenant.user)
         response = self.client.post(
             "/api/v1/documents/legal-id/",
             {
@@ -106,8 +107,9 @@ class DocumentsApiTests(TestCase):
             billing_cycle_snapshot=BillingCycle.MONTHLY,
         )
 
+        self.client.force_authenticate(user=self.landlord.user)
         response = self.client.get(
-            f"/api/v1/documents/legal-id/access/?landlord={self.landlord.id}&tenant={self.tenant.id}"
+            f"/api/v1/documents/legal-id/access/?tenant={self.tenant.id}"
         )
 
         self.assertEqual(response.status_code, 200)
@@ -121,8 +123,9 @@ class DocumentsApiTests(TestCase):
             document_url="https://example.com/legal-id.pdf",
         )
 
+        self.client.force_authenticate(user=self.landlord.user)
         response = self.client.get(
-            f"/api/v1/documents/legal-id/access/?landlord={self.landlord.id}&tenant={self.tenant.id}"
+            f"/api/v1/documents/legal-id/access/?tenant={self.tenant.id}"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -153,8 +156,9 @@ class DocumentsApiTests(TestCase):
             granted_by=self.landlord_user,
         )
 
+        self.client.force_authenticate(user=self.private_agent.user)
         response = self.client.get(
-            f"/api/v1/documents/legal-id/access/?agent={self.private_agent.id}&tenant={self.tenant.id}"
+            f"/api/v1/documents/legal-id/access/?tenant={self.tenant.id}"
         )
 
         self.assertEqual(response.status_code, 200)
@@ -186,8 +190,9 @@ class DocumentsApiTests(TestCase):
             granted_by=self.landlord_user,
         )
 
+        self.client.force_authenticate(user=self.public_agent.user)
         response = self.client.get(
-            f"/api/v1/documents/legal-id/access/?agent={self.public_agent.id}&tenant={self.tenant.id}"
+            f"/api/v1/documents/legal-id/access/?tenant={self.tenant.id}"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -200,7 +205,8 @@ class DocumentsApiTests(TestCase):
             document_url="https://example.com/legal-id.pdf",
         )
 
-        response = self.client.delete(f"/api/v1/documents/legal-id/{document.id}/?tenant={self.tenant.id}")
+        self.client.force_authenticate(user=self.tenant.user)
+        response = self.client.delete(f"/api/v1/documents/legal-id/{document.id}/")
 
         self.tenant.refresh_from_db()
         self.assertEqual(response.status_code, 204)
