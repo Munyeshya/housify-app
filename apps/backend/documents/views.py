@@ -3,6 +3,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from accounts.access import get_authenticated_agent, get_authenticated_landlord, get_authenticated_tenant
+
 from .models import TenantLegalDocument
 from .serializers import (
     TenantLegalDocumentAccessSerializer,
@@ -12,16 +14,12 @@ from .serializers import (
 
 
 class TenantLegalDocumentListCreateView(generics.ListCreateAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        tenant = get_authenticated_tenant(self.request)
         queryset = TenantLegalDocument.objects.select_related("tenant__user")
-        tenant_id = self.request.query_params.get("tenant")
-
-        if tenant_id:
-            queryset = queryset.filter(tenant_id=tenant_id)
-
-        return queryset
+        return queryset.filter(tenant=tenant)
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -29,7 +27,10 @@ class TenantLegalDocumentListCreateView(generics.ListCreateAPIView):
         return TenantLegalDocumentSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        tenant = get_authenticated_tenant(request)
+        payload = request.data.copy()
+        payload["tenant"] = tenant.id
+        serializer = self.get_serializer(data=payload)
         serializer.is_valid(raise_exception=True)
         document = serializer.save()
         response_serializer = TenantLegalDocumentSerializer(document)
@@ -37,20 +38,35 @@ class TenantLegalDocumentListCreateView(generics.ListCreateAPIView):
 
 
 class TenantLegalDocumentDestroyView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def delete(self, request, document_id):
-        tenant_id = request.query_params.get("tenant")
-        document = get_object_or_404(TenantLegalDocument, id=document_id, tenant_id=tenant_id)
+        tenant = get_authenticated_tenant(request)
+        document = get_object_or_404(TenantLegalDocument, id=document_id, tenant=tenant)
         document.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TenantLegalDocumentAccessView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        serializer = TenantLegalDocumentAccessSerializer(data=request.query_params)
+        payload = request.query_params.copy()
+        if request.user.role == "landlord":
+            landlord = get_authenticated_landlord(request)
+            payload["landlord"] = landlord.id
+            payload.pop("agent", None)
+        elif request.user.role == "agent":
+            agent = get_authenticated_agent(request)
+            payload["agent"] = agent.id
+            payload.pop("landlord", None)
+        else:
+            return Response(
+                {"detail": "Only landlords and agents can request legal document access."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        serializer = TenantLegalDocumentAccessSerializer(data=payload)
         serializer.is_valid(raise_exception=True)
         document = serializer.validated_data["document"]
         return Response(TenantLegalDocumentSerializer(document).data, status=status.HTTP_200_OK)
