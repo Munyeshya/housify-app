@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
+from accounts.access import get_authenticated_landlord
 from tenancies.models import Tenancy
 
 from .models import TenantHistoryLookup
@@ -12,19 +13,18 @@ from .serializers import (
 
 
 class TenantHistoryLookupListView(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = TenantHistoryLookupSerializer
 
     def get_queryset(self):
+        landlord = get_authenticated_landlord(self.request)
         queryset = TenantHistoryLookup.objects.select_related(
             "landlord__user",
             "tenant__user",
         )
-        landlord_id = self.request.query_params.get("landlord")
         tenant_id = self.request.query_params.get("tenant")
 
-        if landlord_id:
-            queryset = queryset.filter(landlord_id=landlord_id)
+        queryset = queryset.filter(landlord=landlord)
         if tenant_id:
             queryset = queryset.filter(tenant_id=tenant_id)
 
@@ -32,11 +32,14 @@ class TenantHistoryLookupListView(generics.ListAPIView):
 
 
 class TenantHistoryLookupCreateView(generics.CreateAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = TenantHistoryLookupCreateSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        landlord = get_authenticated_landlord(request)
+        payload = request.data.copy()
+        payload["landlord"] = landlord.id
+        serializer = self.get_serializer(data=payload)
         serializer.is_valid(raise_exception=True)
         lookup = serializer.save()
 
