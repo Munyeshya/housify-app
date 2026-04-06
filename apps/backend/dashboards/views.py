@@ -6,19 +6,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.access import (
+    ensure_platform_admin,
     get_active_agent_property_ids,
     get_authenticated_agent,
     get_authenticated_landlord,
     get_authenticated_tenant,
 )
-from accounts.models import AgentType
+from accounts.models import AgentType, User, UserRole
 from agents.models import AgentAssignmentStatus
 from complaints.models import Complaint, ComplaintStatus
+from documents.models import LandlordDocumentVerificationAccess, LegalDocumentStatus, TenantLegalDocument
 from payments.models import Payment, PaymentStatus
 from properties.models import Property, PropertyStatus
 from tenancies.models import Tenancy, TenancyStatus
 
-from .serializers import AgentDashboardSerializer, LandlordDashboardSerializer, TenantDashboardSerializer
+from .serializers import AdminDashboardSerializer, AgentDashboardSerializer, LandlordDashboardSerializer, TenantDashboardSerializer
 
 
 def build_payment_snapshot(queryset):
@@ -129,3 +131,54 @@ class AgentDashboardView(APIView):
             "can_view_legal_id": agent.agent_type == AgentType.PRIVATE,
         }
         return Response(AgentDashboardSerializer(payload).data, status=status.HTTP_200_OK)
+
+
+class AdminDashboardView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        ensure_platform_admin(request)
+        users = User.objects.all()
+        properties = Property.objects.all()
+        tenancies = Tenancy.objects.all()
+        payments = Payment.objects.all()
+        complaints = Complaint.objects.all()
+        documents = TenantLegalDocument.objects.all()
+        verification_access = LandlordDocumentVerificationAccess.objects.all()
+
+        payload = {
+            "users": [
+                {"label": "total", "value": users.count()},
+                {"label": "landlords", "value": users.filter(role=UserRole.LANDLORD).count()},
+                {"label": "tenants", "value": users.filter(role=UserRole.TENANT).count()},
+                {"label": "agents", "value": users.filter(role=UserRole.AGENT).count()},
+                {"label": "admins", "value": users.filter(role=UserRole.ADMIN).count() + users.filter(is_superuser=True).exclude(role=UserRole.ADMIN).count()},
+            ],
+            "properties": [
+                {"label": "total", "value": properties.count()},
+                {"label": "public", "value": properties.filter(is_public=True).count()},
+                {"label": "available", "value": properties.filter(status=PropertyStatus.AVAILABLE).count()},
+                {"label": "occupied", "value": properties.filter(status=PropertyStatus.OCCUPIED).count()},
+                {"label": "hidden", "value": properties.filter(status=PropertyStatus.HIDDEN).count()},
+            ],
+            "tenancies": [
+                {"label": "active", "value": tenancies.filter(status=TenancyStatus.ACTIVE).count()},
+                {"label": "pending", "value": tenancies.filter(status=TenancyStatus.PENDING).count()},
+                {"label": "completed", "value": tenancies.filter(status=TenancyStatus.COMPLETED).count()},
+                {"label": "terminated", "value": tenancies.filter(status=TenancyStatus.TERMINATED).count()},
+            ],
+            "payment_snapshot": build_payment_snapshot(payments),
+            "complaint_snapshot": build_complaint_snapshot(complaints),
+            "legal_documents": [
+                {"label": "total", "value": documents.count()},
+                {"label": "verified", "value": documents.filter(status=LegalDocumentStatus.VERIFIED).count()},
+                {"label": "submitted", "value": documents.filter(status=LegalDocumentStatus.SUBMITTED).count()},
+                {"label": "rejected", "value": documents.filter(status=LegalDocumentStatus.REJECTED).count()},
+                {"label": "expired", "value": documents.filter(status=LegalDocumentStatus.EXPIRED).count()},
+            ],
+            "verification_access": [
+                {"label": "enabled", "value": verification_access.filter(is_enabled=True).count()},
+                {"label": "disabled", "value": verification_access.filter(is_enabled=False).count()},
+            ],
+        }
+        return Response(AdminDashboardSerializer(payload).data, status=status.HTTP_200_OK)
