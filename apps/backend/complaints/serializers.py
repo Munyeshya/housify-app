@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from accounts.models import User
 from tenancies.models import Tenancy
 
 from .models import Complaint
@@ -39,20 +38,12 @@ class ComplaintSerializer(serializers.ModelSerializer):
 
 class ComplaintCreateSerializer(serializers.ModelSerializer):
     tenancy = serializers.PrimaryKeyRelatedField(queryset=Tenancy.objects.select_related("property", "tenant__user"))
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True)
-    assigned_to = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Complaint
         fields = (
             "tenancy",
-            "created_by",
-            "assigned_to",
             "title",
             "description",
             "category",
-            "direction",
-            "status",
-            "resolution_notes",
-            "resolved_at",
         )
