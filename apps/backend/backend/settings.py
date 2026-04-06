@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "agents",
     "bookmarks",
     "corsheaders",
+    "dashboards",
     "documents",
     "history",
     "locations",
