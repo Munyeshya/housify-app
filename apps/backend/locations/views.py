@@ -115,7 +115,8 @@ class LandlordPropertyMapView(PropertyMapQueryMixin, APIView):
                 "maintenance_properties": sum(
                     1 for property_obj in properties if property_obj.status == PropertyStatus.MAINTENANCE
                 ),
-                "map_points": PropertyMapPinSerializer(properties, many=True, context={"origin": origin}).data,
-            }
+                "map_points": properties,
+            },
+            context={"origin": origin},
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
