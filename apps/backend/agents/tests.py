@@ -271,8 +271,8 @@ class AgentsApiTests(TestCase):
 
         self.assertEqual(payments_response.status_code, 200)
         self.assertEqual(complaints_response.status_code, 200)
-        self.assertEqual(len(payments_response.data), 1)
-        self.assertEqual(len(complaints_response.data), 1)
+        self.assertEqual(len(payments_response.data["results"]), 1)
+        self.assertEqual(len(complaints_response.data["results"]), 1)
 
     def test_duplicate_active_assignment_is_blocked(self):
         PropertyAgentAssignment.objects.create(
