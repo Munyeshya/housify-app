@@ -5,10 +5,17 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 
+from .access import get_authenticated_agent, get_authenticated_landlord, get_authenticated_tenant
 from .serializers import (
     AgentRegistrationSerializer,
+    AgentProfileSerializer,
+    AgentProfileUpdateSerializer,
     LandlordRegistrationSerializer,
+    LandlordProfileSerializer,
+    LandlordProfileUpdateSerializer,
     LoginSerializer,
+    TenantProfileSerializer,
+    TenantProfileUpdateSerializer,
     TenantRegistrationSerializer,
     UserSerializer,
 )
@@ -67,3 +74,48 @@ class MeView(APIView):
 
     def get(self, request):
         return Response(UserSerializer(request.user).data, status=status.HTTP_200_OK)
+
+
+class LandlordProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = get_authenticated_landlord(request)
+        return Response(LandlordProfileSerializer(profile).data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        profile = get_authenticated_landlord(request)
+        serializer = LandlordProfileUpdateSerializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(LandlordProfileSerializer(profile).data, status=status.HTTP_200_OK)
+
+
+class TenantProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = get_authenticated_tenant(request)
+        return Response(TenantProfileSerializer(profile).data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        profile = get_authenticated_tenant(request)
+        serializer = TenantProfileUpdateSerializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(TenantProfileSerializer(profile).data, status=status.HTTP_200_OK)
+
+
+class AgentProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = get_authenticated_agent(request)
+        return Response(AgentProfileSerializer(profile).data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        profile = get_authenticated_agent(request)
+        serializer = AgentProfileUpdateSerializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(AgentProfileSerializer(profile).data, status=status.HTTP_200_OK)
