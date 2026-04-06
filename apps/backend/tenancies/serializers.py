@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from accounts.models import LandlordProfile, TenantProfile, User
+from accounts.models import TenantProfile
 from properties.models import Property
 
 from .models import Tenancy, TenancyStatus
@@ -38,20 +38,12 @@ class TenancySerializer(serializers.ModelSerializer):
 class TenancyCreateSerializer(serializers.ModelSerializer):
     property = serializers.PrimaryKeyRelatedField(queryset=Property.objects.all())
     tenant = serializers.PrimaryKeyRelatedField(queryset=TenantProfile.objects.select_related("user"))
-    landlord = serializers.PrimaryKeyRelatedField(queryset=LandlordProfile.objects.select_related("user"))
-    assigned_by = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        required=False,
-        allow_null=True,
-    )
 
     class Meta:
         model = Tenancy
         fields = (
             "property",
             "tenant",
-            "landlord",
-            "assigned_by",
             "status",
             "start_date",
             "end_date",
@@ -64,7 +56,7 @@ class TenancyCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         property_obj = attrs["property"]
-        landlord = attrs["landlord"]
+        landlord = self.context["landlord"]
         tenant = attrs["tenant"]
 
         if property_obj.landlord_id != landlord.id:
