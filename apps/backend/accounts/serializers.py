@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from documents.models import TenantLegalDocument
@@ -80,3 +81,21 @@ class AgentRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(password=password, role=UserRole.AGENT, **validated_data)
         AgentProfile.objects.create(user=user, agent_type=agent_type, bio=bio)
         return user
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True, trim_whitespace=False)
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
+        user = authenticate(
+            request=self.context.get("request"),
+            username=email,
+            password=password,
+        )
+        if not user:
+            raise serializers.ValidationError("Invalid email or password.")
+        attrs["user"] = user
+        return attrs
