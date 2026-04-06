@@ -59,6 +59,7 @@ class BookmarkApiTests(TestCase):
         )
 
     def test_tenant_can_bookmark_public_property(self):
+        self.client.force_authenticate(user=self.tenant.user)
         response = self.client.post(
             "/api/v1/bookmarks/",
             {
@@ -72,6 +73,7 @@ class BookmarkApiTests(TestCase):
         self.assertEqual(PropertyBookmark.objects.count(), 1)
 
     def test_cannot_bookmark_private_property(self):
+        self.client.force_authenticate(user=self.tenant.user)
         response = self.client.post(
             "/api/v1/bookmarks/",
             {
@@ -86,6 +88,7 @@ class BookmarkApiTests(TestCase):
 
     def test_duplicate_bookmark_is_blocked(self):
         PropertyBookmark.objects.create(tenant=self.tenant, property=self.public_property)
+        self.client.force_authenticate(user=self.tenant.user)
 
         response = self.client.post(
             "/api/v1/bookmarks/",
@@ -100,8 +103,9 @@ class BookmarkApiTests(TestCase):
 
     def test_tenant_can_list_bookmarks(self):
         PropertyBookmark.objects.create(tenant=self.tenant, property=self.public_property)
+        self.client.force_authenticate(user=self.tenant.user)
 
-        response = self.client.get(f"/api/v1/bookmarks/?tenant={self.tenant.id}")
+        response = self.client.get("/api/v1/bookmarks/")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
@@ -109,8 +113,9 @@ class BookmarkApiTests(TestCase):
 
     def test_tenant_can_delete_own_bookmark(self):
         bookmark = PropertyBookmark.objects.create(tenant=self.tenant, property=self.public_property)
+        self.client.force_authenticate(user=self.tenant.user)
 
-        response = self.client.delete(f"/api/v1/bookmarks/{bookmark.id}/?tenant={self.tenant.id}")
+        response = self.client.delete(f"/api/v1/bookmarks/{bookmark.id}/")
 
         self.assertEqual(response.status_code, 204)
         self.assertFalse(PropertyBookmark.objects.filter(id=bookmark.id).exists())
