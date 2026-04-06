@@ -9,6 +9,8 @@ from accounts.access import (
     get_authenticated_tenant,
     is_admin_user,
 )
+from security.models import SecurityEventType
+from security.services import log_security_event
 from .models import Payment
 from .serializers import PaymentCreateSerializer, PaymentSerializer
 
@@ -69,5 +71,20 @@ class PaymentListCreateView(generics.ListCreateAPIView):
             raise PermissionDenied("Only authenticated landlords or tenants can record payments.")
 
         payment = serializer.save()
+        log_security_event(
+            request=request,
+            actor=request.user,
+            event_type=SecurityEventType.PAYMENT_CREATED,
+            success=True,
+            target_type="payment",
+            target_id=payment.id,
+            metadata={
+                "tenancy_id": payment.tenancy_id,
+                "category": payment.category,
+                "status": payment.status,
+                "amount_due": str(payment.amount_due),
+                "amount_paid": str(payment.amount_paid),
+            },
+        )
         response_serializer = PaymentSerializer(payment)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
