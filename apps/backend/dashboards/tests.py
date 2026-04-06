@@ -5,7 +5,7 @@ from accounts.models import AgentProfile, AgentType, LandlordProfile, TenantProf
 from agents.models import AgentAssignmentStatus, PropertyAgentAssignment
 from bookmarks.models import PropertyBookmark
 from complaints.models import Complaint, ComplaintCategory, ComplaintDirection, ComplaintStatus
-from documents.models import TenantLegalDocument
+from documents.models import LandlordDocumentVerificationAccess, TenantLegalDocument
 from payments.models import Payment, PaymentCategory, PaymentMethod, PaymentStatus
 from properties.models import BillingCycle, Property, PropertyStatus, PropertyType
 from tenancies.models import Tenancy, TenancyStatus
@@ -47,6 +47,11 @@ class DashboardApiTests(TestCase):
             user=self.agent_user,
             agent_type=AgentType.PRIVATE,
             created_by_landlord=self.landlord,
+        )
+        self.admin_user = User.objects.create_superuser(
+            email="admin@example.com",
+            password="password123",
+            full_name="Platform Admin",
         )
 
         self.property = Property.objects.create(
@@ -105,6 +110,11 @@ class DashboardApiTests(TestCase):
             status=AgentAssignmentStatus.ACTIVE,
             granted_by=self.landlord_user,
         )
+        LandlordDocumentVerificationAccess.objects.create(
+            landlord=self.landlord,
+            is_enabled=True,
+            granted_by=self.admin_user,
+        )
 
     def test_landlord_dashboard_returns_summary(self):
         self.client.force_authenticate(user=self.landlord_user)
@@ -135,3 +145,13 @@ class DashboardApiTests(TestCase):
         self.assertEqual(response.data["agent"], self.agent.id)
         self.assertEqual(response.data["managed_property_count"], 1)
         self.assertTrue(response.data["can_view_legal_id"])
+
+    def test_admin_dashboard_returns_platform_summary(self):
+        self.client.force_authenticate(user=self.admin_user)
+
+        response = self.client.get("/api/v1/dashboards/admin/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["users"][0]["label"], "total")
+        self.assertEqual(response.data["properties"][0]["label"], "total")
+        self.assertEqual(response.data["verification_access"][0]["label"], "enabled")
