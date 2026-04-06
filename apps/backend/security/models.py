@@ -6,6 +6,7 @@ class SecurityEventType(models.TextChoices):
     LOGIN_SUCCESS = "login_success", "Login success"
     LOGIN_FAILURE = "login_failure", "Login failure"
     LOGOUT = "logout", "Logout"
+    PAYMENT_CREATED = "payment_created", "Payment created"
     LEGAL_DOCUMENT_ACCESS = "legal_document_access", "Legal document access"
     LANDLORD_VERIFICATION_ACCESS_CHANGED = "landlord_verification_access_changed", "Landlord verification access changed"
     LANDLORD_DOCUMENT_VERIFICATION_REQUESTED = "landlord_document_verification_requested", "Landlord document verification requested"
