@@ -24,7 +24,13 @@ def get_authenticated_agent(request):
 
 
 def is_admin_user(user):
-    return user.is_authenticated and user.role == UserRole.ADMIN
+    return user.is_authenticated and (user.role == UserRole.ADMIN or user.is_superuser)
+
+
+def ensure_platform_admin(request):
+    if not is_admin_user(request.user):
+        raise PermissionDenied("Only platform admins can perform this action.")
+    return request.user
 
 
 def get_active_agent_property_ids(agent_profile):
