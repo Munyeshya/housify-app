@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -125,6 +126,8 @@ class SecurityUserSuspendView(APIView):
     def post(self, request, user_id):
         admin_user = ensure_platform_admin(request)
         target_user = get_object_or_404(User, id=user_id)
+        if target_user.id == admin_user.id:
+            raise PermissionDenied("Platform admins cannot suspend themselves.")
         serializer = SecurityUserActionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         suspend_user(
