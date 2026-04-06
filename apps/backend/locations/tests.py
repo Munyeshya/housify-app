@@ -118,7 +118,8 @@ class LocationsApiTests(TestCase):
         self.assertIsNotNone(response.data[0]["distance_km"])
 
     def test_landlord_map_returns_summary_for_landlord_properties(self):
-        response = self.client.get(f"/api/v1/locations/landlord-map/?landlord={self.landlord.id}")
+        self.client.force_authenticate(user=self.landlord.user)
+        response = self.client.get("/api/v1/locations/landlord-map/")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["landlord"], self.landlord.id)
@@ -130,10 +131,10 @@ class LocationsApiTests(TestCase):
         self.assertIn(self.landlord_hidden_property.title, titles)
         self.assertNotIn(self.other_public_property.title, titles)
 
-    def test_landlord_map_requires_landlord_identifier(self):
+    def test_landlord_map_requires_authenticated_landlord(self):
         response = self.client.get("/api/v1/locations/landlord-map/")
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 401)
 
     def test_public_map_can_filter_by_bounding_box(self):
         response = self.client.get(
