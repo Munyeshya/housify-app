@@ -237,16 +237,26 @@ Potential feature expansions include:
 
 ## Demo Seed Data
 
-The backend includes a demo seed command for local development:
+The backend includes a Faker-powered seed command for local development:
 
 - `python manage.py seed_demo_data`
 
 Optional flags:
 
-- `--password <value>` to set the password used for all demo users
-- `--reset` to delete the existing demo users before recreating the demo dataset
+- `--password <value>` to set the password used for all seeded users
+- `--reset` to delete the existing demo and Faker-generated users before recreating the dataset
+- `--seed <int>` to keep the generated data deterministic across runs
+- `--landlords <int>` to set how many additional Faker landlords to create
+- `--tenants <int>` to set how many additional Faker tenants to create
+- `--public-agents <int>` to set how many additional public agents to create
+- `--private-agents-per-landlord <int>` to set how many private agents each landlord gets
+- `--properties-per-landlord <int>` to set how many properties each landlord gets
 
-The command creates a reusable landlord, tenant, public agent, private agent, portfolios, properties, images, an active tenancy, payments, a complaint, bookmarks, and agent assignments so the frontend can be developed against realistic sample data.
+Example:
+
+- `python manage.py seed_demo_data --reset --seed 42 --landlords 6 --tenants 30 --public-agents 8 --properties-per-landlord 8`
+
+The command now creates the base demo users plus Faker-generated landlords, tenants, agents, portfolios, public and private properties, images, active tenancies, payment history, complaints, bookmarks, and agent assignments so the frontend can be developed against a larger working dataset.
 
 ## API Conventions
 
