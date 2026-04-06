@@ -108,8 +108,8 @@ class BookmarkApiTests(TestCase):
         response = self.client.get("/api/v1/bookmarks/")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["property"]["title"], self.public_property.title)
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(response.data["results"][0]["property"]["title"], self.public_property.title)
 
     def test_tenant_can_delete_own_bookmark(self):
         bookmark = PropertyBookmark.objects.create(tenant=self.tenant, property=self.public_property)
