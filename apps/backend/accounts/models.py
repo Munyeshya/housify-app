@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 
@@ -80,7 +81,13 @@ class TenantProfile(models.Model):
 
     @property
     def has_legal_id_document(self):
-        return bool(self.legal_id_document_url)
+        if self.legal_id_document_url:
+            return True
+
+        try:
+            return bool(self.legal_document.document_url)
+        except ObjectDoesNotExist:
+            return False
 
     def __str__(self):
         return f"Tenant {self.user.full_name}"
