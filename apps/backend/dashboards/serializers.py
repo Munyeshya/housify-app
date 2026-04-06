@@ -52,3 +52,13 @@ class AgentDashboardSerializer(serializers.Serializer):
     payment_snapshot = PaymentSnapshotSerializer()
     complaint_snapshot = ComplaintSnapshotSerializer()
     can_view_legal_id = serializers.BooleanField()
+
+
+class AdminDashboardSerializer(serializers.Serializer):
+    users = DashboardStatSerializer(many=True)
+    properties = DashboardStatSerializer(many=True)
+    tenancies = DashboardStatSerializer(many=True)
+    payment_snapshot = PaymentSnapshotSerializer()
+    complaint_snapshot = ComplaintSnapshotSerializer()
+    legal_documents = DashboardStatSerializer(many=True)
+    verification_access = DashboardStatSerializer(many=True)
