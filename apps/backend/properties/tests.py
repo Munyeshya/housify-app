@@ -169,4 +169,4 @@ class LandlordPropertyManagementApiTests(TestCase):
         response = self.client.get("/api/v1/properties/manage/")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data["results"]), 1)
