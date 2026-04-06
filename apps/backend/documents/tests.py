@@ -6,7 +6,7 @@ from agents.models import AgentAssignmentStatus, PropertyAgentAssignment
 from properties.models import BillingCycle, Property, PropertyStatus, PropertyType
 from tenancies.models import Tenancy, TenancyStatus
 
-from .models import LegalDocumentStatus, TenantLegalDocument
+from .models import LandlordDocumentVerificationAccess, LegalDocumentStatus, TenantLegalDocument
 
 
 class DocumentsApiTests(TestCase):
@@ -28,6 +28,12 @@ class DocumentsApiTests(TestCase):
             full_name="Tenant One",
         )
         self.tenant = TenantProfile.objects.create(user=self.tenant_user)
+
+        self.admin_user = User.objects.create_superuser(
+            email="admin@example.com",
+            password="password123",
+            full_name="Platform Admin",
+        )
 
         self.public_agent_user = User.objects.create_user(
             email="public-agent@example.com",
@@ -196,6 +202,80 @@ class DocumentsApiTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+    def test_platform_admin_can_view_any_document(self):
+        TenantLegalDocument.objects.create(
+            tenant=self.tenant,
+            document_type="National ID",
+            document_number="1199980012345678",
+            document_url="https://example.com/legal-id.pdf",
+        )
+
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.get(
+            f"/api/v1/documents/legal-id/access/?tenant={self.tenant.id}"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["tenant"], self.tenant.id)
+
+    def test_platform_admin_can_grant_landlord_document_verification_access(self):
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.post(
+            "/api/v1/documents/legal-id/verification-access/",
+            {
+                "landlord": self.landlord.id,
+                "is_enabled": True,
+                "provider_code": "national-registry",
+                "notes": "Paid verification access enabled.",
+            },
+            format="json",
+        )
+
+        access = LandlordDocumentVerificationAccess.objects.get(landlord=self.landlord)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(access.is_enabled)
+        self.assertEqual(access.granted_by, self.admin_user)
+
+    def test_landlord_document_verification_status_returns_grant(self):
+        LandlordDocumentVerificationAccess.objects.create(
+            landlord=self.landlord,
+            is_enabled=True,
+            granted_by=self.admin_user,
+            provider_code="national-registry",
+        )
+
+        self.client.force_authenticate(user=self.landlord_user)
+        response = self.client.get("/api/v1/documents/legal-id/verification-access/me/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["is_enabled"])
+
+    def test_landlord_document_verification_uses_unconfigured_gateway_socket(self):
+        TenantLegalDocument.objects.create(
+            tenant=self.tenant,
+            document_type="National ID",
+            document_number="1199980012345678",
+            document_url="https://example.com/legal-id.pdf",
+        )
+        LandlordDocumentVerificationAccess.objects.create(
+            landlord=self.landlord,
+            is_enabled=True,
+            granted_by=self.admin_user,
+            provider_code="national-registry",
+        )
+
+        self.client.force_authenticate(user=self.landlord_user)
+        response = self.client.post(
+            "/api/v1/documents/legal-id/verify/",
+            {"tenant": self.tenant.id},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.data["is_available"])
+        self.assertIsNone(response.data["is_valid"])
 
     def test_deleting_document_clears_legacy_tenant_profile_fields(self):
         document = TenantLegalDocument.objects.create(
