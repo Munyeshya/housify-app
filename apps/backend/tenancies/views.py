@@ -42,11 +42,11 @@ class TenancyListCreateView(generics.ListCreateAPIView):
             raise PermissionDenied("Only authenticated landlords can create tenancy records.")
 
         landlord = get_authenticated_landlord(request)
-        payload = request.data.copy()
-        payload["landlord"] = landlord.id
-        payload["assigned_by"] = request.user.id
-        serializer = self.get_serializer(data=payload)
+        serializer = self.get_serializer(
+            data=request.data,
+            context={**self.get_serializer_context(), "landlord": landlord},
+        )
         serializer.is_valid(raise_exception=True)
-        tenancy = serializer.save()
+        tenancy = serializer.save(landlord=landlord, assigned_by=request.user)
         response_serializer = TenancySerializer(tenancy)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
