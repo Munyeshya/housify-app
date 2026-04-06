@@ -1,5 +1,7 @@
 from rest_framework.exceptions import PermissionDenied
 
+from agents.models import AgentAssignmentStatus, PropertyAgentAssignment
+
 from .models import UserRole
 
 
@@ -19,6 +21,17 @@ def get_authenticated_agent(request):
     if not request.user.is_authenticated or request.user.role != UserRole.AGENT:
         raise PermissionDenied("Only authenticated agents can perform this action.")
     return request.user.agent_profile
+
+
+def is_admin_user(user):
+    return user.is_authenticated and user.role == UserRole.ADMIN
+
+
+def get_active_agent_property_ids(agent_profile):
+    return PropertyAgentAssignment.objects.filter(
+        agent=agent_profile,
+        status=AgentAssignmentStatus.ACTIVE,
+    ).values_list("property_id", flat=True)
 
 
 def ensure_current_agent(agent_profile, requested_agent_id):
