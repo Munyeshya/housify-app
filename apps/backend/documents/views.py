@@ -66,8 +66,26 @@ class TenantLegalDocumentAccessView(APIView):
     def get(self, request):
         payload = request.query_params.copy()
         if TenantLegalDocument.can_admin_view(request.user):
-            payload.pop("landlord", None)
-            payload.pop("agent", None)
+            tenant_id = payload.get("tenant")
+            if not tenant_id:
+                return Response(
+                    {"detail": "A tenant id is required."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            document = get_object_or_404(TenantLegalDocument.objects.select_related("tenant__user"), tenant_id=tenant_id)
+            log_security_event(
+                request=request,
+                actor=request.user,
+                event_type=SecurityEventType.LEGAL_DOCUMENT_ACCESS,
+                success=True,
+                target_type="tenant_legal_document",
+                target_id=document.id,
+                metadata={
+                    "tenant_id": document.tenant_id,
+                    "viewer_role": request.user.role,
+                },
+            )
+            return Response(TenantLegalDocumentSerializer(document).data, status=status.HTTP_200_OK)
         elif request.user.role == "landlord":
             landlord = get_authenticated_landlord(request)
             payload["landlord"] = landlord.id
