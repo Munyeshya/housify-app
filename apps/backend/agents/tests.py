@@ -140,6 +140,7 @@ class AgentsApiTests(TestCase):
         )
 
     def test_attach_public_agent_to_landlord_property(self):
+        self.client.force_authenticate(user=self.landlord_user)
         response = self.client.post(
             "/api/v1/agents/assignments/",
             {
@@ -157,6 +158,7 @@ class AgentsApiTests(TestCase):
         self.assertEqual(response.data["agent"]["type"], AgentType.PUBLIC)
 
     def test_cannot_attach_agent_to_other_landlord_property(self):
+        self.client.force_authenticate(user=self.landlord_user)
         response = self.client.post(
             "/api/v1/agents/assignments/",
             {
@@ -173,6 +175,7 @@ class AgentsApiTests(TestCase):
         self.assertEqual(PropertyAgentAssignment.objects.count(), 0)
 
     def test_create_private_agent_and_assign_to_property(self):
+        self.client.force_authenticate(user=self.landlord_user)
         create_response = self.client.post(
             "/api/v1/agents/private/",
             {
@@ -211,10 +214,11 @@ class AgentsApiTests(TestCase):
             status=AgentAssignmentStatus.ACTIVE,
             granted_by=self.landlord_user,
         )
+        self.client.force_authenticate(user=self.landlord_user)
 
         response = self.client.post(
             f"/api/v1/agents/assignments/{assignment.id}/revoke/",
-            {"landlord": self.landlord.id},
+            {},
             format="json",
         )
 
@@ -239,7 +243,9 @@ class AgentsApiTests(TestCase):
             granted_by=self.landlord_user,
         )
 
+        self.client.force_authenticate(user=self.public_agent_user)
         public_response = self.client.get(f"/api/v1/agents/{self.public_agent.id}/properties/")
+        self.client.force_authenticate(user=self.private_agent_user)
         private_response = self.client.get(f"/api/v1/agents/{self.private_agent.id}/properties/")
 
         public_tenancy = public_response.data[0]["active_tenancies"][0]
@@ -259,6 +265,7 @@ class AgentsApiTests(TestCase):
             granted_by=self.landlord_user,
         )
 
+        self.client.force_authenticate(user=self.public_agent_user)
         payments_response = self.client.get(f"/api/v1/agents/{self.public_agent.id}/payments/")
         complaints_response = self.client.get(f"/api/v1/agents/{self.public_agent.id}/complaints/")
 
@@ -275,6 +282,7 @@ class AgentsApiTests(TestCase):
             status=AgentAssignmentStatus.ACTIVE,
             granted_by=self.landlord_user,
         )
+        self.client.force_authenticate(user=self.landlord_user)
 
         response = self.client.post(
             "/api/v1/agents/assignments/",
@@ -309,9 +317,8 @@ class AgentsApiTests(TestCase):
             )
 
     def test_public_agent_cannot_be_deleted_by_landlord(self):
-        response = self.client.delete(
-            f"/api/v1/agents/private/{self.public_agent.id}/?landlord={self.landlord.id}"
-        )
+        self.client.force_authenticate(user=self.landlord_user)
+        response = self.client.delete(f"/api/v1/agents/private/{self.public_agent.id}/")
 
         self.assertEqual(response.status_code, 400)
         self.assertTrue(AgentProfile.objects.filter(id=self.public_agent.id).exists())
@@ -325,9 +332,8 @@ class AgentsApiTests(TestCase):
             granted_by=self.landlord_user,
         )
 
-        response = self.client.delete(
-            f"/api/v1/agents/private/{self.private_agent.id}/?landlord={self.landlord.id}"
-        )
+        self.client.force_authenticate(user=self.landlord_user)
+        response = self.client.delete(f"/api/v1/agents/private/{self.private_agent.id}/")
 
         self.assertEqual(response.status_code, 204)
         self.assertFalse(AgentProfile.objects.filter(id=self.private_agent.id).exists())
