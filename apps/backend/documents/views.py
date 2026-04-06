@@ -22,6 +22,8 @@ from .serializers import (
     TenantLegalDocumentUpsertSerializer,
 )
 from .services import get_document_verification_gateway
+from security.models import SecurityEventType
+from security.services import log_security_event
 
 
 class TenantLegalDocumentListCreateView(generics.ListCreateAPIView):
@@ -83,6 +85,18 @@ class TenantLegalDocumentAccessView(APIView):
         serializer = TenantLegalDocumentAccessSerializer(data=payload)
         serializer.is_valid(raise_exception=True)
         document = serializer.validated_data["document"]
+        log_security_event(
+            request=request,
+            actor=request.user,
+            event_type=SecurityEventType.LEGAL_DOCUMENT_ACCESS,
+            success=True,
+            target_type="tenant_legal_document",
+            target_id=document.id,
+            metadata={
+                "tenant_id": document.tenant_id,
+                "viewer_role": request.user.role,
+            },
+        )
         return Response(TenantLegalDocumentSerializer(document).data, status=status.HTTP_200_OK)
 
 
@@ -108,6 +122,18 @@ class PlatformDocumentVerificationAccessView(APIView):
                 "notes": serializer.validated_data.get("notes", ""),
                 "granted_by": admin_user,
                 "granted_at": timezone.now(),
+            },
+        )
+        log_security_event(
+            request=request,
+            actor=admin_user,
+            event_type=SecurityEventType.LANDLORD_VERIFICATION_ACCESS_CHANGED,
+            success=True,
+            target_type="landlord",
+            target_id=landlord.id,
+            metadata={
+                "is_enabled": access.is_enabled,
+                "provider_code": access.provider_code,
             },
         )
         response_serializer = LandlordDocumentVerificationAccessSerializer(access)
@@ -149,5 +175,18 @@ class TenantLegalDocumentVerificationView(APIView):
         document = serializer.validated_data["document"]
         gateway = get_document_verification_gateway()
         result = gateway.verify_tenant_document(document=document, landlord=landlord)
+        log_security_event(
+            request=request,
+            actor=request.user,
+            event_type=SecurityEventType.LANDLORD_DOCUMENT_VERIFICATION_REQUESTED,
+            success=result.is_available,
+            target_type="tenant_legal_document",
+            target_id=document.id,
+            metadata={
+                "tenant_id": document.tenant_id,
+                "provider_code": result.provider_code,
+                "is_available": result.is_available,
+            },
+        )
         response_serializer = TenantDocumentVerificationResultSerializer(result)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
