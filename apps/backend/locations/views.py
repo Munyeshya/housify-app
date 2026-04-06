@@ -2,6 +2,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from accounts.access import get_authenticated_landlord
 from properties.models import Property, PropertyStatus
 
 from .serializers import LandlordMapSummarySerializer, PropertyMapPinSerializer, haversine_distance_km
@@ -84,19 +85,14 @@ class PublicPropertyMapView(PropertyMapQueryMixin, APIView):
 
 
 class LandlordPropertyMapView(PropertyMapQueryMixin, APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        landlord_id = request.query_params.get("landlord")
-        if not landlord_id:
-            return Response(
-                {"detail": "A landlord id is required to load the landlord map."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        landlord = get_authenticated_landlord(request)
 
         origin = self._parse_origin(request)
         queryset = (
-            Property.objects.filter(landlord_id=landlord_id)
+            Property.objects.filter(landlord=landlord)
             .exclude(latitude__isnull=True)
             .exclude(longitude__isnull=True)
             .prefetch_related("images")
@@ -107,7 +103,7 @@ class LandlordPropertyMapView(PropertyMapQueryMixin, APIView):
 
         serializer = LandlordMapSummarySerializer(
             {
-                "landlord": int(landlord_id),
+                "landlord": landlord.id,
                 "total_properties": len(properties),
                 "available_properties": sum(1 for property_obj in properties if property_obj.status == PropertyStatus.AVAILABLE),
                 "occupied_properties": sum(1 for property_obj in properties if property_obj.status == PropertyStatus.OCCUPIED),
