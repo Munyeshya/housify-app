@@ -12,6 +12,42 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "full_name", "phone_number", "role")
 
 
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("full_name", "phone_number")
+
+
+class LandlordProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = LandlordProfile
+        fields = ("id", "display_name", "user")
+
+
+class LandlordProfileUpdateSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="user.full_name", required=False)
+    phone_number = serializers.CharField(source="user.phone_number", required=False, allow_blank=True)
+
+    class Meta:
+        model = LandlordProfile
+        fields = ("display_name", "full_name", "phone_number")
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user", {})
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if user_data:
+            for attr, value in user_data.items():
+                setattr(instance.user, attr, value)
+            instance.user.save(update_fields=list(user_data.keys()))
+
+        return instance
+
+
 class LandlordRegistrationSerializer(serializers.ModelSerializer):
     display_name = serializers.CharField(max_length=255)
     password = serializers.CharField(write_only=True, min_length=8)
@@ -81,6 +117,71 @@ class AgentRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(password=password, role=UserRole.AGENT, **validated_data)
         AgentProfile.objects.create(user=user, agent_type=agent_type, bio=bio)
         return user
+
+
+class TenantProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    has_legal_id_document = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = TenantProfile
+        fields = (
+            "id",
+            "tenant_identifier",
+            "legal_id_type",
+            "legal_id_number",
+            "legal_id_document_url",
+            "has_legal_id_document",
+            "user",
+        )
+
+
+class TenantProfileUpdateSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="user.full_name", required=False)
+    phone_number = serializers.CharField(source="user.phone_number", required=False, allow_blank=True)
+
+    class Meta:
+        model = TenantProfile
+        fields = ("full_name", "phone_number")
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user", {})
+        if user_data:
+            for attr, value in user_data.items():
+                setattr(instance.user, attr, value)
+            instance.user.save(update_fields=list(user_data.keys()))
+        return instance
+
+
+class AgentProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    created_by_landlord = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = AgentProfile
+        fields = ("id", "agent_type", "bio", "created_by_landlord", "user")
+
+
+class AgentProfileUpdateSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="user.full_name", required=False)
+    phone_number = serializers.CharField(source="user.phone_number", required=False, allow_blank=True)
+
+    class Meta:
+        model = AgentProfile
+        fields = ("bio", "full_name", "phone_number")
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user", {})
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if user_data:
+            for attr, value in user_data.items():
+                setattr(instance.user, attr, value)
+            instance.user.save(update_fields=list(user_data.keys()))
+
+        return instance
 
 
 class LoginSerializer(serializers.Serializer):
