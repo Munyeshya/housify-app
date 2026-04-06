@@ -9,8 +9,7 @@ from accounts.access import (
     get_authenticated_tenant,
     is_admin_user,
 )
-from .models import ComplaintDirection
-from .models import Complaint
+from .models import Complaint, ComplaintDirection, ComplaintStatus
 from .serializers import ComplaintCreateSerializer, ComplaintSerializer
 
 
@@ -71,6 +70,7 @@ class ComplaintListCreateView(generics.ListCreateAPIView):
             payload["created_by"] = request.user
             payload["assigned_to"] = tenancy.tenant.user
             payload["direction"] = ComplaintDirection.LANDLORD_TO_TENANT
+            payload["status"] = ComplaintStatus.OPEN
         elif request.user.role == "tenant":
             tenant = get_authenticated_tenant(request)
             if tenancy.tenant_id != tenant.id:
@@ -78,6 +78,7 @@ class ComplaintListCreateView(generics.ListCreateAPIView):
             payload["created_by"] = request.user
             payload["assigned_to"] = tenancy.landlord.user
             payload["direction"] = ComplaintDirection.TENANT_TO_LANDLORD
+            payload["status"] = ComplaintStatus.OPEN
         else:
             raise PermissionDenied("Only authenticated landlords or tenants can create complaints.")
 
