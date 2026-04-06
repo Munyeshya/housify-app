@@ -234,3 +234,16 @@ Potential feature expansions include:
 - `apps/backend` - Django project
 - `apps/web` - React web app created with Vite
 - `apps/mobile` - React Native app created with Expo
+
+## Demo Seed Data
+
+The backend includes a demo seed command for local development:
+
+- `python manage.py seed_demo_data`
+
+Optional flags:
+
+- `--password <value>` to set the password used for all demo users
+- `--reset` to delete the existing demo users before recreating the demo dataset
+
+The command creates a reusable landlord, tenant, public agent, private agent, portfolios, properties, images, an active tenancy, payments, a complaint, bookmarks, and agent assignments so the frontend can be developed against realistic sample data.
