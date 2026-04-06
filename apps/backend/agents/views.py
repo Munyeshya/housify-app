@@ -169,11 +169,15 @@ class AgentManagedPropertiesView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        items = page if page is not None else queryset
         data = []
-        for property_obj in queryset:
+        for property_obj in items:
             assignment = self.assignment_map[property_obj.id]
             serializer = self.get_serializer(property_obj, context={"assignment": assignment})
             data.append(serializer.data)
+        if page is not None:
+            return self.get_paginated_response(data)
         return Response(data)
 
 
