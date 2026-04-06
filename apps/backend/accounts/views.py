@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 
 from .access import get_authenticated_agent, get_authenticated_landlord, get_authenticated_tenant
+from .throttles import LoginRateThrottle
 from .serializers import (
     AgentRegistrationSerializer,
     AgentProfileSerializer,
@@ -19,6 +20,8 @@ from .serializers import (
     TenantRegistrationSerializer,
     UserSerializer,
 )
+from security.models import SecurityEventType
+from security.services import log_security_event
 
 
 class RegistrationResponseMixin:
@@ -46,12 +49,30 @@ class AgentRegistrationView(RegistrationResponseMixin, CreateAPIView):
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [LoginRateThrottle]
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data, context={"request": request})
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            log_security_event(
+                request=request,
+                event_type=SecurityEventType.LOGIN_FAILURE,
+                success=False,
+                metadata={"email": request.data.get("email", "")},
+            )
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         user = serializer.validated_data["user"]
-        token, _ = Token.objects.get_or_create(user=user)
+        Token.objects.filter(user=user).delete()
+        token = Token.objects.create(user=user)
+        log_security_event(
+            request=request,
+            actor=user,
+            event_type=SecurityEventType.LOGIN_SUCCESS,
+            success=True,
+            target_type="user",
+            target_id=user.id,
+            metadata={"role": user.role},
+        )
         return Response(
             {
                 "token": token.key,
@@ -65,6 +86,15 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        log_security_event(
+            request=request,
+            actor=request.user,
+            event_type=SecurityEventType.LOGOUT,
+            success=True,
+            target_type="user",
+            target_id=request.user.id,
+            metadata={"role": request.user.role},
+        )
         Token.objects.filter(user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
