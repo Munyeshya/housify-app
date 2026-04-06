@@ -247,3 +247,19 @@ Optional flags:
 - `--reset` to delete the existing demo users before recreating the demo dataset
 
 The command creates a reusable landlord, tenant, public agent, private agent, portfolios, properties, images, an active tenancy, payments, a complaint, bookmarks, and agent assignments so the frontend can be developed against realistic sample data.
+
+## API Conventions
+
+The backend now applies two global API conventions:
+
+- paginated list responses return:
+  - `count`
+  - `page`
+  - `page_size`
+  - `num_pages`
+  - `next`
+  - `previous`
+  - `results`
+- API errors return a normalized shape:
+  - `status_code`
+  - `errors` as a list of objects with `field`, `detail`, and `code`
