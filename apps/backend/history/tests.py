@@ -181,8 +181,8 @@ class TenantHistoryApiTests(TestCase):
         response = self.client.get("/api/v1/history/lookups/")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["landlord"], self.landlord.id)
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(response.data["results"][0]["landlord"], self.landlord.id)
 
     def test_history_summary_does_not_expose_legal_id_document(self):
         self.client.force_authenticate(user=self.landlord.user)
