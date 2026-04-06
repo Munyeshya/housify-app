@@ -2,7 +2,14 @@ from rest_framework import serializers
 
 from tenancies.models import Tenancy
 
-from .models import Payment
+from .models import (
+    Payment,
+    PaymentAdjustment,
+    PaymentAdjustmentStatus,
+    PaymentAdjustmentType,
+    PaymentSource,
+    PaymentVerificationStatus,
+)
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -15,6 +22,8 @@ class PaymentSerializer(serializers.ModelSerializer):
         decimal_places=2,
         read_only=True,
     )
+    created_by_name = serializers.CharField(source="created_by.full_name", read_only=True)
+    approved_by_name = serializers.CharField(source="approved_by.full_name", read_only=True)
 
     class Meta:
         model = Payment
@@ -35,8 +44,22 @@ class PaymentSerializer(serializers.ModelSerializer):
             "due_date",
             "paid_at",
             "reference",
+            "external_reference",
+            "idempotency_key",
+            "source",
+            "verification_status",
+            "created_by",
+            "created_by_name",
+            "approved_by",
+            "approved_by_name",
+            "approved_at",
             "notes",
             "created_at",
+        )
+        read_only_fields = (
+            "created_by",
+            "approved_by",
+            "approved_at",
         )
 
 
@@ -56,6 +79,9 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
             "due_date",
             "paid_at",
             "reference",
+            "external_reference",
+            "idempotency_key",
+            "source",
             "notes",
         )
 
@@ -67,3 +93,65 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Amount paid cannot be greater than amount due.")
 
         return attrs
+
+
+class PaymentAdjustmentSerializer(serializers.ModelSerializer):
+    created_by_name = serializers.CharField(source="created_by.full_name", read_only=True)
+    approved_by_name = serializers.CharField(source="approved_by.full_name", read_only=True)
+
+    class Meta:
+        model = PaymentAdjustment
+        fields = (
+            "id",
+            "payment",
+            "adjustment_type",
+            "status",
+            "amount_delta",
+            "reason",
+            "created_by",
+            "created_by_name",
+            "approved_by",
+            "approved_by_name",
+            "approved_at",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = (
+            "created_by",
+            "approved_by",
+            "approved_at",
+            "created_at",
+            "updated_at",
+        )
+
+
+class PaymentAdjustmentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentAdjustment
+        fields = (
+            "payment",
+            "adjustment_type",
+            "amount_delta",
+            "reason",
+        )
+
+    def validate(self, attrs):
+        if attrs["amount_delta"] == 0:
+            raise serializers.ValidationError("Amount delta cannot be zero.")
+        return attrs
+
+
+class PaymentAdjustmentDecisionSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(
+        choices=[
+            PaymentAdjustmentStatus.APPLIED,
+            PaymentAdjustmentStatus.REJECTED,
+        ]
+    )
+
+
+class PaymentIntegritySummarySerializer(serializers.Serializer):
+    payment = PaymentSerializer()
+    adjustments = PaymentAdjustmentSerializer(many=True)
+    effective_amount_paid = serializers.DecimalField(max_digits=12, decimal_places=2)
+    effective_outstanding_balance = serializers.DecimalField(max_digits=12, decimal_places=2)
