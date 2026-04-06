@@ -248,8 +248,8 @@ class AgentsApiTests(TestCase):
         self.client.force_authenticate(user=self.private_agent_user)
         private_response = self.client.get(f"/api/v1/agents/{self.private_agent.id}/properties/")
 
-        public_tenancy = public_response.data[0]["active_tenancies"][0]
-        private_tenancy = private_response.data[0]["active_tenancies"][0]
+        public_tenancy = public_response.data["results"][0]["active_tenancies"][0]
+        private_tenancy = private_response.data["results"][0]["active_tenancies"][0]
 
         self.assertEqual(public_assignment.can_view_legal_id, False)
         self.assertEqual(private_assignment.can_view_legal_id, True)
