@@ -124,6 +124,7 @@ class TenantHistoryApiTests(TestCase):
         )
 
     def test_landlord_can_lookup_tenant_history_by_identifier(self):
+        self.client.force_authenticate(user=self.landlord.user)
         response = self.client.post(
             "/api/v1/history/lookup/",
             {
@@ -149,6 +150,7 @@ class TenantHistoryApiTests(TestCase):
         self.assertEqual(active_entry["complaints_count"], 1)
 
     def test_lookup_fails_for_unknown_identifier(self):
+        self.client.force_authenticate(user=self.landlord.user)
         response = self.client.post(
             "/api/v1/history/lookup/",
             {
@@ -174,14 +176,16 @@ class TenantHistoryApiTests(TestCase):
             tenant_identifier=self.tenant.tenant_identifier,
             lookup_reason="Review two",
         )
+        self.client.force_authenticate(user=self.landlord.user)
 
-        response = self.client.get(f"/api/v1/history/lookups/?landlord={self.landlord.id}")
+        response = self.client.get("/api/v1/history/lookups/")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["landlord"], self.landlord.id)
 
     def test_history_summary_does_not_expose_legal_id_document(self):
+        self.client.force_authenticate(user=self.landlord.user)
         response = self.client.post(
             "/api/v1/history/lookup/",
             {
