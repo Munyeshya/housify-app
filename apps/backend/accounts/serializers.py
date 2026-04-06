@@ -9,7 +9,7 @@ from .models import AgentProfile, AgentType, LandlordProfile, TenantProfile, Use
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "email", "full_name", "phone_number", "role")
+        fields = ("id", "email", "full_name", "phone_number", "role", "is_staff", "is_superuser")
 
 
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
