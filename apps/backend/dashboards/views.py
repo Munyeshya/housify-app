@@ -11,6 +11,8 @@ from accounts.access import (
     get_authenticated_landlord,
     get_authenticated_tenant,
 )
+from accounts.models import AgentType
+from agents.models import AgentAssignmentStatus
 from complaints.models import Complaint, ComplaintStatus
 from payments.models import Payment, PaymentStatus
 from properties.models import Property, PropertyStatus
@@ -75,7 +77,9 @@ class LandlordDashboardView(APIView):
             "complaint_snapshot": build_complaint_snapshot(complaints),
             "public_listing_count": properties.filter(is_public=True).count(),
             "private_listing_count": properties.filter(is_public=False).count(),
-            "active_agent_count": landlord.agent_assignments.filter(status="active").values("agent").distinct().count(),
+            "active_agent_count": landlord.agent_assignments.filter(
+                status=AgentAssignmentStatus.ACTIVE
+            ).values("agent").distinct().count(),
         }
         return Response(LandlordDashboardSerializer(payload).data, status=status.HTTP_200_OK)
 
@@ -122,6 +126,6 @@ class AgentDashboardView(APIView):
             "managed_active_tenancy_count": active_tenancy_count,
             "payment_snapshot": build_payment_snapshot(payments),
             "complaint_snapshot": build_complaint_snapshot(complaints),
-            "can_view_legal_id": agent.agent_type == "private",
+            "can_view_legal_id": agent.agent_type == AgentType.PRIVATE,
         }
         return Response(AgentDashboardSerializer(payload).data, status=status.HTTP_200_OK)
