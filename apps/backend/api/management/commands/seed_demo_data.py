@@ -13,6 +13,7 @@ from agents.models import AgentAssignmentStatus, PropertyAgentAssignment
 from bookmarks.models import PropertyBookmark
 from complaints.models import Complaint, ComplaintCategory, ComplaintDirection, ComplaintStatus
 from documents.models import LegalDocumentStatus, TenantLegalDocument
+from locations.models import Cell, District, Sector, Village
 from payments.models import Payment, PaymentCategory, PaymentMethod, PaymentStatus
 from properties.models import BillingCycle, Portfolio, Property, PropertyImage, PropertyStatus, PropertyType
 from tenancies.models import Tenancy, TenancyStatus
@@ -82,6 +83,132 @@ class Command(BaseCommand):
         "Convention Centre",
         "BK Arena",
     ]
+    location_blueprint = {
+        "Gasabo": {
+            "center": ("-1.934600", "30.092300"),
+            "sectors": {
+                "Kacyiru": {
+                    "center": ("-1.944072", "30.061885"),
+                    "cells": {
+                        "Kamatamu": ("Rugando", "Amahoro"),
+                        "Kamutwa": ("Kibaza", "Ibuhoro"),
+                    },
+                },
+                "Remera": {
+                    "center": ("-1.949900", "30.112200"),
+                    "cells": {
+                        "Rukiri I": ("Giporoso", "Nyabisindu"),
+                        "Nyarutarama": ("Kibagabaga", "Vision City"),
+                    },
+                },
+            },
+        },
+        "Kicukiro": {
+            "center": ("-1.970600", "30.116300"),
+            "sectors": {
+                "Kagarama": {
+                    "center": ("-1.987100", "30.094700"),
+                    "cells": {
+                        "Kanserege": ("Kanserege I", "Kanserege II"),
+                        "Muyange": ("Muyange I", "Muyange II"),
+                    },
+                },
+                "Kanombe": {
+                    "center": ("-1.983200", "30.169500"),
+                    "cells": {
+                        "Busanza": ("Busanza I", "Busanza II"),
+                        "Karama": ("Karama I", "Karama II"),
+                    },
+                },
+            },
+        },
+        "Nyarugenge": {
+            "center": ("-1.952600", "30.058700"),
+            "sectors": {
+                "Kimisagara": {
+                    "center": ("-1.958200", "30.039700"),
+                    "cells": {
+                        "Kamuhoza": ("Kamuhoza I", "Kamuhoza II"),
+                        "Katabaro": ("Katabaro I", "Katabaro II"),
+                    },
+                },
+                "Nyamirambo": {
+                    "center": ("-1.970500", "30.041400"),
+                    "cells": {
+                        "Cyivugiza": ("Cyivugiza I", "Cyivugiza II"),
+                        "Mumena": ("Mumena I", "Mumena II"),
+                    },
+                },
+            },
+        },
+        "Musanze": {
+            "center": ("-1.499300", "29.634100"),
+            "sectors": {
+                "Muhoza": {
+                    "center": ("-1.499000", "29.634600"),
+                    "cells": {
+                        "Kigombe": ("Kigombe I", "Kigombe II"),
+                        "Mpenge": ("Mpenge I", "Mpenge II"),
+                    },
+                },
+                "Cyuve": {
+                    "center": ("-1.531300", "29.622100"),
+                    "cells": {
+                        "Kabeza": ("Kabeza I", "Kabeza II"),
+                        "Buruba": ("Buruba I", "Buruba II"),
+                    },
+                },
+            },
+        },
+        "Rubavu": {
+            "center": ("-1.679000", "29.258500"),
+            "sectors": {
+                "Gisenyi": {
+                    "center": ("-1.702800", "29.256700"),
+                    "cells": {
+                        "Nengo": ("Nengo I", "Nengo II"),
+                        "Umuganda": ("Umuganda I", "Umuganda II"),
+                    },
+                },
+                "Rubavu": {
+                    "center": ("-1.678400", "29.325000"),
+                    "cells": {
+                        "Buhaza": ("Buhaza I", "Buhaza II"),
+                        "Burinda": ("Burinda I", "Burinda II"),
+                    },
+                },
+            },
+        },
+        "Huye": {
+            "center": ("-2.596700", "29.739400"),
+            "sectors": {
+                "Ngoma": {
+                    "center": ("-2.596000", "29.741500"),
+                    "cells": {
+                        "Matyazo": ("Matyazo I", "Matyazo II"),
+                        "Kaburemera": ("Kaburemera I", "Kaburemera II"),
+                    },
+                },
+                "Tumba": {
+                    "center": ("-2.601600", "29.744400"),
+                    "cells": {
+                        "Cyarwa": ("Cyarwa I", "Cyarwa II"),
+                        "Rango A": ("Rango A I", "Rango A II"),
+                    },
+                },
+            },
+        },
+    }
+    neighborhood_sector_preferences = {
+        "Kacyiru": "Kacyiru",
+        "Kimihurura": "Kacyiru",
+        "Gisozi": "Kacyiru",
+        "Gacuriro": "Kacyiru",
+        "Remera": "Remera",
+        "Nyarutarama": "Remera",
+        "Kibagabaga": "Remera",
+        "Kimironko": "Remera",
+    }
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -138,6 +265,7 @@ class Command(BaseCommand):
         self.fake = Faker()
         Faker.seed(options["seed"])
         self.fake.seed_instance(options["seed"])
+        self.location_tree = self._bootstrap_rwanda_location_hierarchy()
 
         with transaction.atomic():
             if reset:
@@ -160,6 +288,7 @@ class Command(BaseCommand):
                 properties_per_landlord=options["properties_per_landlord"],
                 private_agents_per_landlord=options["private_agents_per_landlord"],
             )
+            self._backfill_existing_property_locations()
             bookmark_count = self._seed_bookmarks(all_tenants)
 
         self.stdout.write(self.style.SUCCESS("Housify sample data is ready."))
@@ -254,6 +383,7 @@ class Command(BaseCommand):
             house_rules="No smoking, no loud parties after 10 PM",
             nearby_landmarks="Kigali Golf Club, Kigali Heights",
             listed_at=timezone.now(),
+            location_path=self._resolve_location_path("Gasabo", "Kacyiru"),
         )
         hidden_property = self._create_or_update_property(
             landlord=landlord_profile,
@@ -285,6 +415,7 @@ class Command(BaseCommand):
             house_rules="Pets allowed by approval only",
             nearby_landmarks="Amahoro Stadium",
             listed_at=None,
+            location_path=self._resolve_location_path("Gasabo", "Nyarutarama"),
         )
 
         self._sync_property_images(featured_property, "green-heights")
@@ -537,6 +668,7 @@ class Command(BaseCommand):
                     house_rules=self.fake.sentence(nb_words=8),
                     nearby_landmarks=self.randomizer.choice(self.landmarks),
                     listed_at=timezone.now() if is_public else None,
+                    location_path=self._resolve_location_path(district, neighborhood),
                 )
                 self._sync_property_images(property_obj, slug_name)
 
@@ -670,6 +802,7 @@ class Command(BaseCommand):
         house_rules,
         nearby_landmarks,
         listed_at,
+        location_path,
     ):
         return Property.objects.update_or_create(
             landlord=landlord,
@@ -697,7 +830,11 @@ class Command(BaseCommand):
                 "address_line_2": "",
                 "neighborhood": neighborhood,
                 "city": city,
-                "district": district,
+                "district": location_path["district"].name,
+                "district_area": location_path["district"],
+                "sector_area": location_path["sector"],
+                "cell_area": location_path["cell"],
+                "village_area": location_path["village"],
                 "country": "Rwanda",
                 "latitude": latitude,
                 "longitude": longitude,
@@ -716,6 +853,114 @@ class Command(BaseCommand):
                 "listed_at": listed_at,
             },
         )[0]
+
+    def _bootstrap_rwanda_location_hierarchy(self):
+        tree = {"districts": {}}
+        for district_name, district_data in self.location_blueprint.items():
+            district, _ = District.objects.update_or_create(
+                code=slugify(district_name).upper().replace("-", "_"),
+                defaults={
+                    "name": district_name,
+                    "center_latitude": Decimal(district_data["center"][0]),
+                    "center_longitude": Decimal(district_data["center"][1]),
+                },
+            )
+            tree["districts"][district_name] = {"district": district, "sectors": {}}
+
+            for sector_name, sector_data in district_data["sectors"].items():
+                sector, _ = Sector.objects.update_or_create(
+                    code=f"{district.code}_{slugify(sector_name).upper().replace('-', '_')}",
+                    defaults={
+                        "district": district,
+                        "name": sector_name,
+                        "center_latitude": Decimal(sector_data["center"][0]),
+                        "center_longitude": Decimal(sector_data["center"][1]),
+                    },
+                )
+                tree["districts"][district_name]["sectors"][sector_name] = {
+                    "sector": sector,
+                    "cells": {},
+                }
+
+                for cell_name, villages in sector_data["cells"].items():
+                    cell, _ = Cell.objects.update_or_create(
+                        code=f"{sector.code}_{slugify(cell_name).upper().replace('-', '_')}",
+                        defaults={
+                            "sector": sector,
+                            "name": cell_name,
+                            "center_latitude": sector.center_latitude,
+                            "center_longitude": sector.center_longitude,
+                        },
+                    )
+                    tree["districts"][district_name]["sectors"][sector_name]["cells"][cell_name] = {
+                        "cell": cell,
+                        "villages": [],
+                    }
+
+                    for village_name in villages:
+                        village, _ = Village.objects.update_or_create(
+                            code=f"{cell.code}_{slugify(village_name).upper().replace('-', '_')}",
+                            defaults={
+                                "cell": cell,
+                                "name": village_name,
+                                "center_latitude": cell.center_latitude,
+                                "center_longitude": cell.center_longitude,
+                            },
+                        )
+                        tree["districts"][district_name]["sectors"][sector_name]["cells"][cell_name]["villages"].append(
+                            village
+                        )
+        return tree
+
+    def _resolve_location_path(self, district_name, neighborhood=""):
+        district_data = self.location_tree["districts"].get(district_name)
+        if not district_data:
+            district_name = next(iter(self.location_tree["districts"]))
+            district_data = self.location_tree["districts"][district_name]
+
+        preferred_sector = self.neighborhood_sector_preferences.get(neighborhood)
+        available_sector_names = list(district_data["sectors"].keys())
+        if preferred_sector not in district_data["sectors"]:
+            preferred_sector = self.randomizer.choice(available_sector_names)
+
+        sector_data = district_data["sectors"][preferred_sector]
+        cell_name = self.randomizer.choice(list(sector_data["cells"].keys()))
+        cell_data = sector_data["cells"][cell_name]
+        village = self.randomizer.choice(cell_data["villages"])
+
+        return {
+            "district": district_data["district"],
+            "sector": sector_data["sector"],
+            "cell": cell_data["cell"],
+            "village": village,
+        }
+
+    def _backfill_existing_property_locations(self):
+        for property_obj in Property.objects.select_related(
+            "district_area",
+            "sector_area",
+            "cell_area",
+            "village_area",
+        ):
+            if property_obj.village_area_id:
+                continue
+
+            location_path = self._resolve_location_path(property_obj.district or "Gasabo", property_obj.neighborhood)
+            property_obj.district = location_path["district"].name
+            property_obj.district_area = location_path["district"]
+            property_obj.sector_area = location_path["sector"]
+            property_obj.cell_area = location_path["cell"]
+            property_obj.village_area = location_path["village"]
+            property_obj.save(
+                update_fields=[
+                    "district",
+                    "district_area",
+                    "sector_area",
+                    "cell_area",
+                    "village_area",
+                    "updated_at",
+                ]
+            )
 
     def _create_or_update_tenancy(
         self,
