@@ -1,6 +1,6 @@
 function Contact() {
   return (
-    <section className="page-panel page-panel--auth">
+    <section className="page-panel page-panel--auth contact-page">
       <div className="page-copy">
         <p className="eyebrow">Contact</p>
         <h1>Talk to us about rentals, landlord access, and support.</h1>
