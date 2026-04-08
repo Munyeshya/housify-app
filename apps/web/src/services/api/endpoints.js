@@ -23,6 +23,7 @@ export const apiEndpoints = {
   },
   properties: {
     publicList: "/properties/public/",
+    publicDetail: (propertyId) => `/properties/public/${propertyId}/`,
     landlordPortfolios: "/properties/portfolios/",
     landlordManage: "/properties/manage/",
     landlordImages: (propertyId) => `/properties/manage/${propertyId}/images/`,
