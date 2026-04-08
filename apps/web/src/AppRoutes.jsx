@@ -1,11 +1,16 @@
 import { Route, Routes } from "react-router-dom"
 import ProtectedRoute from "./lib/ProtectedRoute"
 import AppLayout from "./layouts/AppLayout"
+import PublicLayout from "./layouts/PublicLayout"
 import {
+  About,
   AdminDashboard,
   AgentDashboard,
+  Contact,
   Home,
   LandlordDashboard,
+  ListingDetail,
+  Listings,
   Login,
   NotFound,
   TenantDashboard,
@@ -14,8 +19,14 @@ import {
 function AppRoutes() {
   return (
     <Routes>
-      <Route element={<Home />} path="/" />
-      <Route element={<Login />} path="/login" />
+      <Route element={<PublicLayout />}>
+        <Route element={<Home />} path="/" />
+        <Route element={<About />} path="/about" />
+        <Route element={<Contact />} path="/contact" />
+        <Route element={<Listings />} path="/listings" />
+        <Route element={<ListingDetail />} path="/listings/:propertyId" />
+        <Route element={<Login />} path="/login" />
+      </Route>
 
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
