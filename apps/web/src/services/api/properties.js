@@ -20,6 +20,19 @@ export const propertiesApi = {
   listPublic(query = {}) {
     return apiClient.get(withQuery(apiEndpoints.properties.publicList, query))
   },
+  listAvailablePublic(query = {}) {
+    return apiClient.get(
+      withQuery(apiEndpoints.properties.publicList, {
+        status: "available",
+        ...query,
+      }),
+    )
+  },
+  async getPublicPropertyById(propertyId) {
+    const properties = await apiClient.get(apiEndpoints.properties.publicList)
+    const matches = Array.isArray(properties) ? properties : []
+    return matches.find((property) => String(property.id) === String(propertyId)) || null
+  },
   listLandlordPortfolios(query = {}) {
     return apiClient.get(withQuery(apiEndpoints.properties.landlordPortfolios, query))
   },
