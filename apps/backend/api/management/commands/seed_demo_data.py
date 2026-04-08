@@ -359,7 +359,7 @@ class Command(BaseCommand):
             slug_name="green-heights",
             title="Green Heights Apartments",
             property_type=PropertyType.APARTMENT,
-            status=PropertyStatus.OCCUPIED,
+            status=PropertyStatus.AVAILABLE,
             is_public=True,
             is_featured=True,
             city="Kigali",
@@ -391,7 +391,7 @@ class Command(BaseCommand):
             slug_name="hilltop-villa",
             title="Hilltop Villa",
             property_type=PropertyType.HOUSE,
-            status=PropertyStatus.AVAILABLE,
+            status=PropertyStatus.OCCUPIED,
             is_public=False,
             is_featured=False,
             city="Kigali",
@@ -421,7 +421,7 @@ class Command(BaseCommand):
         self._sync_property_images(featured_property, "green-heights")
         self._sync_property_images(hidden_property, "hilltop-villa")
         tenancy = self._create_or_update_tenancy(
-            property_obj=featured_property,
+            property_obj=hidden_property,
             landlord=landlord_profile,
             tenant=tenant_profile,
             assigned_by=landlord_user,
@@ -710,7 +710,7 @@ class Command(BaseCommand):
         public_properties = list(
             Property.objects.filter(
                 is_public=True,
-                status__in=[PropertyStatus.AVAILABLE, PropertyStatus.OCCUPIED],
+                status=PropertyStatus.AVAILABLE,
             )[:40]
         )
         created_count = 0
