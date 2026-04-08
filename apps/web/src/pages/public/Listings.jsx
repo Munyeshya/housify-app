@@ -46,34 +46,34 @@ function Listings() {
       <section className="listing-intro page-panel">
         <div>
           <p className="eyebrow">Rental search</p>
-          <h2>Browse and compare the homes that are currently open.</h2>
+          <h2>Browse homes that are currently available for rent.</h2>
           <p className="lede">
-            Review the homes that are currently open for rent, compare their
-            location and rent, and open any property to mark your interest.
+            Compare homes by their location, pricing, and key property facts,
+            then open any house to review full details and mark your interest.
           </p>
         </div>
         <div className="listing-intro__summary">
           <strong>{properties.length}</strong>
-          <span>public homes currently available</span>
+          <span>available homes</span>
         </div>
       </section>
 
       <section className="listing-browser">
         <aside className="listing-browser__filters">
           <div className="filter-card">
-            <p className="eyebrow">Filter snapshot</p>
-            <h2>Rental search</h2>
+            <p className="eyebrow">Explore</p>
+            <h2>Current public listings</h2>
             <div className="filter-card__group">
               <span>Status</span>
               <strong>Available</strong>
             </div>
             <div className="filter-card__group">
-              <span>Type</span>
+              <span>Property types</span>
               <strong>Houses, apartments, compounds</strong>
             </div>
             <div className="filter-card__group">
-              <span>Pricing</span>
-              <strong>Visible before you sign in</strong>
+              <span>Tenant action</span>
+              <strong>Open a home to mark your interest after sign in</strong>
             </div>
           </div>
         </aside>
@@ -81,8 +81,11 @@ function Listings() {
         <div className="listing-browser__results">
           <div className="listing-browser__map">
             <div className="listing-browser__map-card">
-              <span>Map view</span>
-              <strong>Property locations appear here as public listings with coordinates grow.</strong>
+              <span>Map-ready listings</span>
+              <strong>
+                Property coordinates and map discovery can appear here as more public
+                homes are published with location data.
+              </strong>
             </div>
           </div>
 
