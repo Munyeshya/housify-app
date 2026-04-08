@@ -1,14 +1,12 @@
 import { Outlet } from "react-router-dom"
-import PublicHeader from "../components/PublicHeader"
+import AppHeader from "../components/AppHeader"
 
 function PublicLayout() {
   return (
     <div className="public-shell">
-      <PublicHeader />
+      <AppHeader />
       <main className="public-shell__content">
-        <div className="container-fluid">
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
     </div>
   )
