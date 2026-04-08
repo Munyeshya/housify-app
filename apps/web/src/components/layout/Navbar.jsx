@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
+import { MailIcon, PhoneIcon, PinIcon } from "../common/Icons"
 import Logo from "../common/Logo"
 
 const publicLinks = [
@@ -19,9 +20,18 @@ function Navbar() {
         <div className="container-fluid">
           <div className="app-header__top-inner">
             <div className="app-header__contact">
-              <span>support@housify.app</span>
-              <span>+250 700 000 000</span>
-              <span>Kigali, Rwanda</span>
+              <span className="app-header__meta-item">
+                <MailIcon />
+                support@housify.app
+              </span>
+              <span className="app-header__meta-item">
+                <PhoneIcon />
+                +250 700 000 000
+              </span>
+              <span className="app-header__meta-item">
+                <PinIcon />
+                Kigali, Rwanda
+              </span>
             </div>
             <div className="app-header__meta">
               <span>
