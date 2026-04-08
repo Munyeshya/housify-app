@@ -1,11 +1,11 @@
 function TenantDashboard() {
   return (
     <section className="page-panel">
-      <p className="eyebrow">Tenant workspace</p>
-      <h1>Tenant dashboard shell</h1>
+      <p className="eyebrow">Tenant dashboard</p>
+      <h1>Track your residence, payments, and saved homes.</h1>
       <p className="lede">
-        This area will hold current residence details, payments, complaints,
-        bookmarks, and verified document status.
+        This area will bring together your current residence details, payment
+        records, complaints, bookmarked homes, and document status.
       </p>
     </section>
   )
