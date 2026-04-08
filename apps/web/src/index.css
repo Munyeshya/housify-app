@@ -972,8 +972,7 @@ h3 {
 
 .listing-browser__filters {
   align-self: start;
-  position: sticky;
-  top: 134px;
+  position: relative;
 }
 
 .filter-card {
@@ -981,7 +980,11 @@ h3 {
   border: 1px solid var(--color-border);
   border-radius: 18px;
   box-shadow: var(--shadow-soft);
+  max-height: calc(100vh - 152px);
+  overflow-y: auto;
   padding: 1rem;
+  position: sticky;
+  top: 134px;
 }
 
 .filter-card__group + .filter-card__group {
@@ -1039,12 +1042,15 @@ h3 {
 
 .listing-pagination__button,
 .listing-pagination__page {
+  align-items: center;
   background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: 10px;
   color: var(--color-text);
+  display: inline-flex;
   font-size: 0.8rem;
   font-weight: 700;
+  justify-content: center;
   min-height: 36px;
   padding: 0.45rem 0.75rem;
 }
@@ -1548,8 +1554,13 @@ h3 {
   }
 
   .app-sidebar__panel,
-  .listing-browser__filters,
+  .listing-browser__filters {
+    position: static;
+  }
+
   .filter-card {
+    max-height: none;
+    overflow-y: visible;
     position: static;
   }
 
