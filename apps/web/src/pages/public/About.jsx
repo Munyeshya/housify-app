@@ -1,44 +1,116 @@
+import { Link } from "react-router-dom"
+
 function About() {
   return (
     <div className="public-stack">
-      <section className="page-panel about-intro">
-        <div className="page-copy">
-          <p className="eyebrow">About Housify</p>
-          <h1>A rental platform built for public discovery and structured property control.</h1>
-          <p className="lede">
-            Housify connects tenants looking for homes with landlords managing
-            listings, occupancy, tenant records, complaints, and payment history.
-            Public visitors can explore open rentals, while signed-in accounts
-            unlock the deeper management side of the platform.
-          </p>
+      <section className="about-showcase">
+        <div className="about-showcase__media">
+          <div className="about-showcase__tower" />
+          <div className="about-showcase__stack">
+            <div className="about-showcase__villa" />
+            <div className="about-showcase__house" />
+          </div>
+          <article className="about-showcase__floating-card">
+            <strong>Trusted by growing rental portfolios</strong>
+            <div className="about-showcase__avatars" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span className="is-count">2K+</span>
+            </div>
+          </article>
         </div>
 
-        <div className="about-intro__card">
-          <span>What Housify connects</span>
-          <strong>Listings, tenants, landlords, agents, and tenancy records</strong>
+        <div className="about-showcase__content">
+          <p className="eyebrow">About Housify</p>
+          <h1>A rental platform that connects public discovery with structured property control.</h1>
+          <p className="lede">
+            Housify helps tenants find open homes while giving landlords one place
+            to manage listings, occupancy, agents, tenant records, complaints,
+            and payment history. It is built for everyday rental decisions and
+            long-term property organization.
+          </p>
+
+          <div className="about-showcase__metrics">
+            <article>
+              <strong>10K</strong>
+              <span>Listing views tracked</span>
+            </article>
+            <article>
+              <strong>9K</strong>
+              <span>Tenant actions organized</span>
+            </article>
+            <article>
+              <strong>98%</strong>
+              <span>Operational clarity target</span>
+            </article>
+          </div>
+
+          <Link className="btn btn-dark" to="/listings">
+            See available homes
+          </Link>
+        </div>
+      </section>
+
+      <section className="about-mission">
+        <div className="about-mission__heading">
+          <p className="eyebrow">Our mission</p>
+          <h2>Clearer rental information, stronger property management, better tenant decisions.</h2>
+        </div>
+
+        <div className="about-mission__layout">
+          <article className="about-mission__card">
+            <h3>Our path to better rental management</h3>
+            <p>
+              Housify is designed to reduce the friction between public house discovery
+              and the work landlords handle after a tenant moves in. Instead of
+              splitting listings, occupancy, complaints, and payment records across
+              different tools, the platform keeps them connected.
+            </p>
+
+            <h4>Our mission</h4>
+            <p>
+              Make it easier for tenants to evaluate rental homes and for landlords
+              to manage the people, records, and decisions attached to each property.
+            </p>
+
+            <h4>Our vision</h4>
+            <p>
+              Build a trusted rental system where listings are easier to understand,
+              tenancy history is better organized, and property operations stay clear
+              as landlords grow.
+            </p>
+
+            <Link className="btn btn-dark" to="/contact">
+              Talk to us
+            </Link>
+          </article>
+
+          <div className="about-mission__image" />
         </div>
       </section>
 
       <section className="feature-row">
         <article className="feature-card">
-          <h2>Public listings</h2>
+          <h2>Open rental discovery</h2>
           <p>
-            Available homes are shown with pricing, property type, and the practical
-            information a tenant needs before making a decision.
+            Public listings show rent, property type, location, and practical facts
+            so tenants can compare homes before they act.
           </p>
         </article>
         <article className="feature-card">
-          <h2>Tenant interest</h2>
+          <h2>Tenant follow-up</h2>
           <p>
-            Signed-in tenant accounts can bookmark properties and come back to them
-            later as they narrow down their options.
+            Signed-in accounts can bookmark homes, revisit them later, and narrow
+            choices without losing track of good options.
           </p>
         </article>
         <article className="feature-card">
           <h2>Landlord control</h2>
           <p>
-            Landlords manage visibility, occupation, complaints, tenant history,
-            agents, and payment records from a connected workspace.
+            Landlords manage visibility, occupation, tenant records, complaints,
+            agents, and payment history from one connected workspace.
           </p>
         </article>
       </section>
