@@ -16,15 +16,19 @@ function PropertyCard({ property }) {
         ) : (
           <div className="property-card__placeholder">No image</div>
         )}
+        <div className="property-card__badges">
+          <span>{property.property_type}</span>
+          <strong>{property.status}</strong>
+        </div>
       </div>
 
       <div className="property-card__body">
         <div className="property-card__meta">
-          <span>{property.property_type}</span>
           <strong>
             {formatMoney(property.rent_amount, property.currency)} /{" "}
             {property.billing_cycle}
           </strong>
+          <span>{formatLocation(property) || "Location pending"}</span>
         </div>
 
         <h2>{property.title}</h2>
@@ -40,13 +44,13 @@ function PropertyCard({ property }) {
             <dd>{property.bathrooms ?? "-"}</dd>
           </div>
           <div>
-            <dt>Location</dt>
-            <dd>{formatLocation(property) || "-"}</dd>
+            <dt>Parking</dt>
+            <dd>{property.parking_spaces ?? "-"}</dd>
           </div>
         </dl>
 
         <Link className="property-card__link" to={`/listings/${property.id}`}>
-          View home
+          View home details
         </Link>
       </div>
     </article>
