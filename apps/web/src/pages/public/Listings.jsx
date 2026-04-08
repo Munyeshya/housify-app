@@ -4,10 +4,13 @@ import PropertyCard from "../../components/PropertyCard"
 import PropertyCardSkeleton from "../../components/PropertyCardSkeleton"
 import { propertiesApi } from "../../services/api"
 
+const PAGE_SIZE = 14
+
 function Listings() {
   const [properties, setProperties] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     let isMounted = true
@@ -17,6 +20,7 @@ function Listings() {
         const response = await propertiesApi.listAvailablePublic()
         if (isMounted) {
           setProperties(Array.isArray(response) ? response : response?.results || [])
+          setCurrentPage(1)
         }
       } catch (error) {
         if (isMounted) {
@@ -35,6 +39,10 @@ function Listings() {
       isMounted = false
     }
   }, [])
+
+  const totalPages = Math.max(1, Math.ceil(properties.length / PAGE_SIZE))
+  const startIndex = (currentPage - 1) * PAGE_SIZE
+  const visibleProperties = properties.slice(startIndex, startIndex + PAGE_SIZE)
 
   return (
     <div className="public-stack listing-page">
@@ -122,16 +130,67 @@ function Listings() {
           ) : null}
 
           {!isLoading && !errorMessage ? (
-            <section className="property-grid property-grid--results">
-              {properties.map((property) => (
-                <PropertyCard key={property.id} property={property} />
-              ))}
-              {!properties.length ? (
-                <article className="page-panel">
-                  <p className="lede">There are no public rental homes available right now.</p>
-                </article>
+            <>
+              {properties.length ? (
+                <div className="listing-pagination">
+                  <div className="listing-pagination__summary">
+                    Showing <strong>{startIndex + 1}</strong>-
+                    <strong>{Math.min(startIndex + PAGE_SIZE, properties.length)}</strong> of{" "}
+                    <strong>{properties.length}</strong> homes
+                  </div>
+
+                  <div className="listing-pagination__controls">
+                    <button
+                      className="listing-pagination__button"
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                      type="button"
+                    >
+                      Previous
+                    </button>
+
+                    <div className="listing-pagination__pages">
+                      {Array.from({ length: totalPages }).map((_, index) => {
+                        const page = index + 1
+
+                        return (
+                          <button
+                            className={`listing-pagination__page${
+                              page === currentPage ? " is-active" : ""
+                            }`}
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            type="button"
+                          >
+                            {page}
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    <button
+                      className="listing-pagination__button"
+                      disabled={currentPage === totalPages}
+                      onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                      type="button"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
               ) : null}
-            </section>
+
+              <section className="property-grid property-grid--results">
+                {visibleProperties.map((property) => (
+                  <PropertyCard key={property.id} property={property} />
+                ))}
+                {!properties.length ? (
+                  <article className="page-panel">
+                    <p className="lede">There are no public rental homes available right now.</p>
+                  </article>
+                ) : null}
+              </section>
+            </>
           ) : null}
         </div>
       </section>
