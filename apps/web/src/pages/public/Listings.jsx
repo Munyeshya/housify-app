@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { FilterIcon, PinIcon, SearchIcon } from "../../components/common/Icons"
-import PageBanner from "../../components/PageBanner"
 import PropertyCard from "../../components/PropertyCard"
 import { propertiesApi } from "../../services/api"
 
@@ -38,27 +37,6 @@ function Listings() {
 
   return (
     <div className="public-stack">
-      <PageBanner
-        eyebrow="Listings"
-        subtitle="Browse the public homes currently open for rent."
-        title="Available rental homes"
-      />
-
-      <section className="listing-intro page-panel">
-        <div>
-          <p className="eyebrow">Rental search</p>
-          <h2>Browse homes that are currently available for rent.</h2>
-          <p className="lede">
-            Compare homes by their location, pricing, and key property facts,
-            then open any house to review full details and mark your interest.
-          </p>
-        </div>
-        <div className="listing-intro__summary">
-          <strong>{properties.length}</strong>
-          <span>available homes</span>
-        </div>
-      </section>
-
       <section className="listing-browser">
         <aside className="listing-browser__filters">
           <div className="filter-card">
@@ -128,16 +106,6 @@ function Listings() {
         </aside>
 
         <div className="listing-browser__results">
-          <div className="listing-browser__map">
-            <div className="listing-browser__map-card">
-              <span>Map-ready listings</span>
-              <strong>
-                Property coordinates and map discovery can appear here as more public
-                homes are published with location data.
-              </strong>
-            </div>
-          </div>
-
           {isLoading ? (
             <section className="page-panel">
               <p className="lede">Loading available homes...</p>
