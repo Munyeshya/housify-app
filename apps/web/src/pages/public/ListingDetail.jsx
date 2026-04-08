@@ -143,6 +143,21 @@ function ListingDetail() {
             </div>
           </dl>
 
+          <div className="listing-detail__summary-grid">
+            <article>
+              <span>Utilities</span>
+              <strong>{property.utilities_included || "Utilities not listed"}</strong>
+            </article>
+            <article>
+              <span>House rules</span>
+              <strong>{property.house_rules || "House rules will be shared by the landlord"}</strong>
+            </article>
+            <article>
+              <span>Nearby landmarks</span>
+              <strong>{property.nearby_landmarks || "Nearby landmarks not listed"}</strong>
+            </article>
+          </div>
+
           <div className="page-actions">
             <button
               className="btn btn-dark"
