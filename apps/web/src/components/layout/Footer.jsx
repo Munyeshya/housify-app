@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import { MailIcon, PhoneIcon, PinIcon } from "../common/Icons"
 import Logo from "../common/Logo"
 
 const quickLinks = [
@@ -11,9 +12,9 @@ const quickLinks = [
 
 function Footer() {
   return (
-    <footer className="public-footer">
+    <div className="public-footer-wrap">
       <div className="container-fluid">
-        <section className="public-footer__cta">
+        <section className="public-footer__floating-cta">
           <div>
             <p className="eyebrow">Find your next rental with Housify</p>
             <h2>Explore available homes and follow the ones you want to rent.</h2>
@@ -22,7 +23,10 @@ function Footer() {
             View listings
           </Link>
         </section>
+      </div>
 
+      <footer className="public-footer">
+        <div className="container-fluid">
         <section className="public-footer__grid">
           <article className="public-footer__brand">
             <div className="public-footer__brand-mark">
@@ -48,9 +52,18 @@ function Footer() {
           <article>
             <h3>Contact</h3>
             <div className="public-footer__contact">
-              <span>support@housify.app</span>
-              <span>+250 700 000 000</span>
-              <span>Kigali, Rwanda</span>
+              <span>
+                <MailIcon />
+                support@housify.app
+              </span>
+              <span>
+                <PhoneIcon />
+                +250 700 000 000
+              </span>
+              <span>
+                <PinIcon />
+                Kigali, Rwanda
+              </span>
             </div>
           </article>
         </section>
@@ -58,8 +71,9 @@ function Footer() {
         <div className="public-footer__bottom">
           <span>&copy; {new Date().getFullYear()} Housify. All rights reserved.</span>
         </div>
-      </div>
-    </footer>
+        </div>
+      </footer>
+    </div>
   )
 }
 
