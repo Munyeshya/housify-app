@@ -178,6 +178,8 @@ class PublicDistrictCountsView(APIView):
                 "name": district.name,
                 "parent_id": None,
                 "parent_code": None,
+                "center_latitude": district.center_latitude,
+                "center_longitude": district.center_longitude,
                 "available_houses_count": district.available_houses_count,
             }
             for district in districts
@@ -200,6 +202,8 @@ class PublicSectorCountsView(APIView):
                 "name": sector.name,
                 "parent_id": sector.district_id,
                 "parent_code": sector.district.code,
+                "center_latitude": sector.center_latitude,
+                "center_longitude": sector.center_longitude,
                 "available_houses_count": sector.available_houses_count,
             }
             for sector in sectors.select_related("district")
@@ -222,6 +226,8 @@ class PublicCellCountsView(APIView):
                 "name": cell.name,
                 "parent_id": cell.sector_id,
                 "parent_code": cell.sector.code,
+                "center_latitude": cell.center_latitude,
+                "center_longitude": cell.center_longitude,
                 "available_houses_count": cell.available_houses_count,
             }
             for cell in cells.select_related("sector")
@@ -244,6 +250,8 @@ class PublicVillageCountsView(APIView):
                 "name": village.name,
                 "parent_id": village.cell_id,
                 "parent_code": village.cell.code,
+                "center_latitude": village.center_latitude,
+                "center_longitude": village.center_longitude,
                 "available_houses_count": village.available_houses_count,
             }
             for village in villages.select_related("cell")
