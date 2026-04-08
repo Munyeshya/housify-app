@@ -2,6 +2,7 @@ import math
 
 from rest_framework import serializers
 
+from .models import Cell, District, Sector, Village
 from properties.models import Property
 
 
@@ -26,6 +27,10 @@ def haversine_distance_km(lat1, lon1, lat2, lon2):
 class PropertyMapPinSerializer(serializers.ModelSerializer):
     cover_image_url = serializers.SerializerMethodField()
     distance_km = serializers.SerializerMethodField()
+    district_area_name = serializers.CharField(source="district_area.name", read_only=True)
+    sector_area_name = serializers.CharField(source="sector_area.name", read_only=True)
+    cell_area_name = serializers.CharField(source="cell_area.name", read_only=True)
+    village_area_name = serializers.CharField(source="village_area.name", read_only=True)
 
     class Meta:
         model = Property
@@ -38,6 +43,10 @@ class PropertyMapPinSerializer(serializers.ModelSerializer):
             "is_public",
             "city",
             "neighborhood",
+            "district_area_name",
+            "sector_area_name",
+            "cell_area_name",
+            "village_area_name",
             "country",
             "address_line_1",
             "rent_amount",
@@ -74,3 +83,69 @@ class LandlordMapSummarySerializer(serializers.Serializer):
     hidden_properties = serializers.IntegerField()
     maintenance_properties = serializers.IntegerField()
     map_points = PropertyMapPinSerializer(many=True)
+
+
+class LocationCountSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    code = serializers.CharField()
+    name = serializers.CharField()
+    parent_id = serializers.IntegerField(allow_null=True)
+    parent_code = serializers.CharField(allow_null=True)
+    available_houses_count = serializers.IntegerField()
+
+
+class DistrictSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = District
+        fields = ("id", "code", "name", "center_latitude", "center_longitude")
+
+
+class SectorSerializer(serializers.ModelSerializer):
+    district_id = serializers.IntegerField(source="district.id", read_only=True)
+    district_code = serializers.CharField(source="district.code", read_only=True)
+
+    class Meta:
+        model = Sector
+        fields = (
+            "id",
+            "code",
+            "name",
+            "district_id",
+            "district_code",
+            "center_latitude",
+            "center_longitude",
+        )
+
+
+class CellSerializer(serializers.ModelSerializer):
+    sector_id = serializers.IntegerField(source="sector.id", read_only=True)
+    sector_code = serializers.CharField(source="sector.code", read_only=True)
+
+    class Meta:
+        model = Cell
+        fields = (
+            "id",
+            "code",
+            "name",
+            "sector_id",
+            "sector_code",
+            "center_latitude",
+            "center_longitude",
+        )
+
+
+class VillageSerializer(serializers.ModelSerializer):
+    cell_id = serializers.IntegerField(source="cell.id", read_only=True)
+    cell_code = serializers.CharField(source="cell.code", read_only=True)
+
+    class Meta:
+        model = Village
+        fields = (
+            "id",
+            "code",
+            "name",
+            "cell_id",
+            "cell_code",
+            "center_latitude",
+            "center_longitude",
+        )
