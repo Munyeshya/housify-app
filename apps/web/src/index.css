@@ -949,6 +949,7 @@ h3 {
 }
 
 .listing-browser {
+  align-items: start;
   display: grid;
   gap: 1rem;
   grid-template-columns: 290px 1fr;
@@ -969,14 +970,18 @@ h3 {
   max-width: none;
 }
 
+.listing-browser__filters {
+  align-self: start;
+  position: sticky;
+  top: 134px;
+}
+
 .filter-card {
   background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: 18px;
   box-shadow: var(--shadow-soft);
   padding: 1rem;
-  position: sticky;
-  top: 134px;
 }
 
 .filter-card__group + .filter-card__group {
@@ -1543,6 +1548,7 @@ h3 {
   }
 
   .app-sidebar__panel,
+  .listing-browser__filters,
   .filter-card {
     position: static;
   }
