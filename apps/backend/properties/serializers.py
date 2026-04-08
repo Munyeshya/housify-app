@@ -4,6 +4,36 @@ from rest_framework import serializers
 from .models import Portfolio, Property, PropertyImage
 
 
+def resolve_property_location_fields(attrs, instance=None):
+    district_area = attrs.get("district_area", getattr(instance, "district_area", None))
+    sector_area = attrs.get("sector_area", getattr(instance, "sector_area", None))
+    cell_area = attrs.get("cell_area", getattr(instance, "cell_area", None))
+    village_area = attrs.get("village_area", getattr(instance, "village_area", None))
+
+    if village_area:
+        cell_area = village_area.cell
+        sector_area = cell_area.sector
+        district_area = sector_area.district
+    elif cell_area:
+        sector_area = cell_area.sector
+        district_area = sector_area.district
+    elif sector_area:
+        district_area = sector_area.district
+
+    if district_area and sector_area and sector_area.district_id != district_area.id:
+        raise serializers.ValidationError("Selected sector does not belong to the selected district.")
+    if sector_area and cell_area and cell_area.sector_id != sector_area.id:
+        raise serializers.ValidationError("Selected cell does not belong to the selected sector.")
+    if cell_area and village_area and village_area.cell_id != cell_area.id:
+        raise serializers.ValidationError("Selected village does not belong to the selected cell.")
+
+    attrs["district_area"] = district_area
+    attrs["sector_area"] = sector_area
+    attrs["cell_area"] = cell_area
+    attrs["village_area"] = village_area
+    return attrs
+
+
 class PropertyImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyImage
@@ -30,6 +60,10 @@ class PortfolioCreateUpdateSerializer(serializers.ModelSerializer):
 
 class PropertyListSerializer(serializers.ModelSerializer):
     cover_image = serializers.SerializerMethodField()
+    district_area_name = serializers.CharField(source="district_area.name", read_only=True)
+    sector_area_name = serializers.CharField(source="sector_area.name", read_only=True)
+    cell_area_name = serializers.CharField(source="cell_area.name", read_only=True)
+    village_area_name = serializers.CharField(source="village_area.name", read_only=True)
 
     class Meta:
         model = Property
@@ -43,6 +77,10 @@ class PropertyListSerializer(serializers.ModelSerializer):
             "city",
             "neighborhood",
             "country",
+            "district_area_name",
+            "sector_area_name",
+            "cell_area_name",
+            "village_area_name",
             "rent_amount",
             "currency",
             "billing_cycle",
@@ -65,6 +103,10 @@ class PropertyDetailSerializer(serializers.ModelSerializer):
     images = PropertyImageSerializer(many=True, read_only=True)
     portfolio = PortfolioSerializer(read_only=True)
     parent_property_title = serializers.CharField(source="parent_property.title", read_only=True)
+    district_area_name = serializers.CharField(source="district_area.name", read_only=True)
+    sector_area_name = serializers.CharField(source="sector_area.name", read_only=True)
+    cell_area_name = serializers.CharField(source="cell_area.name", read_only=True)
+    village_area_name = serializers.CharField(source="village_area.name", read_only=True)
 
     class Meta:
         model = Property
@@ -93,6 +135,14 @@ class PropertyDetailSerializer(serializers.ModelSerializer):
             "neighborhood",
             "city",
             "district",
+            "district_area",
+            "district_area_name",
+            "sector_area",
+            "sector_area_name",
+            "cell_area",
+            "cell_area_name",
+            "village_area",
+            "village_area_name",
             "country",
             "latitude",
             "longitude",
@@ -119,6 +169,10 @@ class LandlordPropertyListSerializer(serializers.ModelSerializer):
     cover_image = serializers.SerializerMethodField()
     portfolio_name = serializers.CharField(source="portfolio.name", read_only=True)
     parent_property_title = serializers.CharField(source="parent_property.title", read_only=True)
+    district_area_name = serializers.CharField(source="district_area.name", read_only=True)
+    sector_area_name = serializers.CharField(source="sector_area.name", read_only=True)
+    cell_area_name = serializers.CharField(source="cell_area.name", read_only=True)
+    village_area_name = serializers.CharField(source="village_area.name", read_only=True)
 
     class Meta:
         model = Property
@@ -133,6 +187,14 @@ class LandlordPropertyListSerializer(serializers.ModelSerializer):
             "is_featured",
             "city",
             "neighborhood",
+            "district_area",
+            "district_area_name",
+            "sector_area",
+            "sector_area_name",
+            "cell_area",
+            "cell_area_name",
+            "village_area",
+            "village_area_name",
             "rent_amount",
             "currency",
             "billing_cycle",
@@ -169,6 +231,7 @@ class PropertyCreateUpdateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         attrs = super().validate(attrs)
+        attrs = resolve_property_location_fields(attrs, instance=self.instance)
         status_value = attrs.get("status", getattr(self.instance, "status", None))
         is_public = attrs.get("is_public", getattr(self.instance, "is_public", False))
         latitude = attrs.get("latitude", getattr(self.instance, "latitude", None))
