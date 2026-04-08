@@ -1137,6 +1137,7 @@ h3 {
   gap: 1.75rem;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   margin: 0 auto;
+  margin-top: 1rem;
   max-width: 1200px;
 }
 
@@ -1558,6 +1559,10 @@ h3 {
   .about-showcase__media,
   .about-showcase__metrics {
     grid-template-columns: 1fr;
+  }
+
+  .about-showcase {
+    margin-top: 0.8rem;
   }
 
   .about-showcase__floating-card {
