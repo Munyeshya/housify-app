@@ -1293,16 +1293,17 @@ h3 {
 .about-mission__layout {
   align-items: center;
   display: grid;
-  min-height: 520px;
-  position: relative;
+  gap: 0;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
 }
 
 .about-mission__image {
   background-image: url("https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80");
   box-shadow: var(--shadow-card);
-  justify-self: end;
+  grid-column: 2;
+  justify-self: stretch;
   min-height: 470px;
-  width: min(100%, 620px);
+  width: 100%;
 }
 
 .about-mission__card {
@@ -1312,12 +1313,11 @@ h3 {
   box-shadow: var(--shadow-card);
   display: grid;
   gap: 1rem;
-  left: 0;
-  max-width: 560px;
+  grid-column: 1;
+  margin-right: -64px;
+  max-width: 540px;
   padding: 1.45rem 1.5rem;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-48%);
+  position: relative;
   z-index: 1;
 }
 
@@ -1564,10 +1564,12 @@ h3 {
 
   .about-mission__layout {
     gap: 1rem;
+    grid-template-columns: 1fr;
     min-height: auto;
   }
 
   .about-mission__card {
+    margin-right: 0;
     max-width: none;
     position: relative;
     top: auto;
