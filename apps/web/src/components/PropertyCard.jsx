@@ -64,8 +64,11 @@ function PropertyCard({ property }) {
           <strong className="property-card__price">
             {formatMoney(property.rent_amount, property.currency)}
           </strong>
-          <Link className="property-card__link" to={`/listings/${property.id}`}>
-            View home
+          <Link
+            aria-label={`View ${property.title}`}
+            className="property-card__link property-card__link--icon"
+            to={`/listings/${property.id}`}
+          >
             <ArrowRightIcon className="ui-icon ui-icon--tiny" />
           </Link>
         </div>
