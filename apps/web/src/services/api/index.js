@@ -1,4 +1,5 @@
 export * from "./auth"
+export * from "./bookmarks"
 export * from "./client"
 export * from "./dashboards"
 export * from "./endpoints"
