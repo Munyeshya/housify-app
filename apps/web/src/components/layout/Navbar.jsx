@@ -1,6 +1,7 @@
+import { useState } from "react"
 import { NavLink } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
-import { MailIcon, PhoneIcon, PinIcon } from "../common/Icons"
+import { CloseIcon, MailIcon, MenuIcon, PhoneIcon, PinIcon } from "../common/Icons"
 import Logo from "../common/Logo"
 
 const publicLinks = [
@@ -13,6 +14,11 @@ const publicLinks = [
 function Navbar() {
   const { isAuthenticated, user } = useAuth()
   const dashboardPath = user?.role ? `/${user.role}/dashboard` : "/login"
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  function closeMobileMenu() {
+    setIsMobileMenuOpen(false)
+  }
 
   return (
     <header className="app-header">
@@ -49,13 +55,27 @@ function Navbar() {
           <div className="app-header__inner">
             <Logo />
 
-            <nav className="app-header__nav" aria-label="Primary">
+            <button
+              aria-expanded={isMobileMenuOpen}
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              className="app-header__toggle"
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              type="button"
+            >
+              {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+            </button>
+
+            <nav
+              aria-label="Primary"
+              className={`app-header__nav${isMobileMenuOpen ? " is-open" : ""}`}
+            >
               {publicLinks.map((link) => (
                 <NavLink
                   key={link.to}
                   className={({ isActive }) =>
                     isActive ? "app-header__link is-active" : "app-header__link"
                   }
+                  onClick={closeMobileMenu}
                   to={link.to}
                 >
                   {link.label}
@@ -65,6 +85,7 @@ function Navbar() {
                 className={({ isActive }) =>
                   isActive ? "app-header__action is-active" : "app-header__action"
                 }
+                onClick={closeMobileMenu}
                 to={isAuthenticated ? dashboardPath : "/login"}
               >
                 {isAuthenticated ? "Dashboard" : "Sign in"}
