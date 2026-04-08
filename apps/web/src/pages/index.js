@@ -1,0 +1,7 @@
+export { default as Login } from "./auth/Login"
+export { default as Home } from "./public/Home"
+export { default as LandlordDashboard } from "./landlord/Dashboard"
+export { default as TenantDashboard } from "./tenant/Dashboard"
+export { default as AgentDashboard } from "./agent/Dashboard"
+export { default as AdminDashboard } from "./admin/Dashboard"
+export { default as NotFound } from "./NotFound"
