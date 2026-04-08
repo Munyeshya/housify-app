@@ -20,9 +20,10 @@ function AppHeader() {
             <div className="app-header__contact">
               <span>support@housify.app</span>
               <span>+250 700 000 000</span>
+              <span>Kigali, Rwanda</span>
             </div>
             <div className="app-header__meta">
-              <span>Rental homes, landlord tools, and structured tenancy records.</span>
+              <span>{isAuthenticated ? "Account access enabled" : "Sign in to save homes and manage rentals"}</span>
             </div>
           </div>
         </div>
@@ -32,10 +33,14 @@ function AppHeader() {
         <div className="container-fluid">
           <div className="app-header__inner">
             <NavLink className="brand-mark" to="/">
-              <span className="brand-mark__badge">H</span>
+              <span className="brand-mark__badge" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </span>
               <span className="brand-mark__text">
                 <strong>Housify</strong>
-                <small>Property listings and rental operations</small>
+                <small>Homes, tenants, landlords</small>
               </span>
             </NavLink>
 
