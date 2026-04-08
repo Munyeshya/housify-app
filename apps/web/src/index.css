@@ -43,6 +43,7 @@ body {
   font-family: "Manrope", "Segoe UI", sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 a {
@@ -152,6 +153,7 @@ img {
 .public-shell {
   background: var(--color-bg);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .public-shell__content {
