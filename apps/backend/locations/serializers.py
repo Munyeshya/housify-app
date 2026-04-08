@@ -91,6 +91,8 @@ class LocationCountSerializer(serializers.Serializer):
     name = serializers.CharField()
     parent_id = serializers.IntegerField(allow_null=True)
     parent_code = serializers.CharField(allow_null=True)
+    center_latitude = serializers.DecimalField(max_digits=9, decimal_places=6, allow_null=True)
+    center_longitude = serializers.DecimalField(max_digits=9, decimal_places=6, allow_null=True)
     available_houses_count = serializers.IntegerField()
 
 
