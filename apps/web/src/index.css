@@ -1,111 +1,364 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  color: #2f271d;
+  background-color: #f4efe6;
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  line-height: 1.5;
   font-synthesis: none;
+  font-weight: 400;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --page-bg: #f4efe6;
+  --surface: #fcfaf5;
+  --surface-muted: #efe5d6;
+  --surface-strong: #e3d5bf;
+  --ink: #2f271d;
+  --ink-soft: #655847;
+  --line: #d6cfbf;
+  --brand: #25352d;
+  --brand-soft: #435748;
+  --accent: #8c6b49;
+  --danger: #9f4a34;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --shadow-soft: 0 12px 24px rgba(47, 39, 29, 0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
+  background: var(--page-bg);
+  color: var(--ink);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.btn {
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.8rem 1.1rem;
+}
+
+.btn-dark {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+.btn-dark:hover,
+.btn-dark:focus {
+  background: #1c2922;
+  border-color: #1c2922;
+}
+
+.btn-outline-dark {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.btn-outline-dark:hover,
+.btn-outline-dark:focus {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+.form-control {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  min-height: 48px;
+  padding: 0.75rem 0.9rem;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-shell__body {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 73px);
+}
+
+.app-shell__content {
+  padding: 2rem 0;
+}
+
+.app-header {
+  background: rgba(252, 250, 245, 0.96);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.app-header__inner {
+  align-items: center;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  min-height: 72px;
+}
+
+.brand-mark {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.9rem;
+}
+
+.brand-mark__badge {
+  align-items: center;
+  background: var(--brand);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  display: inline-flex;
+  font-size: 1rem;
+  font-weight: 800;
+  height: 2.25rem;
+  justify-content: center;
+  width: 2.25rem;
+}
+
+.brand-mark__text {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  line-height: 1.15;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.brand-mark__text strong {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.brand-mark__text small {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.app-header__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.app-header__link,
+.app-sidebar__link {
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--ink-soft);
+  display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.6rem 0.8rem;
+  transition: background-color 160ms ease, border-color 160ms ease,
+    color 160ms ease;
+}
+
+.app-header__link:hover,
+.app-sidebar__link:hover {
+  background: rgba(227, 213, 191, 0.45);
+  border-color: rgba(140, 107, 73, 0.15);
+  color: var(--ink);
+}
+
+.app-header__link.is-active,
+.app-sidebar__link.is-active {
+  background: rgba(37, 53, 45, 0.08);
+  border-color: rgba(37, 53, 45, 0.14);
+  color: var(--brand);
+}
+
+.app-sidebar {
+  border-right: 1px solid var(--line);
+  padding: 2rem 1rem;
+}
+
+.app-sidebar__panel {
+  background: rgba(252, 250, 245, 0.78);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  padding: 1rem;
+  position: sticky;
+  top: 96px;
+}
+
+.app-sidebar__section + .app-sidebar__section {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.app-sidebar__section h2 {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.8rem;
+  text-transform: uppercase;
+}
+
+.app-sidebar__section nav {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.page-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 2rem;
+}
+
+.page-panel--hero,
+.page-panel--auth {
+  display: grid;
+  gap: 2rem;
+}
+
+.page-panel--hero {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+
+.page-panel--auth {
+  align-items: start;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 420px);
+}
+
+.page-copy {
+  max-width: 52rem;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin: 0 0 0.85rem;
+  text-transform: uppercase;
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: clamp(2rem, 3vw, 3.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
   margin: 0;
+  max-width: 14ch;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.lede {
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  margin: 1rem 0 0;
+  max-width: 60ch;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.page-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.info-block {
+  background: var(--surface-muted);
+  border: 1px solid rgba(140, 107, 73, 0.12);
+  border-radius: var(--radius-md);
+  min-height: 136px;
+  padding: 1.2rem;
+}
+
+.info-block span {
+  color: var(--ink-soft);
+  display: block;
+  font-size: 0.83rem;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.info-block strong {
+  display: block;
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.auth-form {
+  background: rgba(239, 229, 214, 0.56);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  display: grid;
+  gap: 1rem;
+  padding: 1.4rem;
+}
+
+.auth-form label {
+  color: var(--ink);
+  display: grid;
+  font-size: 0.95rem;
+  font-weight: 600;
+  gap: 0.5rem;
+}
+
+@media (max-width: 991px) {
+  .app-shell__body {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 1rem;
+  }
+
+  .app-sidebar__panel {
+    position: static;
+  }
+
+  .page-panel--hero,
+  .page-panel--auth {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-header__inner {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 1rem 0;
+  }
+
+  .page-panel {
+    padding: 1.35rem;
+  }
 }
