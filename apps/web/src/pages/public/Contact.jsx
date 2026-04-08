@@ -25,7 +25,7 @@ function Contact() {
         </div>
       </div>
 
-      <form className="auth-form" onSubmit={(event) => event.preventDefault()}>
+      <form className="auth-form contact-form" onSubmit={(event) => event.preventDefault()}>
         <label>
           Full name
           <input className="form-control" placeholder="Your name" type="text" />
@@ -38,7 +38,7 @@ function Contact() {
           Message
           <textarea className="form-control" placeholder="Tell us what you need help with" rows="5" />
         </label>
-        <button className="btn btn-dark" type="submit">
+        <button className="btn btn-dark contact-form__submit" type="submit">
           Send message
         </button>
       </form>
