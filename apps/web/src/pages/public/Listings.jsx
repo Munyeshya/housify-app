@@ -36,39 +36,75 @@ function Listings() {
 
   return (
     <div className="public-stack">
-      <section className="page-panel">
-        <p className="eyebrow">Listings</p>
-        <h1>Available rental homes</h1>
-        <p className="lede">
-          Explore the properties that are currently open for rent and review the
-          details before you mark your interest.
-        </p>
+      <section className="listing-intro page-panel">
+        <div>
+          <p className="eyebrow">Listings</p>
+          <h1>Available rental homes</h1>
+          <p className="lede">
+            Review the homes that are currently open for rent, compare their
+            location and rent, and open any property to mark your interest.
+          </p>
+        </div>
+        <div className="listing-intro__summary">
+          <strong>{properties.length}</strong>
+          <span>public homes currently available</span>
+        </div>
       </section>
 
-      {isLoading ? (
-        <section className="page-panel">
-          <p className="lede">Loading available homes...</p>
-        </section>
-      ) : null}
+      <section className="listing-browser">
+        <aside className="listing-browser__filters">
+          <div className="filter-card">
+            <p className="eyebrow">Filter snapshot</p>
+            <h2>Rental search</h2>
+            <div className="filter-card__group">
+              <span>Status</span>
+              <strong>Available</strong>
+            </div>
+            <div className="filter-card__group">
+              <span>Type</span>
+              <strong>Houses, apartments, compounds</strong>
+            </div>
+            <div className="filter-card__group">
+              <span>Pricing</span>
+              <strong>Visible before you sign in</strong>
+            </div>
+          </div>
+        </aside>
 
-      {errorMessage ? (
-        <section className="page-panel">
-          <p className="lede">{errorMessage}</p>
-        </section>
-      ) : null}
+        <div className="listing-browser__results">
+          <div className="listing-browser__map">
+            <div className="listing-browser__map-card">
+              <span>Map view</span>
+              <strong>Property locations appear here as public listings with coordinates grow.</strong>
+            </div>
+          </div>
 
-      {!isLoading && !errorMessage ? (
-        <section className="property-grid">
-          {properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
-          {!properties.length ? (
-            <article className="page-panel">
-              <p className="lede">There are no public rental homes available right now.</p>
-            </article>
+          {isLoading ? (
+            <section className="page-panel">
+              <p className="lede">Loading available homes...</p>
+            </section>
           ) : null}
-        </section>
-      ) : null}
+
+          {errorMessage ? (
+            <section className="page-panel">
+              <p className="lede">{errorMessage}</p>
+            </section>
+          ) : null}
+
+          {!isLoading && !errorMessage ? (
+            <section className="property-grid property-grid--results">
+              {properties.map((property) => (
+                <PropertyCard key={property.id} property={property} />
+              ))}
+              {!properties.length ? (
+                <article className="page-panel">
+                  <p className="lede">There are no public rental homes available right now.</p>
+                </article>
+              ) : null}
+            </section>
+          ) : null}
+        </div>
+      </section>
     </div>
   )
 }
