@@ -859,8 +859,9 @@ class Command(BaseCommand):
         tree = {"districts": {}}
         for district_name, district_data in self.location_blueprint.items():
             district, _ = District.objects.update_or_create(
-                code=self._location_code(district_name),
+                name=district_name,
                 defaults={
+                    "code": self._location_code(district_name),
                     "name": district_name,
                     "center_latitude": Decimal(district_data["center"][0]),
                     "center_longitude": Decimal(district_data["center"][1]),
@@ -870,9 +871,10 @@ class Command(BaseCommand):
 
             for sector_name, sector_data in district_data["sectors"].items():
                 sector, _ = Sector.objects.update_or_create(
-                    code=self._location_code(district_name, sector_name),
+                    district=district,
+                    name=sector_name,
                     defaults={
-                        "district": district,
+                        "code": self._location_code(district_name, sector_name),
                         "name": sector_name,
                         "center_latitude": Decimal(sector_data["center"][0]),
                         "center_longitude": Decimal(sector_data["center"][1]),
@@ -885,9 +887,10 @@ class Command(BaseCommand):
 
                 for cell_name, villages in sector_data["cells"].items():
                     cell, _ = Cell.objects.update_or_create(
-                        code=self._location_code(district_name, sector_name, cell_name),
+                        sector=sector,
+                        name=cell_name,
                         defaults={
-                            "sector": sector,
+                            "code": self._location_code(district_name, sector_name, cell_name),
                             "name": cell_name,
                             "center_latitude": sector.center_latitude,
                             "center_longitude": sector.center_longitude,
@@ -900,9 +903,10 @@ class Command(BaseCommand):
 
                     for village_name in villages:
                         village, _ = Village.objects.update_or_create(
-                            code=self._location_code(district_name, sector_name, cell_name, village_name),
+                            cell=cell,
+                            name=village_name,
                             defaults={
-                                "cell": cell,
+                                "code": self._location_code(district_name, sector_name, cell_name, village_name),
                                 "name": village_name,
                                 "center_latitude": cell.center_latitude,
                                 "center_longitude": cell.center_longitude,
