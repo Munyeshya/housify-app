@@ -1,13 +1,17 @@
 import { NavLink } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 
-const quickLinks = [
-  { label: "Public listings", to: "/" },
-  { label: "Landlord", to: "/landlord/dashboard" },
-  { label: "Tenant", to: "/tenant/dashboard" },
-  { label: "Admin", to: "/admin/dashboard" },
+const publicLinks = [
+  { label: "Home", to: "/" },
+  { label: "About", to: "/about" },
+  { label: "Listings", to: "/listings" },
+  { label: "Contact", to: "/contact" },
 ]
 
 function AppHeader() {
+  const { isAuthenticated, user } = useAuth()
+  const dashboardPath = user?.role ? `/${user.role}/dashboard` : "/login"
+
   return (
     <header className="app-header border-bottom">
       <div className="container-fluid">
@@ -21,7 +25,7 @@ function AppHeader() {
           </NavLink>
 
           <nav className="app-header__nav" aria-label="Primary">
-            {quickLinks.map((link) => (
+            {publicLinks.map((link) => (
               <NavLink
                 key={link.to}
                 className={({ isActive }) =>
@@ -32,6 +36,14 @@ function AppHeader() {
                 {link.label}
               </NavLink>
             ))}
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "app-header__action is-active" : "app-header__action"
+              }
+              to={isAuthenticated ? dashboardPath : "/login"}
+            >
+              {isAuthenticated ? "Dashboard" : "Sign in"}
+            </NavLink>
           </nav>
         </div>
       </div>
