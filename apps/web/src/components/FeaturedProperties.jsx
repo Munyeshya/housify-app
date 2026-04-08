@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import PropertyCard from "./PropertyCard"
+import SectionTitle from "./common/SectionTitle"
 import { propertiesApi } from "../services/api"
 
 function FeaturedProperties() {
@@ -37,15 +38,15 @@ function FeaturedProperties() {
 
   return (
     <section className="featured-properties">
-      <div className="featured-properties__header">
-        <div>
-          <p className="eyebrow">Featured listings</p>
-          <h2>Homes currently attracting attention</h2>
-        </div>
-        <Link className="btn btn-outline-dark" to="/listings">
-          See all properties
-        </Link>
-      </div>
+      <SectionTitle
+        action={
+          <Link className="btn btn-outline-dark" to="/listings">
+            See all properties
+          </Link>
+        }
+        badge="Featured listings"
+        title="Homes currently attracting attention"
+      />
 
       <div className="property-grid">
         {properties.map((property) => (

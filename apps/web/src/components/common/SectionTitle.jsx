@@ -1,7 +1,7 @@
-function SectionTitle({ badge, title, text, center = false, action = null }) {
+function SectionTitle({ badge, title, text, action = null }) {
   return (
-    <div className={`section-title${center ? " section-title--center" : ""}`}>
-      <div className="section-title__copy">
+    <div className="section-title">
+      <div>
         {badge ? <p className="eyebrow">{badge}</p> : null}
         <h2>{title}</h2>
         {text ? <p className="lede">{text}</p> : null}

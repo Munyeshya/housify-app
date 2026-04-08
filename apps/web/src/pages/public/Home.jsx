@@ -4,115 +4,111 @@ import FeaturedProperties from "../../components/FeaturedProperties"
 function Home() {
   return (
     <div className="public-stack public-stack--wide">
-      <section className="hero-showcase">
-        <div className="hero-showcase__copy">
-          <p className="eyebrow">Available homes across trusted landlord portfolios</p>
-          <h1>Rental homes for people who want clearer property details.</h1>
+      <section className="home-hero page-panel">
+        <div className="page-copy">
+          <p className="eyebrow">Find your next rental with confidence</p>
+          <h1>See open homes, compare the details, and follow the ones that fit you.</h1>
           <p className="lede">
-            Browse homes that are currently open for rent, check the details
-            that matter, and mark your interest once you are ready to follow up.
+            Housify brings public rental discovery and real landlord property management
+            into one system. Browse available homes, review the facts that matter,
+            and save the properties you want to revisit after signing in.
           </p>
           <div className="page-actions">
             <Link className="btn btn-dark" to="/listings">
-              View all listings
+              Browse listings
             </Link>
             <Link className="btn btn-outline-dark" to="/about">
-              Learn more
+              About Housify
             </Link>
           </div>
         </div>
 
-        <div className="hero-showcase__gallery">
-          <div className="hero-showcase__frame hero-showcase__frame--tall" />
-          <div className="hero-showcase__frame hero-showcase__frame--wide" />
-          <div className="hero-showcase__frame hero-showcase__frame--card">
-            <span>Tenant interest</span>
-            <strong>Save homes after sign in and come back to them later.</strong>
+        <div className="home-hero__media">
+          <div className="home-hero__image home-hero__image--main" />
+          <div className="home-hero__card">
+            <span>Tenant tools</span>
+            <strong>Sign in to bookmark homes and keep track of the places you like.</strong>
           </div>
         </div>
       </section>
 
-      <section className="search-strip">
-        <div className="search-strip__field">
-          <span>Location</span>
-          <strong>Kigali and nearby areas</strong>
-        </div>
-        <div className="search-strip__field">
-          <span>Property type</span>
-          <strong>Houses, apartments, compounds</strong>
-        </div>
-        <div className="search-strip__field">
-          <span>For tenants</span>
-          <strong>See details before marking interest</strong>
-        </div>
-        <Link className="btn btn-dark search-strip__button" to="/listings">
-          Search listings
-        </Link>
-      </section>
-
-      <section className="about-showcase page-panel">
-        <div className="about-showcase__media">
-          <div className="about-showcase__image about-showcase__image--tall" />
-          <div className="about-showcase__image about-showcase__image--small" />
-          <div className="about-showcase__image about-showcase__image--wide" />
-        </div>
-
-        <div className="about-showcase__copy">
-          <p className="eyebrow">About Housify</p>
-          <h2>One platform for public rental listings and structured property management.</h2>
-          <p className="lede">
-            Tenants can browse homes, compare rent, and save the places they
-            want to follow up on. Landlords can manage listings, tenants,
-            complaints, payments, and occupancy history inside the same system.
+      <section className="home-story">
+        <div className="home-story__quote">
+          <div className="home-story__mark">"</div>
+          <h2>Better rental decisions start with clearer property information.</h2>
+          <p>
+            Tenants should be able to understand a home before they enquire. Landlords
+            should be able to manage listings, occupancy, complaints, and payments
+            without jumping between disconnected tools.
           </p>
-          <div className="stats-band stats-band--light">
-            <article>
-              <strong>Listings</strong>
-              <span>Public homes shown with pricing and property details</span>
-            </article>
-            <article>
-              <strong>Interest</strong>
-              <span>Bookmarks begin after sign in</span>
-            </article>
-            <article>
-              <strong>Management</strong>
-              <span>Landlords keep control of records and visibility</span>
-            </article>
+          <div className="home-story__meta">
+            <strong>Housify platform</strong>
+            <span>Rental discovery and property management</span>
           </div>
-          <div className="page-actions">
-            <Link className="btn btn-dark" to="/about">
-              More about Housify
-            </Link>
-          </div>
+        </div>
+
+        <div className="home-story__media">
+          <div className="home-story__image" />
         </div>
       </section>
 
-      <section className="offer-grid">
-        <article className="offer-grid__image" />
-        <article className="offer-card">
+      <section className="home-services">
+        <article className="home-service-card home-service-card--media" />
+        <article className="home-service-card">
           <span>For tenants</span>
           <h3>Browse open homes</h3>
-          <p>See the homes that are publicly available and compare the details before acting.</p>
-          <Link to="/listings">Explore listings</Link>
+          <p>
+            See currently available houses, apartments, and compounds with pricing,
+            location, and practical details before you act.
+          </p>
+          <Link to="/listings">View homes</Link>
         </article>
-        <article className="offer-card offer-card--accent">
+        <article className="home-service-card home-service-card--accent">
           <span>For landlords</span>
-          <h3>Control property visibility</h3>
-          <p>Keep public listings in front while managing occupancy, records, and access privately.</p>
+          <h3>Control your properties</h3>
+          <p>
+            Manage visibility, tenant occupation, complaints, payment records,
+            and agent access from one account.
+          </p>
           <Link to="/login">Sign in</Link>
         </article>
-        <article className="offer-card">
-          <span>For the full journey</span>
-          <h3>Move from listing to tenancy</h3>
-          <p>Keep complaints, payments, and history organized after a tenant moves in.</p>
-          <Link to="/contact">Talk to us</Link>
+        <article className="home-service-card">
+          <span>For decisions</span>
+          <h3>Keep rental history organized</h3>
+          <p>
+            Housify keeps tenancy records and history available where the right
+            permissions apply.
+          </p>
+          <Link to="/about">Learn more</Link>
         </article>
-        <article className="offer-card">
+        <article className="home-service-card">
           <span>For follow-up</span>
           <h3>Mark your interest</h3>
-          <p>Use bookmarks after sign in to keep track of the homes you may want to rent.</p>
+          <p>
+            Tenant accounts can bookmark homes and return to them later when they
+            are ready to reach out.
+          </p>
           <Link to="/login">Create account access</Link>
         </article>
+      </section>
+
+      <section className="home-cta">
+        <div>
+          <p className="eyebrow">Start with what is available today</p>
+          <h2>Explore rental homes that are already open for the public to view.</h2>
+          <p className="lede">
+            Review pricing, property type, location, and the details a tenant needs
+            before choosing where to focus.
+          </p>
+        </div>
+        <div className="page-actions">
+          <Link className="btn btn-light" to="/listings">
+            View listings
+          </Link>
+          <Link className="btn btn-outline-light" to="/contact">
+            Contact us
+          </Link>
+        </div>
       </section>
 
       <FeaturedProperties />
