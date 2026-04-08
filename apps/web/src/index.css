@@ -698,6 +698,7 @@ h3 {
 }
 
 .property-grid--results {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: 0;
 }
 
