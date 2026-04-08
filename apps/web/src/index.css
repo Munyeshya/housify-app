@@ -1615,7 +1615,6 @@ h3 {
 
 @media (max-width: 767px) {
   .app-header__top-inner,
-  .app-header__inner,
   .dashboard-header__inner,
   .featured-properties__header,
   .section-title,
@@ -1628,6 +1627,14 @@ h3 {
     align-items: stretch;
     display: none;
     width: 100%;
+  }
+
+  .app-header__inner {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 
   .app-header__nav.is-open {
@@ -1643,6 +1650,7 @@ h3 {
 
   .app-header__toggle {
     display: inline-flex;
+    margin-left: auto;
   }
 
   .app-header__meta {
