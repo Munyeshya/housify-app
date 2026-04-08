@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import { MailIcon, PhoneIcon, PinIcon } from "../common/Icons"
 import Logo from "../common/Logo"
 
@@ -13,18 +12,6 @@ const quickLinks = [
 function Footer() {
   return (
     <div className="public-footer-wrap">
-      <div className="container-fluid">
-        <section className="public-footer__floating-cta">
-          <div>
-            <p className="eyebrow">Find your next rental with Housify</p>
-            <h2>Explore available homes and follow the ones you want to rent.</h2>
-          </div>
-          <Link className="btn btn-dark" to="/listings">
-            View listings
-          </Link>
-        </section>
-      </div>
-
       <footer className="public-footer">
         <div className="container-fluid">
         <section className="public-footer__grid">
