@@ -1,15 +1,15 @@
 import { Outlet } from "react-router-dom"
-import AppHeader from "../components/AppHeader"
-import PublicFooter from "../components/PublicFooter"
+import Footer from "../components/layout/Footer"
+import Navbar from "../components/layout/Navbar"
 
 function PublicLayout() {
   return (
     <div className="public-shell">
-      <AppHeader />
+      <Navbar />
       <main className="public-shell__content">
         <Outlet />
       </main>
-      <PublicFooter />
+      <Footer />
     </div>
   )
 }
