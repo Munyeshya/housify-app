@@ -4,35 +4,35 @@ function Home() {
   return (
     <section className="page-panel page-panel--hero">
       <div className="page-copy">
-        <p className="eyebrow">Homes you can trust</p>
-        <h1>Find available rental homes and connect with responsive landlords.</h1>
+        <p className="eyebrow">Available rentals for real tenancy decisions</p>
+        <h1>Find a home, review the details, and register your interest with confidence.</h1>
         <p className="lede">
-          Housify helps house seekers discover open listings, save the homes
-          they like, and move into properties with clearer records, better
-          communication, and structured property management behind the scenes.
+          Housify brings public rental listings together with structured
+          property management. Tenants can browse open homes, compare pricing
+          and location, and save the places they want to follow up on.
         </p>
         <div className="page-actions">
           <Link className="btn btn-dark" to="/listings">
-            View listings
+            Browse listings
           </Link>
           <Link className="btn btn-outline-dark" to="/about">
-            How Housify works
+            See how Housify works
           </Link>
         </div>
       </div>
 
       <div className="page-grid">
         <article className="info-block">
-          <span>For house seekers</span>
-          <strong>Browse available homes, compare prices, and save the ones you like.</strong>
+          <span>For tenants</span>
+          <strong>Browse available homes, compare rent, and save the places you want to revisit.</strong>
         </article>
         <article className="info-block">
           <span>For landlords</span>
-          <strong>Manage property visibility, occupancy, tenant records, and payments in one place.</strong>
+          <strong>Advertise open properties and manage occupancy, records, complaints, and payments in one place.</strong>
         </article>
         <article className="info-block">
-          <span>For everyone</span>
-          <strong>Clearer records, better follow-up, and a safer rental journey from listing to tenancy.</strong>
+          <span>For the whole rental journey</span>
+          <strong>Move from listing to tenancy with clearer property information and better follow-up.</strong>
         </article>
       </div>
     </section>
