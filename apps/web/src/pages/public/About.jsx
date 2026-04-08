@@ -24,7 +24,9 @@ function About() {
 
         <div className="about-showcase__content">
           <p className="eyebrow">About Housify</p>
-          <h1>A rental platform that connects public discovery with structured property control.</h1>
+          <h1 style={{ fontSize: "clamp(1.46rem, 2.4vw, 2.72rem)" }}>
+            A rental platform that connects public discovery with structured property control.
+          </h1>
           <p className="lede">
             Housify helps tenants find open homes while giving landlords one place
             to manage listings, occupancy, agents, tenant records, complaints,
