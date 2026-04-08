@@ -90,6 +90,18 @@ export function SearchIcon({ className = "ui-icon" }) {
   )
 }
 
+export function GlobeIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <circle cx="12" cy="12" r="8" />
+      <path d="M4.5 9.5h15" />
+      <path d="M4.5 14.5h15" />
+      <path d="M12 4a12 12 0 0 1 0 16" />
+      <path d="M12 4a12 12 0 0 0 0 16" />
+    </svg>
+  )
+}
+
 export function HeartIcon({ className = "ui-icon" }) {
   return (
     <svg {...iconProps(className)}>
