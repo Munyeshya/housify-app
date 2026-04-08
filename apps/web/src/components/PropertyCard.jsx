@@ -20,19 +20,18 @@ function PropertyCard({ property }) {
           <span>{property.property_type}</span>
           <strong>{property.status}</strong>
         </div>
+        <div className="property-card__pager">
+          <span />
+          <span />
+          <span className="is-active" />
+        </div>
       </div>
 
       <div className="property-card__body">
-        <div className="property-card__meta">
-          <strong>
-            {formatMoney(property.rent_amount, property.currency)} /{" "}
-            {property.billing_cycle}
-          </strong>
-          <span>{formatLocation(property) || "Location pending"}</span>
-        </div>
-
         <h2>{property.title}</h2>
-        <p>{property.short_description}</p>
+        <p className="property-card__location">
+          {formatLocation(property) || "Location pending"}
+        </p>
 
         <dl className="property-card__stats">
           <div>
@@ -49,9 +48,14 @@ function PropertyCard({ property }) {
           </div>
         </dl>
 
-        <Link className="property-card__link" to={`/listings/${property.id}`}>
-          View home details
-        </Link>
+        <div className="property-card__footer">
+          <strong className="property-card__price">
+            {formatMoney(property.rent_amount, property.currency)}
+          </strong>
+          <Link className="property-card__link" to={`/listings/${property.id}`}>
+            View details
+          </Link>
+        </div>
       </div>
     </article>
   )
