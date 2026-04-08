@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { FilterIcon, PinIcon, SearchIcon } from "../../components/common/Icons"
 import PageBanner from "../../components/PageBanner"
 import PropertyCard from "../../components/PropertyCard"
 import { propertiesApi } from "../../services/api"
@@ -62,18 +63,66 @@ function Listings() {
         <aside className="listing-browser__filters">
           <div className="filter-card">
             <p className="eyebrow">Explore</p>
-            <h2>Current public listings</h2>
+            <h2>Filter homes</h2>
+
             <div className="filter-card__group">
-              <span>Status</span>
-              <strong>Available</strong>
+              <label className="filter-card__label" htmlFor="filter-location">
+                <PinIcon />
+                Location
+              </label>
+              <input
+                className="form-control"
+                id="filter-location"
+                placeholder="Search by city or area"
+              />
             </div>
+
             <div className="filter-card__group">
-              <span>Property types</span>
-              <strong>Houses, apartments, compounds</strong>
+              <label className="filter-card__label" htmlFor="filter-type">
+                <FilterIcon />
+                Property type
+              </label>
+              <select className="form-control" defaultValue="" id="filter-type">
+                <option value="">All property types</option>
+                <option>House</option>
+                <option>Apartment</option>
+                <option>Compound</option>
+                <option>Studio</option>
+              </select>
             </div>
+
             <div className="filter-card__group">
-              <span>Tenant action</span>
-              <strong>Open a home to mark your interest after sign in</strong>
+              <label className="filter-card__label" htmlFor="filter-price">
+                <SearchIcon />
+                Budget
+              </label>
+              <select className="form-control" defaultValue="" id="filter-price">
+                <option value="">Any budget</option>
+                <option>Below 250,000</option>
+                <option>250,000 - 500,000</option>
+                <option>500,000 - 1,000,000</option>
+                <option>Above 1,000,000</option>
+              </select>
+            </div>
+
+            <div className="filter-card__group">
+              <label className="filter-card__label" htmlFor="filter-status">
+                <FilterIcon />
+                Availability
+              </label>
+              <select className="form-control" defaultValue="Available" id="filter-status">
+                <option>Available</option>
+                <option>Any status</option>
+              </select>
+            </div>
+
+            <div className="filter-card__actions">
+              <button className="btn btn-dark" type="button">
+                Apply filters
+              </button>
+              <button className="btn btn-outline-dark" type="button">
+                Reset
+              </button>
             </div>
           </div>
         </aside>
