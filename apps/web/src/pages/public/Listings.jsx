@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react"
-import { FilterIcon, PinIcon, SearchIcon } from "../../components/common/Icons"
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  FilterIcon,
+  PinIcon,
+  SearchIcon,
+} from "../../components/common/Icons"
 import PropertyCard from "../../components/PropertyCard"
 import PropertyCardSkeleton from "../../components/PropertyCardSkeleton"
 import { propertiesApi } from "../../services/api"
@@ -141,12 +147,13 @@ function Listings() {
 
                   <div className="listing-pagination__controls">
                     <button
+                      aria-label="Previous page"
                       className="listing-pagination__button"
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
                       type="button"
                     >
-                      Previous
+                      <ChevronLeftIcon className="ui-icon ui-icon--tiny" />
                     </button>
 
                     <div className="listing-pagination__pages">
@@ -169,12 +176,13 @@ function Listings() {
                     </div>
 
                     <button
+                      aria-label="Next page"
                       className="listing-pagination__button"
                       disabled={currentPage === totalPages}
                       onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
                       type="button"
                     >
-                      Next
+                      <ChevronRightIcon className="ui-icon ui-icon--tiny" />
                     </button>
                   </div>
                 </div>
