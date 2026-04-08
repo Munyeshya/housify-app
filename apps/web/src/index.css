@@ -1017,6 +1017,10 @@ h3 {
   font-weight: 800;
 }
 
+.contact-page {
+  margin-top: 1.1rem;
+}
+
 .public-footer-wrap {
   margin-top: 3rem;
 }
@@ -1208,5 +1212,9 @@ h3 {
 
   h1 {
     max-width: none;
+  }
+
+  .contact-page {
+    margin-top: 0.85rem;
   }
 }
