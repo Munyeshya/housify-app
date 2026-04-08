@@ -15,7 +15,7 @@ function PublicFooter() {
         <section className="public-footer__cta">
           <div>
             <p className="eyebrow">Find your next rental with Housify</p>
-            <h2>Browse available homes and keep track of the ones you care about.</h2>
+            <h2>Explore available homes and follow the ones you want to rent.</h2>
           </div>
           <Link className="btn btn-dark" to="/listings">
             View listings
@@ -24,16 +24,20 @@ function PublicFooter() {
 
         <section className="public-footer__grid">
           <article className="public-footer__brand">
-            <div className="brand-mark">
-              <span className="brand-mark__badge">H</span>
+            <div className="brand-mark public-footer__brand-mark">
+              <span className="brand-mark__badge" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </span>
               <span className="brand-mark__text">
                 <strong>Housify</strong>
-                <small>Property listings and rental operations</small>
+                <small>Homes, tenants, landlords</small>
               </span>
             </div>
             <p>
-              Housify helps tenants discover rental homes and helps landlords
-              manage listings, tenants, payments, complaints, and records.
+              Housify helps tenants discover rental homes while landlords manage
+              listings, occupancy, tenant records, complaints, and payment history.
             </p>
           </article>
 
