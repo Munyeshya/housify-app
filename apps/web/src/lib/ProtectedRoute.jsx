@@ -1,19 +1,23 @@
 import { useEffect } from "react"
 import { Navigate, Outlet, useLocation } from "react-router-dom"
 import { toast } from "react-hot-toast"
-import { getStoredAuthToken } from "../services/api/storage"
+import { useAuth } from "../context/AuthContext"
 
 function ProtectedRoute() {
-  const token = getStoredAuthToken()
+  const { isAuthenticated, isBootstrapping } = useAuth()
   const location = useLocation()
 
   useEffect(() => {
-    if (!token) {
+    if (!isBootstrapping && !isAuthenticated) {
       toast.error("Please sign in to access this area.")
     }
-  }, [token])
+  }, [isAuthenticated, isBootstrapping])
 
-  if (!token) {
+  if (isBootstrapping) {
+    return null
+  }
+
+  if (!isAuthenticated) {
     return <Navigate replace state={{ from: location }} to="/login" />
   }
 
