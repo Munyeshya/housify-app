@@ -1275,7 +1275,7 @@ h3 {
   background:
     radial-gradient(circle at top, rgba(22, 101, 52, 0.05), transparent 32%),
     #fafaf8;
-  border-radius: 24px;
+  border-radius: 16px;
   display: grid;
   gap: 1.4rem;
   margin: 0 auto;
