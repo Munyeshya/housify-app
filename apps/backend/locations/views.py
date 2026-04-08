@@ -15,13 +15,29 @@ from .serializers import (
 )
 
 
-PUBLIC_AVAILABLE_FILTER = Q(
-    properties__is_public=True,
-    properties__status=PropertyStatus.AVAILABLE,
-)
-
-
 class PropertyMapQueryMixin:
+    def _build_public_available_related_filter(self, request, prefix="properties__"):
+        query = Q(
+            **{
+                f"{prefix}is_public": True,
+                f"{prefix}status": PropertyStatus.AVAILABLE,
+            }
+        )
+        property_type = request.query_params.get("property_type")
+        city = request.query_params.get("city")
+        min_rent = request.query_params.get("min_rent")
+        max_rent = request.query_params.get("max_rent")
+
+        if property_type:
+            query &= Q(**{f"{prefix}property_type": property_type})
+        if city:
+            query &= Q(**{f"{prefix}city__iexact": city})
+        if min_rent:
+            query &= Q(**{f"{prefix}rent_amount__gte": min_rent})
+        if max_rent:
+            query &= Q(**{f"{prefix}rent_amount__lte": max_rent})
+        return query
+
     def _parse_origin(self, request):
         latitude = request.query_params.get("latitude")
         longitude = request.query_params.get("longitude")
@@ -151,8 +167,9 @@ class PublicDistrictCountsView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
+        public_available_filter = PropertyMapQueryMixin()._build_public_available_related_filter(request)
         districts = District.objects.annotate(
-            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+            available_houses_count=Count("properties", filter=public_available_filter, distinct=True)
         )
         data = [
             {
@@ -172,8 +189,9 @@ class PublicSectorCountsView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, district_id):
+        public_available_filter = PropertyMapQueryMixin()._build_public_available_related_filter(request)
         sectors = Sector.objects.filter(district_id=district_id).annotate(
-            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+            available_houses_count=Count("properties", filter=public_available_filter, distinct=True)
         )
         data = [
             {
@@ -193,8 +211,9 @@ class PublicCellCountsView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, sector_id):
+        public_available_filter = PropertyMapQueryMixin()._build_public_available_related_filter(request)
         cells = Cell.objects.filter(sector_id=sector_id).annotate(
-            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+            available_houses_count=Count("properties", filter=public_available_filter, distinct=True)
         )
         data = [
             {
@@ -214,8 +233,9 @@ class PublicVillageCountsView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, cell_id):
+        public_available_filter = PropertyMapQueryMixin()._build_public_available_related_filter(request)
         villages = Village.objects.filter(cell_id=cell_id).annotate(
-            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+            available_houses_count=Count("properties", filter=public_available_filter, distinct=True)
         )
         data = [
             {
