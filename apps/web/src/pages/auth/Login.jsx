@@ -1,27 +1,93 @@
+import { useState } from "react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { toast } from "react-hot-toast"
+import { useAuth } from "../../context/AuthContext"
+import { getCurrentUser, login } from "../../services/api"
+
+const roleDashboardMap = {
+  admin: "/admin/dashboard",
+  agent: "/agent/dashboard",
+  landlord: "/landlord/dashboard",
+  tenant: "/tenant/dashboard",
+}
+
 function Login() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { setUser } = useAuth()
+  const [credentials, setCredentials] = useState({ email: "", password: "" })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  function updateField(field, value) {
+    setCredentials((current) => ({
+      ...current,
+      [field]: value,
+    }))
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+
+    try {
+      setIsSubmitting(true)
+      await login(credentials)
+      const nextUser = await getCurrentUser()
+      setUser(nextUser)
+      toast.success("Welcome back.")
+
+      const destination =
+        location.state?.from?.pathname ||
+        location.state?.from ||
+        roleDashboardMap[nextUser?.role] ||
+        "/"
+
+      navigate(destination, { replace: true })
+    } catch (error) {
+      toast.error(error.message || "We could not sign you in.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <section className="page-panel page-panel--auth">
       <div className="page-copy">
-        <p className="eyebrow">Authentication</p>
-        <h1>Sign in flow placeholder</h1>
+        <p className="eyebrow">Sign in</p>
+        <h1>Access your Housify account.</h1>
         <p className="lede">
-          The real form will plug into the Housify auth service layer we already
-          built. This page exists now so routing, protection, and layout can be
-          structured before visual implementation.
+          Sign in to manage your properties, review your saved homes, or return
+          to your workspace.
         </p>
+        <div className="page-actions">
+          <Link className="btn btn-outline-dark" to="/listings">
+            Continue browsing homes
+          </Link>
+        </div>
       </div>
 
-      <form className="auth-form" onSubmit={(event) => event.preventDefault()}>
+      <form className="auth-form" onSubmit={handleSubmit}>
         <label>
           Email
-          <input className="form-control" placeholder="name@example.com" type="email" />
+          <input
+            className="form-control"
+            onChange={(event) => updateField("email", event.target.value)}
+            placeholder="name@example.com"
+            type="email"
+            value={credentials.email}
+          />
         </label>
         <label>
           Password
-          <input className="form-control" placeholder="Password" type="password" />
+          <input
+            className="form-control"
+            onChange={(event) => updateField("password", event.target.value)}
+            placeholder="Password"
+            type="password"
+            value={credentials.password}
+          />
         </label>
-        <button className="btn btn-dark" type="submit">
-          Sign in
+        <button className="btn btn-dark" disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Signing in..." : "Sign in"}
         </button>
       </form>
     </section>
