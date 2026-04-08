@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import PageBanner from "../../components/PageBanner"
 import PropertyCard from "../../components/PropertyCard"
 import { propertiesApi } from "../../services/api"
 
@@ -36,10 +37,16 @@ function Listings() {
 
   return (
     <div className="public-stack">
+      <PageBanner
+        eyebrow="Listings"
+        subtitle="Browse the public homes currently open for rent."
+        title="Available rental homes"
+      />
+
       <section className="listing-intro page-panel">
         <div>
-          <p className="eyebrow">Listings</p>
-          <h1>Available rental homes</h1>
+          <p className="eyebrow">Rental search</p>
+          <h2>Browse and compare the homes that are currently open.</h2>
           <p className="lede">
             Review the homes that are currently open for rent, compare their
             location and rent, and open any property to mark your interest.
