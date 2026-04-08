@@ -106,3 +106,22 @@ export function ArrowRightIcon({ className = "ui-icon" }) {
     </svg>
   )
 }
+
+export function MenuIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M4 7h16" />
+      <path d="M4 12h16" />
+      <path d="M4 17h16" />
+    </svg>
+  )
+}
+
+export function CloseIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="m6 6 12 12" />
+      <path d="M18 6 6 18" />
+    </svg>
+  )
+}
