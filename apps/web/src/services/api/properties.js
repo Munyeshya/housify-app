@@ -28,10 +28,8 @@ export const propertiesApi = {
       }),
     )
   },
-  async getPublicPropertyById(propertyId) {
-    const properties = await apiClient.get(apiEndpoints.properties.publicList)
-    const matches = Array.isArray(properties) ? properties : []
-    return matches.find((property) => String(property.id) === String(propertyId)) || null
+  getPublicPropertyById(propertyId) {
+    return apiClient.get(apiEndpoints.properties.publicDetail(propertyId))
   },
   listLandlordPortfolios(query = {}) {
     return apiClient.get(withQuery(apiEndpoints.properties.landlordPortfolios, query))
