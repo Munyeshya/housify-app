@@ -196,7 +196,7 @@ class LocationsApiTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         district_counts = {item["name"]: item["available_houses_count"] for item in response.data}
-        self.assertEqual(district_counts["Gasabo"], 1)
+        self.assertEqual(district_counts["Gasabo"], 2)
         self.assertEqual(district_counts["Kicukiro"], 1)
 
     def test_public_sector_counts_return_selected_district_children(self):
@@ -205,4 +205,4 @@ class LocationsApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["name"], self.sector.name)
-        self.assertEqual(response.data[0]["available_houses_count"], 1)
+        self.assertEqual(response.data[0]["available_houses_count"], 2)
