@@ -2,30 +2,26 @@ function About() {
   return (
     <section className="page-panel">
       <p className="eyebrow">About Housify</p>
-      <h1>A rental platform built around clearer property records and better occupancy management.</h1>
+      <h1>A rental platform for both house seekers and landlords.</h1>
       <p className="lede">
-        Housify is designed for landlords who need reliable property control
-        and for house seekers who want a more transparent rental journey. From
-        public listings to tenant records, payments, complaints, and agent
-        support, the platform is built to reduce confusion and improve trust on
-        both sides.
+        Housify brings public property discovery together with structured rental
+        management. House seekers can explore available homes and save the ones
+        they are interested in. Landlords can manage listings, occupancy,
+        records, complaints, and payments from one place.
       </p>
-      <div className="content-stack">
-        <article className="content-block">
-          <h2>For landlords</h2>
-          <p>
-            Manage multiple properties under one account, control which homes
-            are public, track occupancy, review tenant history with permission,
-            and work with agents where needed.
-          </p>
+
+      <div className="feature-row">
+        <article className="feature-card">
+          <h2>Public listings</h2>
+          <p>Available homes can be advertised clearly with pricing, location, and images.</p>
         </article>
-        <article className="content-block">
-          <h2>For tenants</h2>
-          <p>
-            Discover available homes, save the listings that match your needs,
-            keep a cleaner payment and residence record, and communicate through
-            structured complaint and follow-up channels.
-          </p>
+        <article className="feature-card">
+          <h2>Interest and follow-up</h2>
+          <p>Signed-in users can bookmark homes and return to them when making decisions.</p>
+        </article>
+        <article className="feature-card">
+          <h2>Landlord control</h2>
+          <p>Property owners manage tenants, records, agents, complaints, and visibility.</p>
         </article>
       </div>
     </section>
