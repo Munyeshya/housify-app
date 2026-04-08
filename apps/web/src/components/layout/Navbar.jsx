@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
+import Logo from "../common/Logo"
 
 const publicLinks = [
   { label: "Home", to: "/" },
@@ -36,17 +37,7 @@ function Navbar() {
       <div className="app-header__main border-bottom">
         <div className="container-fluid">
           <div className="app-header__inner">
-            <NavLink className="brand-mark" to="/">
-              <span className="brand-mark__badge" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </span>
-              <span className="brand-mark__text">
-                <strong>Housify</strong>
-                <small>Homes, tenants, landlords</small>
-              </span>
-            </NavLink>
+            <Logo />
 
             <nav className="app-header__nav" aria-label="Primary">
               {publicLinks.map((link) => (
