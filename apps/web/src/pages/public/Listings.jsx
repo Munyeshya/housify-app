@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { FilterIcon, PinIcon, SearchIcon } from "../../components/common/Icons"
 import PropertyCard from "../../components/PropertyCard"
+import PropertyCardSkeleton from "../../components/PropertyCardSkeleton"
 import { propertiesApi } from "../../services/api"
 
 function Listings() {
@@ -36,7 +37,7 @@ function Listings() {
   }, [])
 
   return (
-    <div className="public-stack">
+    <div className="public-stack listing-page">
       <section className="listing-browser">
         <aside className="listing-browser__filters">
           <div className="filter-card">
@@ -107,8 +108,10 @@ function Listings() {
 
         <div className="listing-browser__results">
           {isLoading ? (
-            <section className="page-panel">
-              <p className="lede">Loading available homes...</p>
+            <section className="property-grid property-grid--results">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <PropertyCardSkeleton key={`listing-skeleton-${index}`} />
+              ))}
             </section>
           ) : null}
 
