@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import AppHeader from "../components/AppHeader"
+import PublicFooter from "../components/PublicFooter"
 
 function PublicLayout() {
   return (
@@ -8,6 +9,7 @@ function PublicLayout() {
       <main className="public-shell__content">
         <Outlet />
       </main>
+      <PublicFooter />
     </div>
   )
 }
