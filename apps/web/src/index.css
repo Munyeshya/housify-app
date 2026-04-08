@@ -884,7 +884,7 @@ h1 {
 
 .property-card__media {
   aspect-ratio: 4 / 3;
-  background: var(--surface-muted);
+  background: linear-gradient(180deg, rgba(35, 119, 205, 0.12), rgba(248, 240, 228, 0.4));
   overflow: hidden;
   position: relative;
 }
@@ -930,35 +930,17 @@ h1 {
 .property-card__body {
   display: grid;
   gap: 1rem;
-  padding: 1.25rem;
-}
-
-.property-card__meta {
-  align-items: center;
-  display: flex;
-  gap: 0.75rem;
-  justify-content: space-between;
-}
-
-.property-card__meta strong {
-  font-family: "Sora", "Segoe UI", sans-serif;
-  font-size: 1rem;
-}
-
-.property-card__meta span {
-  color: var(--ink-soft);
-  font-size: 0.88rem;
-  max-width: 18ch;
-  text-align: right;
+  padding: 1.5rem;
 }
 
 .property-card h2 {
   font-family: "Sora", "Segoe UI", sans-serif;
-  font-size: 1.22rem;
+  font-size: 1.9rem;
+  line-height: 1.12;
   margin: 0;
 }
 
-.property-card p {
+.property-card__location {
   color: var(--ink-soft);
   margin: 0;
 }
@@ -972,14 +954,20 @@ h1 {
   padding-top: 1rem;
 }
 
+.property-card__stats div {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.55rem 0.85rem;
+}
+
 .property-card__stats dt,
 .listing-detail__facts dt {
-  color: var(--ink-soft);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.3rem;
-  text-transform: uppercase;
+  display: none;
 }
 
 .property-card__stats dd,
@@ -987,9 +975,56 @@ h1 {
   margin: 0;
 }
 
+.property-card__pager {
+  bottom: 0.85rem;
+  display: flex;
+  gap: 0.35rem;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.property-card__pager span {
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 999px;
+  display: block;
+  height: 0.7rem;
+  width: 0.7rem;
+}
+
+.property-card__pager .is-active {
+  background: #d8d61b;
+}
+
+.property-card__footer {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  padding-top: 1.15rem;
+}
+
+.property-card__price {
+  background: #d8d61b;
+  border-radius: 10px;
+  color: #1b1611;
+  display: inline-flex;
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 1.25rem;
+  padding: 0.8rem 1rem;
+}
+
 .property-card__link {
+  align-items: center;
+  background: #edf1ee;
+  border-radius: 999px;
   color: var(--brand);
+  display: inline-flex;
   font-weight: 700;
+  height: 3rem;
+  justify-content: center;
+  width: 3rem;
 }
 
 .listing-detail {
@@ -1153,6 +1188,10 @@ h1 {
   padding: 0 0 2rem;
 }
 
+.public-footer__brand-mark {
+  margin-bottom: 1rem;
+}
+
 .public-footer__brand p,
 .public-footer__contact span,
 .public-footer__links a {
@@ -1219,12 +1258,13 @@ h1 {
   .search-strip,
   .feature-row,
   .stats-band,
+  .about-showcase,
+  .offer-grid,
   .listing-intro,
   .listing-browser,
   .property-grid,
   .gallery-grid,
   .listing-detail,
-  .about-hero,
   .listing-detail__summary-grid {
     grid-template-columns: 1fr;
   }
@@ -1245,8 +1285,9 @@ h1 {
   .app-header__top-inner,
   .app-header__inner,
   .dashboard-header__inner,
-  .property-card__meta,
-  .page-actions {
+  .page-actions,
+  .featured-properties__header,
+  .property-card__footer {
     align-items: flex-start;
     flex-direction: column;
   }
