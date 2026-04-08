@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 
 from accounts.models import LandlordProfile
+from locations.models import Cell, District, Sector, Village
 
 
 class PropertyType(models.TextChoices):
@@ -104,6 +105,34 @@ class Property(models.Model):
     neighborhood = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=255)
     district = models.CharField(max_length=255, blank=True)
+    district_area = models.ForeignKey(
+        District,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="properties",
+    )
+    sector_area = models.ForeignKey(
+        Sector,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="properties",
+    )
+    cell_area = models.ForeignKey(
+        Cell,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="properties",
+    )
+    village_area = models.ForeignKey(
+        Village,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="properties",
+    )
     country = models.CharField(max_length=255, default="Rwanda")
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
