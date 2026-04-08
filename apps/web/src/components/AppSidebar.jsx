@@ -2,21 +2,21 @@ import { NavLink } from "react-router-dom"
 
 const sections = [
   {
-    title: "Public",
-    items: [{ label: "Browse properties", to: "/" }],
-  },
-  {
-    title: "Roles",
+    title: "Overview",
     items: [
-      { label: "Landlord workspace", to: "/landlord/dashboard" },
-      { label: "Tenant workspace", to: "/tenant/dashboard" },
-      { label: "Agent workspace", to: "/agent/dashboard" },
-      { label: "Admin workspace", to: "/admin/dashboard" },
+      { label: "Landlord dashboard", to: "/landlord/dashboard" },
+      { label: "Tenant dashboard", to: "/tenant/dashboard" },
+      { label: "Agent dashboard", to: "/agent/dashboard" },
+      { label: "Admin dashboard", to: "/admin/dashboard" },
     ],
   },
   {
-    title: "Account",
-    items: [{ label: "Sign in", to: "/login" }],
+    title: "Explore",
+    items: [
+      { label: "All listings", to: "/listings" },
+      { label: "About Housify", to: "/about" },
+      { label: "Contact", to: "/contact" },
+    ],
   },
 ]
 
