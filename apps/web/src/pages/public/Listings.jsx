@@ -4,7 +4,7 @@ import PropertyCard from "../../components/PropertyCard"
 import PropertyCardSkeleton from "../../components/PropertyCardSkeleton"
 import { propertiesApi } from "../../services/api"
 
-const PAGE_SIZE = 14
+const PAGE_SIZE = 16
 
 function Listings() {
   const [properties, setProperties] = useState([])
