@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import PropertyCard from "./PropertyCard"
+import PropertyCardSkeleton from "./PropertyCardSkeleton"
 import SectionTitle from "./common/SectionTitle"
 import { propertiesApi } from "../services/api"
 
 function FeaturedProperties() {
   const [properties, setProperties] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     let isMounted = true
@@ -22,6 +24,10 @@ function FeaturedProperties() {
         if (isMounted) {
           setProperties([])
         }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false)
+        }
       }
     }
 
@@ -32,7 +38,7 @@ function FeaturedProperties() {
     }
   }, [])
 
-  if (!properties.length) {
+  if (!isLoading && !properties.length) {
     return null
   }
 
@@ -49,9 +55,11 @@ function FeaturedProperties() {
       />
 
       <div className="property-grid">
-        {properties.map((property) => (
-          <PropertyCard key={property.id} property={property} />
-        ))}
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, index) => (
+              <PropertyCardSkeleton key={`featured-skeleton-${index}`} />
+            ))
+          : properties.map((property) => <PropertyCard key={property.id} property={property} />)}
       </div>
     </section>
   )
