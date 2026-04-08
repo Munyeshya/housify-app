@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-hot-toast"
+import PageBanner from "../../components/PageBanner"
 import {
   formatLocation,
   formatMoney,
@@ -101,14 +102,20 @@ function ListingDetail() {
 
   return (
     <div className="public-stack">
+      <PageBanner
+        eyebrow={property.property_type}
+        subtitle={formatLocation(property)}
+        title={property.title}
+      />
+
       <section className="listing-detail">
         <div className="listing-detail__hero">
           {cover ? <img alt={property.title} src={cover} /> : <div className="listing-detail__placeholder">No image available</div>}
         </div>
 
         <div className="listing-detail__body page-panel">
-          <p className="eyebrow">{property.property_type}</p>
-          <h1>{property.title}</h1>
+          <p className="eyebrow">Property details</p>
+          <h2>{property.title}</h2>
           <p className="lede">{property.description || property.short_description}</p>
 
           <div className="listing-detail__pricing">
