@@ -4,35 +4,35 @@ function Home() {
   return (
     <section className="page-panel page-panel--hero">
       <div className="page-copy">
-        <p className="eyebrow">Warm Habitat direction</p>
-        <h1>Human-centered structure for landlords, tenants, agents, and admins.</h1>
+        <p className="eyebrow">Homes you can trust</p>
+        <h1>Find available rental homes and connect with responsive landlords.</h1>
         <p className="lede">
-          This shell is the starting point for the Housify web app. We are
-          keeping the interface restrained, editorial, and practical while the
-          real screens and data flows come next.
+          Housify helps house seekers discover open listings, save the homes
+          they like, and move into properties with clearer records, better
+          communication, and structured property management behind the scenes.
         </p>
         <div className="page-actions">
-          <Link className="btn btn-dark" to="/login">
-            Enter workspace
+          <Link className="btn btn-dark" to="/listings">
+            View listings
           </Link>
-          <Link className="btn btn-outline-dark" to="/landlord/dashboard">
-            Preview dashboard routes
+          <Link className="btn btn-outline-dark" to="/about">
+            How Housify works
           </Link>
         </div>
       </div>
 
       <div className="page-grid">
         <article className="info-block">
-          <span>Public listings</span>
-          <strong>Map-first browsing and property discovery</strong>
+          <span>For house seekers</span>
+          <strong>Browse available homes, compare prices, and save the ones you like.</strong>
         </article>
         <article className="info-block">
-          <span>Landlord control</span>
-          <strong>Properties, tenants, payments, complaints, agents</strong>
+          <span>For landlords</span>
+          <strong>Manage property visibility, occupancy, tenant records, and payments in one place.</strong>
         </article>
         <article className="info-block">
-          <span>Verified records</span>
-          <strong>Secure payment and legal-document access flows</strong>
+          <span>For everyone</span>
+          <strong>Clearer records, better follow-up, and a safer rental journey from listing to tenancy.</strong>
         </article>
       </div>
     </section>
