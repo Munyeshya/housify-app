@@ -55,7 +55,7 @@ function ListingDetail() {
 
   async function handleBookmark() {
     if (!isAuthenticated) {
-      toast("Sign in first to save your interest in this home.")
+      toast("Sign in first to mark your interest in this home.")
       navigate("/login", { state: { from: `/listings/${propertyId}` } })
       return
     }
@@ -68,9 +68,9 @@ function ListingDetail() {
     try {
       setIsSavingInterest(true)
       await bookmarksApi.create(propertyId)
-      toast.success("This home has been saved to your interests.")
+      toast.success("Your interest in this home has been saved.")
     } catch (error) {
-      toast.error(error.message || "We could not save this home right now.")
+      toast.error(error.message || "We could not save your interest right now.")
     } finally {
       setIsSavingInterest(false)
     }
@@ -150,7 +150,7 @@ function ListingDetail() {
               onClick={handleBookmark}
               type="button"
             >
-              {isSavingInterest ? "Saving..." : "Mark interest"}
+              {isSavingInterest ? "Saving..." : "Mark interest in this home"}
             </button>
             <Link className="btn btn-outline-dark" to="/listings">
               Back to listings
