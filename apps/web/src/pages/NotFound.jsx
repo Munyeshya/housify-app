@@ -6,7 +6,8 @@ function NotFound() {
       <p className="eyebrow">404</p>
       <h1>That page does not exist.</h1>
       <p className="lede">
-        The route is not mapped yet, or the address was entered incorrectly.
+        The page may have moved, or the address may have been entered
+        incorrectly.
       </p>
       <div className="page-actions">
         <Link className="btn btn-dark" to="/">
