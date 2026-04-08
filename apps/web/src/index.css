@@ -671,10 +671,10 @@ h3 {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  max-width: none;
-  padding: 1.45rem max(1.6rem, calc((100vw - 1200px) / 2 + 1.25rem));
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 1.45rem 1.6rem;
+  width: 100%;
 }
 
 .home-cta .eyebrow {
