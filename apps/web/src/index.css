@@ -23,6 +23,7 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --shadow-soft: 0 12px 24px rgba(47, 39, 29, 0.08);
+  --shadow-card: 0 14px 30px rgba(47, 39, 29, 0.06);
 }
 
 *,
@@ -95,6 +96,14 @@ select {
   min-height: 100vh;
 }
 
+.public-shell {
+  min-height: 100vh;
+}
+
+.public-shell__content {
+  padding: 2rem 0 3rem;
+}
+
 .app-shell__body {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -163,6 +172,27 @@ select {
   gap: 0.5rem;
 }
 
+.app-header__action {
+  align-items: center;
+  background: var(--brand);
+  border: 1px solid var(--brand);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.6rem 0.95rem;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.app-header__action:hover,
+.app-header__action:focus,
+.app-header__action.is-active {
+  background: #1c2922;
+  border-color: #1c2922;
+  color: #fff;
+}
+
 .app-header__link,
 .app-sidebar__link {
   border: 1px solid transparent;
@@ -224,6 +254,42 @@ select {
   gap: 0.4rem;
 }
 
+.dashboard-header {
+  background: rgba(252, 250, 245, 0.96);
+  position: sticky;
+  top: 0;
+  z-index: 15;
+}
+
+.dashboard-header__inner {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: 88px;
+  gap: 1rem;
+}
+
+.dashboard-header__eyebrow {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.dashboard-header__inner h2 {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.dashboard-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .page-panel {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -251,6 +317,12 @@ select {
 
 .page-copy {
   max-width: 52rem;
+}
+
+.public-stack {
+  display: grid;
+  gap: 1.5rem;
+  padding: 0 1rem;
 }
 
 .eyebrow {
@@ -313,6 +385,218 @@ h1 {
   line-height: 1.3;
 }
 
+.feature-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.feature-card {
+  background: rgba(252, 250, 245, 0.74);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 1.35rem;
+}
+
+.feature-card h2 {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 1.15rem;
+  margin: 0 0 0.75rem;
+}
+
+.feature-card p {
+  color: var(--ink-soft);
+}
+
+.property-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 0 1rem;
+}
+
+.property-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.property-card__media {
+  aspect-ratio: 4 / 3;
+  background: var(--surface-muted);
+}
+
+.property-card__media img,
+.gallery-card img,
+.listing-detail__hero img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.property-card__placeholder,
+.listing-detail__placeholder {
+  align-items: center;
+  color: var(--ink-soft);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.property-card__body {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.property-card__meta {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.property-card__meta span {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.property-card__meta strong {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 1rem;
+}
+
+.property-card h2 {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 1.22rem;
+  margin: 0;
+}
+
+.property-card p {
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.property-card__stats {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding-top: 1rem;
+}
+
+.property-card__stats dt,
+.listing-detail__facts dt {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+.property-card__stats dd,
+.listing-detail__facts dd {
+  margin: 0;
+}
+
+.property-card__link {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.listing-detail {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  padding: 0 1rem;
+}
+
+.listing-detail__hero {
+  aspect-ratio: 5 / 4;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.listing-detail__body {
+  margin: 0;
+}
+
+.listing-detail__pricing {
+  align-items: baseline;
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.listing-detail__pricing strong {
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: clamp(1.5rem, 2vw, 2.2rem);
+}
+
+.listing-detail__pricing span {
+  color: var(--ink-soft);
+}
+
+.listing-detail__facts {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 1.5rem 0 0;
+  padding-top: 1.5rem;
+}
+
+.gallery-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 0 1rem;
+}
+
+.gallery-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.gallery-card figcaption {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  padding: 0.9rem 1rem 1rem;
+}
+
+.contact-card-list {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.contact-card {
+  background: rgba(239, 229, 214, 0.56);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem 1.1rem;
+}
+
+.contact-card strong {
+  font-family: "Sora", "Segoe UI", sans-serif;
+}
+
 .auth-form {
   background: rgba(239, 229, 214, 0.56);
   border: 1px solid var(--line);
@@ -349,6 +633,13 @@ h1 {
   .page-panel--auth {
     grid-template-columns: 1fr;
   }
+
+  .feature-row,
+  .property-grid,
+  .gallery-grid,
+  .listing-detail {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 767px) {
@@ -360,5 +651,16 @@ h1 {
 
   .page-panel {
     padding: 1.35rem;
+  }
+
+  .dashboard-header__inner,
+  .property-card__meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .property-card__stats,
+  .listing-detail__facts {
+    grid-template-columns: 1fr;
   }
 }
