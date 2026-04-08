@@ -56,33 +56,39 @@ function About() {
       <section className="about-mission">
         <div className="about-mission__heading">
           <p className="eyebrow">Our mission</p>
-          <h2>Clearer rental information, stronger property management, better tenant decisions.</h2>
+          <h2>Our Mission & Vision</h2>
         </div>
 
         <div className="about-mission__layout">
           <article className="about-mission__card">
-            <h3>Our path to better rental management</h3>
+            <h3>Built to make rental decisions clearer and property operations easier.</h3>
             <p>
-              Housify is designed to reduce the friction between public house discovery
-              and the work landlords handle after a tenant moves in. Instead of
-              splitting listings, occupancy, complaints, and payment records across
-              different tools, the platform keeps them connected.
+              Housify brings together public house discovery, landlord operations,
+              tenant history, complaints, payments, and property visibility into one
+              connected rental system.
             </p>
 
-            <h4>Our mission</h4>
-            <p>
-              Make it easier for tenants to evaluate rental homes and for landlords
-              to manage the people, records, and decisions attached to each property.
-            </p>
+            <div className="about-mission__points">
+              <section>
+                <h4>Our mission</h4>
+                <p>
+                  Help tenants understand homes before they commit, and give landlords
+                  the tools to manage the records, people, and responsibilities tied
+                  to every property.
+                </p>
+              </section>
 
-            <h4>Our vision</h4>
-            <p>
-              Build a trusted rental system where listings are easier to understand,
-              tenancy history is better organized, and property operations stay clear
-              as landlords grow.
-            </p>
+              <section>
+                <h4>Our vision</h4>
+                <p>
+                  Create a trusted rental platform where listings are easier to compare,
+                  tenancy history is better organized, and property management becomes
+                  more transparent as portfolios grow.
+                </p>
+              </section>
+            </div>
 
-            <Link className="btn btn-dark" to="/contact">
+            <Link className="btn btn-dark about-mission__button" to="/contact">
               Talk to us
             </Link>
           </article>
