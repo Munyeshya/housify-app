@@ -3,10 +3,11 @@ function Contact() {
     <section className="page-panel page-panel--auth">
       <div className="page-copy">
         <p className="eyebrow">Contact</p>
-        <h1>Talk to us about listings, access, and support.</h1>
+        <h1>Talk to us about rentals, landlord access, and support.</h1>
         <p className="lede">
-          Whether you are looking for a home or managing a portfolio, our team
-          can help you get started and guide you through the next step.
+          Whether you are searching for a home or managing rental properties,
+          our team can help you with onboarding, listings, account access, and
+          general platform support.
         </p>
         <div className="contact-card-list">
           <article className="contact-card">
@@ -35,7 +36,7 @@ function Contact() {
         </label>
         <label>
           Message
-          <textarea className="form-control" placeholder="How can we help?" rows="5" />
+          <textarea className="form-control" placeholder="Tell us what you need help with" rows="5" />
         </label>
         <button className="btn btn-dark" type="submit">
           Send message
