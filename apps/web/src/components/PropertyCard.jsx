@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom"
-import { BathIcon, BedIcon, CarIcon, HeartIcon, PinIcon } from "./common/Icons"
+import {
+  ArrowRightIcon,
+  BathIcon,
+  BedIcon,
+  CarIcon,
+  HeartIcon,
+  PinIcon,
+} from "./common/Icons"
 import { formatLocation, formatMoney, getPropertyCover } from "../lib/propertyFormatters"
 
 function PropertyCard({ property }) {
@@ -17,6 +24,9 @@ function PropertyCard({ property }) {
           <span>Featured</span>
           <strong>{property.status}</strong>
         </div>
+        <button className="property-card__save" type="button">
+          <HeartIcon className="ui-icon ui-icon--tiny" />
+        </button>
       </div>
 
       <div className="property-card__body">
@@ -55,8 +65,8 @@ function PropertyCard({ property }) {
             {formatMoney(property.rent_amount, property.currency)}
           </strong>
           <Link className="property-card__link" to={`/listings/${property.id}`}>
-            <HeartIcon className="ui-icon ui-icon--tiny" />
             View home
+            <ArrowRightIcon className="ui-icon ui-icon--tiny" />
           </Link>
         </div>
       </div>
