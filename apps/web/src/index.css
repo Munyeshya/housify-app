@@ -993,6 +993,59 @@ h3 {
   gap: 1rem;
 }
 
+.listing-pagination {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.listing-pagination__summary {
+  color: var(--color-text-soft);
+  font-size: 0.82rem;
+}
+
+.listing-pagination__summary strong {
+  color: var(--color-text);
+}
+
+.listing-pagination__controls,
+.listing-pagination__pages {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.listing-pagination__button,
+.listing-pagination__page {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-height: 36px;
+  padding: 0.45rem 0.75rem;
+}
+
+.listing-pagination__page {
+  min-width: 36px;
+  padding-left: 0.55rem;
+  padding-right: 0.55rem;
+}
+
+.listing-pagination__page.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.listing-pagination__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .listing-detail {
   display: grid;
   gap: 1.25rem;
@@ -1288,6 +1341,11 @@ h3 {
     border-radius: 0;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+  }
+
+  .listing-pagination {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .listing-page {
