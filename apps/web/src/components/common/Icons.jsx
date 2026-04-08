@@ -125,3 +125,19 @@ export function CloseIcon({ className = "ui-icon" }) {
     </svg>
   )
 }
+
+export function ChevronLeftIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="m15 6-6 6 6 6" />
+    </svg>
+  )
+}
+
+export function ChevronRightIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  )
+}
