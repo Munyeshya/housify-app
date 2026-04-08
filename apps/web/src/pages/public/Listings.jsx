@@ -38,10 +38,10 @@ function Listings() {
     <div className="public-stack">
       <section className="page-panel">
         <p className="eyebrow">Listings</p>
-        <h1>Available homes</h1>
+        <h1>Available rental homes</h1>
         <p className="lede">
-          Explore the homes that are currently open for rent and view their
-          details before you decide where to apply your interest.
+          Explore the properties that are currently open for rent and review the
+          details before you mark your interest.
         </p>
       </section>
 
@@ -64,7 +64,7 @@ function Listings() {
           ))}
           {!properties.length ? (
             <article className="page-panel">
-              <p className="lede">There are no public homes available right now.</p>
+              <p className="lede">There are no public rental homes available right now.</p>
             </article>
           ) : null}
         </section>
