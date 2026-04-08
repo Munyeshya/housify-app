@@ -1,5 +1,6 @@
 from datetime import timedelta
 from decimal import Decimal
+import hashlib
 import random
 
 from django.core.management.base import BaseCommand
@@ -858,7 +859,7 @@ class Command(BaseCommand):
         tree = {"districts": {}}
         for district_name, district_data in self.location_blueprint.items():
             district, _ = District.objects.update_or_create(
-                code=slugify(district_name).upper().replace("-", "_"),
+                code=self._location_code(district_name),
                 defaults={
                     "name": district_name,
                     "center_latitude": Decimal(district_data["center"][0]),
@@ -869,7 +870,7 @@ class Command(BaseCommand):
 
             for sector_name, sector_data in district_data["sectors"].items():
                 sector, _ = Sector.objects.update_or_create(
-                    code=f"{district.code}_{slugify(sector_name).upper().replace('-', '_')}",
+                    code=self._location_code(district_name, sector_name),
                     defaults={
                         "district": district,
                         "name": sector_name,
@@ -884,7 +885,7 @@ class Command(BaseCommand):
 
                 for cell_name, villages in sector_data["cells"].items():
                     cell, _ = Cell.objects.update_or_create(
-                        code=f"{sector.code}_{slugify(cell_name).upper().replace('-', '_')}",
+                        code=self._location_code(district_name, sector_name, cell_name),
                         defaults={
                             "sector": sector,
                             "name": cell_name,
@@ -899,7 +900,7 @@ class Command(BaseCommand):
 
                     for village_name in villages:
                         village, _ = Village.objects.update_or_create(
-                            code=f"{cell.code}_{slugify(village_name).upper().replace('-', '_')}",
+                            code=self._location_code(district_name, sector_name, cell_name, village_name),
                             defaults={
                                 "cell": cell,
                                 "name": village_name,
@@ -911,6 +912,12 @@ class Command(BaseCommand):
                             village
                         )
         return tree
+
+    def _location_code(self, *parts):
+        normalized_parts = [slugify(part).upper().replace("-", "_") for part in parts]
+        readable = "_".join(part[:8] for part in normalized_parts if part)
+        digest = hashlib.sha1("|".join(normalized_parts).encode("utf-8")).hexdigest()[:8].upper()
+        return f"{readable}_{digest}"[:64]
 
     def _resolve_location_path(self, district_name, neighborhood=""):
         district_data = self.location_tree["districts"].get(district_name)
