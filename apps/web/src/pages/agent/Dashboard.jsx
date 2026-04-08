@@ -1,11 +1,11 @@
 function AgentDashboard() {
   return (
     <section className="page-panel">
-      <p className="eyebrow">Agent workspace</p>
-      <h1>Agent dashboard shell</h1>
+      <p className="eyebrow">Agent dashboard</p>
+      <h1>Follow up on the properties you manage.</h1>
       <p className="lede">
-        This area will hold managed properties, occupancy actions, complaint
-        follow-up, and role-scoped tenant access.
+        This area will bring together managed properties, occupancy actions,
+        complaint follow-up, and your permitted tenant access.
       </p>
     </section>
   )
