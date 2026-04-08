@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import Logo from "../common/Logo"
 
 const quickLinks = [
   { label: "Home", to: "/" },
@@ -24,16 +25,8 @@ function Footer() {
 
         <section className="public-footer__grid">
           <article className="public-footer__brand">
-            <div className="brand-mark public-footer__brand-mark">
-              <span className="brand-mark__badge" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </span>
-              <span className="brand-mark__text">
-                <strong>Housify</strong>
-                <small>Homes, tenants, landlords</small>
-              </span>
+            <div className="public-footer__brand-mark">
+              <Logo />
             </div>
             <p>
               Housify helps tenants discover rental homes while landlords manage
