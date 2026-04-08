@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import FeaturedProperties from "../../components/FeaturedProperties"
 
 function Home() {
   return (
@@ -100,6 +101,8 @@ function Home() {
           <span>Properties, tenants, agents, payments, and complaints</span>
         </article>
       </section>
+
+      <FeaturedProperties />
     </div>
   )
 }
