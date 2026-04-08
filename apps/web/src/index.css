@@ -709,6 +709,10 @@ h3 {
   overflow: hidden;
 }
 
+.property-card--skeleton {
+  pointer-events: none;
+}
+
 .property-card__media {
   aspect-ratio: 4 / 3;
   background: linear-gradient(180deg, rgba(22, 101, 52, 0.08), rgba(22, 101, 52, 0.16));
@@ -832,6 +836,71 @@ h3 {
   gap: 0.35rem;
 }
 
+.property-card__link--icon {
+  background: #f0fdf4;
+  border: 1px solid #d1fae5;
+  border-radius: 999px;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+.property-card__link--icon:hover,
+.property-card__link--icon:focus {
+  background: #dcfce7;
+  color: var(--color-primary-dark);
+}
+
+.skeleton-block,
+.skeleton-line,
+.skeleton-pill,
+.skeleton-price,
+.skeleton-icon-button {
+  animation: skeleton-pulse 1.35s ease-in-out infinite;
+  background: linear-gradient(90deg, #edf0ef 0%, #f8faf8 50%, #edf0ef 100%);
+  background-size: 200% 100%;
+}
+
+.skeleton-block--media {
+  height: 100%;
+  width: 100%;
+}
+
+.skeleton-stack {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.skeleton-line {
+  border-radius: 999px;
+  height: 11px;
+}
+
+.skeleton-line--title {
+  width: 72%;
+}
+
+.skeleton-line--location {
+  width: 54%;
+}
+
+.skeleton-pill {
+  border-radius: 999px;
+  height: 32px;
+}
+
+.skeleton-price {
+  border-radius: 10px;
+  height: 36px;
+  width: 106px;
+}
+
+.skeleton-icon-button {
+  border-radius: 999px;
+  height: 34px;
+  width: 34px;
+}
+
 .page-banner {
   background:
     linear-gradient(135deg, rgba(22, 101, 52, 0.06), rgba(22, 101, 52, 0.01)),
@@ -853,6 +922,10 @@ h3 {
   grid-template-columns: 290px 1fr;
   margin: 0 auto;
   max-width: 1200px;
+}
+
+.listing-page {
+  margin-top: 1.1rem;
 }
 
 .filter-card {
@@ -1142,6 +1215,16 @@ h3 {
   padding: 0.58rem 0.9rem;
 }
 
+@keyframes skeleton-pulse {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
 @media (max-width: 991px) {
   .app-shell__body,
   .page-panel--auth,
@@ -1180,6 +1263,10 @@ h3 {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
+
+  .listing-page {
+    margin-top: 0.9rem;
+  }
 }
 
 @media (max-width: 767px) {
@@ -1216,5 +1303,9 @@ h3 {
 
   .contact-page {
     margin-top: 0.85rem;
+  }
+
+  .listing-page {
+    margin-top: 0.75rem;
   }
 }
