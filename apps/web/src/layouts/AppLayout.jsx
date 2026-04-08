@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom"
-import AppHeader from "../components/AppHeader"
 import AppSidebar from "../components/AppSidebar"
+import DashboardHeader from "../components/DashboardHeader"
 
 function AppLayout() {
   return (
     <div className="app-shell">
-      <AppHeader />
+      <DashboardHeader />
       <div className="app-shell__body">
         <AppSidebar />
         <main className="app-shell__content">
