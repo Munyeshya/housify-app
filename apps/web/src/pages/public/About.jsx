@@ -1,16 +1,24 @@
 function About() {
   return (
-    <section className="page-panel">
-      <p className="eyebrow">About Housify</p>
-      <h1>A rental platform built for tenants, landlords, and managed properties.</h1>
-      <p className="lede">
-        Housify brings public property discovery together with structured rental
-        management. Tenants can explore available homes and save the places
-        they are serious about. Landlords can manage listings, occupancy,
-        payments, complaints, records, and role-based access from one place.
-      </p>
+    <div className="public-stack">
+      <section className="page-panel about-hero">
+        <div className="page-copy">
+          <p className="eyebrow">About Housify</p>
+          <h1>A rental platform built for tenants, landlords, and managed properties.</h1>
+          <p className="lede">
+            Housify connects public rental discovery with serious tenancy
+            management. Tenants can find open homes and mark their interest.
+            Landlords can manage listings, occupancy, records, agents,
+            complaints, and payments in one system.
+          </p>
+        </div>
+        <div className="about-hero__card">
+          <span>What Housify connects</span>
+          <strong>Listings, tenants, landlord control, and tenancy records</strong>
+        </div>
+      </section>
 
-      <div className="feature-row">
+      <section className="feature-row">
         <article className="feature-card">
           <h2>Public listings</h2>
           <p>Open homes are presented with pricing, location, and the details tenants need before they enquire.</p>
@@ -23,8 +31,8 @@ function About() {
           <h2>Landlord control</h2>
           <p>Property owners manage tenants, agents, payments, visibility, and the records behind each tenancy.</p>
         </article>
-      </div>
-    </section>
+      </section>
+    </div>
   )
 }
 
