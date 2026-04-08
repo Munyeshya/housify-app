@@ -56,7 +56,7 @@ function Footer() {
         </section>
 
         <div className="public-footer__bottom">
-          <span>© {new Date().getFullYear()} Housify. All rights reserved.</span>
+          <span>&copy; {new Date().getFullYear()} Housify. All rights reserved.</span>
         </div>
       </div>
     </footer>
