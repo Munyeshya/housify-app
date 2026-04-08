@@ -2,11 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import PageBanner from "../../components/PageBanner"
-import {
-  formatLocation,
-  formatMoney,
-  getPropertyCover,
-} from "../../lib/propertyFormatters"
+import { formatLocation, formatMoney, getPropertyCover } from "../../lib/propertyFormatters"
 import { useAuth } from "../../context/AuthContext"
 import { bookmarksApi, propertiesApi } from "../../services/api"
 
@@ -110,7 +106,11 @@ function ListingDetail() {
 
       <section className="listing-detail">
         <div className="listing-detail__hero">
-          {cover ? <img alt={property.title} src={cover} /> : <div className="listing-detail__placeholder">No image available</div>}
+          {cover ? (
+            <img alt={property.title} src={cover} />
+          ) : (
+            <div className="listing-detail__placeholder">No image available</div>
+          )}
         </div>
 
         <div className="listing-detail__body page-panel">
