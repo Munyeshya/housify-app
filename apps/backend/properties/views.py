@@ -27,13 +27,19 @@ class PublicPropertyViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = (
-            Property.objects.filter(is_public=True)
-            .exclude(status__in=[PropertyStatus.DRAFT, PropertyStatus.ARCHIVED])
+            Property.objects.filter(
+                is_public=True,
+                status=PropertyStatus.AVAILABLE,
+            )
             .prefetch_related("images", "portfolio", "parent_property")
         )
 
         property_type = self.request.query_params.get("property_type")
         city = self.request.query_params.get("city")
+        district_area = self.request.query_params.get("district_area")
+        sector_area = self.request.query_params.get("sector_area")
+        cell_area = self.request.query_params.get("cell_area")
+        village_area = self.request.query_params.get("village_area")
         min_rent = self.request.query_params.get("min_rent")
         max_rent = self.request.query_params.get("max_rent")
 
@@ -41,6 +47,14 @@ class PublicPropertyViewSet(ReadOnlyModelViewSet):
             queryset = queryset.filter(property_type=property_type)
         if city:
             queryset = queryset.filter(city__iexact=city)
+        if district_area:
+            queryset = queryset.filter(district_area_id=district_area)
+        if sector_area:
+            queryset = queryset.filter(sector_area_id=sector_area)
+        if cell_area:
+            queryset = queryset.filter(cell_area_id=cell_area)
+        if village_area:
+            queryset = queryset.filter(village_area_id=village_area)
         if min_rent:
             queryset = queryset.filter(rent_amount__gte=min_rent)
         if max_rent:
