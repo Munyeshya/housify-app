@@ -837,18 +837,20 @@ h3 {
 }
 
 .property-card__link--icon {
-  background: #f0fdf4;
-  border: 1px solid #d1fae5;
-  border-radius: 999px;
-  height: 34px;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 10px;
+  color: var(--color-white);
   justify-content: center;
-  width: 34px;
+  min-width: 42px;
+  padding: 0.55rem 0.75rem;
 }
 
 .property-card__link--icon:hover,
 .property-card__link--icon:focus {
-  background: #dcfce7;
-  color: var(--color-primary-dark);
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: var(--color-white);
 }
 
 .skeleton-block,
