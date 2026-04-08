@@ -758,9 +758,9 @@ h3 {
 }
 
 .property-card__body {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-rows: auto auto auto 1fr auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
   height: 100%;
   padding: 1rem;
 }
@@ -770,7 +770,7 @@ h3 {
   font-size: 1.02rem;
   line-height: 1.2;
   margin: 0;
-  min-height: 2.45em;
+  min-height: 2.2em;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
