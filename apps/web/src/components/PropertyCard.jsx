@@ -69,6 +69,7 @@ function PropertyCard({ property }) {
             className="property-card__link property-card__link--icon"
             to={`/listings/${property.id}`}
           >
+            <span>View</span>
             <ArrowRightIcon className="ui-icon ui-icon--tiny" />
           </Link>
         </div>
