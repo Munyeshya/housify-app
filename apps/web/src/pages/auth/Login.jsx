@@ -55,12 +55,12 @@ function Login() {
         <p className="eyebrow">Sign in</p>
         <h1>Access your Housify account.</h1>
         <p className="lede">
-          Sign in to manage your properties, review your saved homes, or return
-          to your workspace.
+          Sign in to manage your properties, review your saved homes, follow up
+          on tenant activity, or return to your account.
         </p>
         <div className="page-actions">
           <Link className="btn btn-outline-dark" to="/listings">
-            Continue browsing homes
+            Continue browsing rentals
           </Link>
         </div>
       </div>
