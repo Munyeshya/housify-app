@@ -941,7 +941,16 @@ h3 {
 }
 
 .listing-page {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   margin-top: 1.1rem;
+  max-width: none;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.listing-page .listing-browser {
+  max-width: none;
 }
 
 .filter-card {
@@ -1282,6 +1291,8 @@ h3 {
 
   .listing-page {
     margin-top: 0.9rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 }
 
@@ -1322,5 +1333,7 @@ h3 {
 
   .listing-page {
     margin-top: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
