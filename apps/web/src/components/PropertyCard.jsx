@@ -1,9 +1,5 @@
 import { Link } from "react-router-dom"
-import {
-  formatLocation,
-  formatMoney,
-  getPropertyCover,
-} from "../lib/propertyFormatters"
+import { formatLocation, formatMoney, getPropertyCover } from "../lib/propertyFormatters"
 
 function PropertyCard({ property }) {
   const coverImage = getPropertyCover(property)
@@ -17,13 +13,8 @@ function PropertyCard({ property }) {
           <div className="property-card__placeholder">No image</div>
         )}
         <div className="property-card__badges">
-          <span>{property.property_type}</span>
+          <span>Featured</span>
           <strong>{property.status}</strong>
-        </div>
-        <div className="property-card__pager">
-          <span />
-          <span />
-          <span className="is-active" />
         </div>
       </div>
 
@@ -53,7 +44,7 @@ function PropertyCard({ property }) {
             {formatMoney(property.rent_amount, property.currency)}
           </strong>
           <Link className="property-card__link" to={`/listings/${property.id}`}>
-            View details
+            View home
           </Link>
         </div>
       </div>
