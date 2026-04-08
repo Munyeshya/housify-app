@@ -58,6 +58,10 @@ export const apiEndpoints = {
   locations: {
     publicMap: "/locations/public-map/",
     landlordMap: "/locations/landlord-map/",
+    districtCounts: "/locations/counts/districts/",
+    sectorCounts: (districtId) => `/locations/counts/districts/${districtId}/sectors/`,
+    cellCounts: (sectorId) => `/locations/counts/sectors/${sectorId}/cells/`,
+    villageCounts: (cellId) => `/locations/counts/cells/${cellId}/villages/`,
   },
   security: {
     events: "/security/events/",
