@@ -30,7 +30,7 @@ function PropertyCard({ property }) {
       </div>
 
       <div className="property-card__body">
-        <h2 className="property-card__title">{property.title}</h2>
+        <h2>{property.title}</h2>
         <p className="property-card__location">
           <PinIcon className="ui-icon ui-icon--muted" />
           {formatLocation(property) || "Location pending"}
