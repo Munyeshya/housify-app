@@ -4,7 +4,7 @@ import FeaturedProperties from "../../components/FeaturedProperties"
 function Home() {
   return (
     <div className="public-stack public-stack--wide">
-      <section className="home-hero page-panel">
+      <section className="home-hero home-hero--fullbleed">
         <div className="page-copy">
           <p className="eyebrow">Find your next rental with confidence</p>
           <h1>See open homes, compare the details, and follow the ones that fit you.</h1>
