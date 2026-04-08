@@ -285,6 +285,18 @@ img {
   gap: 0.35rem;
 }
 
+.app-header__toggle {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  display: none;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
 .app-header__link,
 .app-sidebar__link {
   border-radius: 10px;
@@ -1613,7 +1625,28 @@ h3 {
   }
 
   .app-header__nav {
-    justify-content: flex-start;
+    align-items: stretch;
+    display: none;
+    width: 100%;
+  }
+
+  .app-header__nav.is-open {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .app-header__link,
+  .app-header__action {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .app-header__toggle {
+    display: inline-flex;
+  }
+
+  .app-header__meta {
+    display: none;
   }
 
   .page-panel,
