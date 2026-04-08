@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -5,7 +6,19 @@ from rest_framework.views import APIView
 from accounts.access import get_authenticated_landlord
 from properties.models import Property, PropertyStatus
 
-from .serializers import LandlordMapSummarySerializer, PropertyMapPinSerializer, haversine_distance_km
+from .models import Cell, District, Sector, Village
+from .serializers import (
+    LandlordMapSummarySerializer,
+    LocationCountSerializer,
+    PropertyMapPinSerializer,
+    haversine_distance_km,
+)
+
+
+PUBLIC_AVAILABLE_FILTER = Q(
+    properties__is_public=True,
+    properties__status=PropertyStatus.AVAILABLE,
+)
 
 
 class PropertyMapQueryMixin:
@@ -22,6 +35,10 @@ class PropertyMapQueryMixin:
     def _apply_shared_filters(self, queryset, request):
         property_type = request.query_params.get("property_type")
         city = request.query_params.get("city")
+        district_area = request.query_params.get("district_area")
+        sector_area = request.query_params.get("sector_area")
+        cell_area = request.query_params.get("cell_area")
+        village_area = request.query_params.get("village_area")
         min_rent = request.query_params.get("min_rent")
         max_rent = request.query_params.get("max_rent")
         north = request.query_params.get("north")
@@ -33,6 +50,14 @@ class PropertyMapQueryMixin:
             queryset = queryset.filter(property_type=property_type)
         if city:
             queryset = queryset.filter(city__iexact=city)
+        if district_area:
+            queryset = queryset.filter(district_area_id=district_area)
+        if sector_area:
+            queryset = queryset.filter(sector_area_id=sector_area)
+        if cell_area:
+            queryset = queryset.filter(cell_area_id=cell_area)
+        if village_area:
+            queryset = queryset.filter(village_area_id=village_area)
         if min_rent:
             queryset = queryset.filter(rent_amount__gte=min_rent)
         if max_rent:
@@ -71,11 +96,14 @@ class PublicPropertyMapView(PropertyMapQueryMixin, APIView):
     def get(self, request):
         origin = self._parse_origin(request)
         queryset = (
-            Property.objects.filter(is_public=True)
-            .exclude(status__in=[PropertyStatus.DRAFT, PropertyStatus.ARCHIVED, PropertyStatus.HIDDEN])
+            Property.objects.filter(
+                is_public=True,
+                status=PropertyStatus.AVAILABLE,
+            )
             .exclude(latitude__isnull=True)
             .exclude(longitude__isnull=True)
             .prefetch_related("images")
+            .select_related("district_area", "sector_area", "cell_area", "village_area")
         )
         queryset = self._apply_shared_filters(queryset, request)
         properties = list(queryset)
@@ -96,6 +124,7 @@ class LandlordPropertyMapView(PropertyMapQueryMixin, APIView):
             .exclude(latitude__isnull=True)
             .exclude(longitude__isnull=True)
             .prefetch_related("images")
+            .select_related("district_area", "sector_area", "cell_area", "village_area")
         )
         queryset = self._apply_shared_filters(queryset, request)
         properties = list(queryset)
@@ -116,3 +145,87 @@ class LandlordPropertyMapView(PropertyMapQueryMixin, APIView):
             context={"origin": origin},
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class PublicDistrictCountsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        districts = District.objects.annotate(
+            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+        )
+        data = [
+            {
+                "id": district.id,
+                "code": district.code,
+                "name": district.name,
+                "parent_id": None,
+                "parent_code": None,
+                "available_houses_count": district.available_houses_count,
+            }
+            for district in districts
+        ]
+        return Response(LocationCountSerializer(data, many=True).data, status=status.HTTP_200_OK)
+
+
+class PublicSectorCountsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, district_id):
+        sectors = Sector.objects.filter(district_id=district_id).annotate(
+            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+        )
+        data = [
+            {
+                "id": sector.id,
+                "code": sector.code,
+                "name": sector.name,
+                "parent_id": sector.district_id,
+                "parent_code": sector.district.code,
+                "available_houses_count": sector.available_houses_count,
+            }
+            for sector in sectors.select_related("district")
+        ]
+        return Response(LocationCountSerializer(data, many=True).data, status=status.HTTP_200_OK)
+
+
+class PublicCellCountsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, sector_id):
+        cells = Cell.objects.filter(sector_id=sector_id).annotate(
+            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+        )
+        data = [
+            {
+                "id": cell.id,
+                "code": cell.code,
+                "name": cell.name,
+                "parent_id": cell.sector_id,
+                "parent_code": cell.sector.code,
+                "available_houses_count": cell.available_houses_count,
+            }
+            for cell in cells.select_related("sector")
+        ]
+        return Response(LocationCountSerializer(data, many=True).data, status=status.HTTP_200_OK)
+
+
+class PublicVillageCountsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, cell_id):
+        villages = Village.objects.filter(cell_id=cell_id).annotate(
+            available_houses_count=Count("properties", filter=PUBLIC_AVAILABLE_FILTER, distinct=True)
+        )
+        data = [
+            {
+                "id": village.id,
+                "code": village.code,
+                "name": village.name,
+                "parent_id": village.cell_id,
+                "parent_code": village.cell.code,
+                "available_houses_count": village.available_houses_count,
+            }
+            for village in villages.select_related("cell")
+        ]
+        return Response(LocationCountSerializer(data, many=True).data, status=status.HTTP_200_OK)
