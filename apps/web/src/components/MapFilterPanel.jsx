@@ -253,6 +253,10 @@ export default function MapFilterPanel({
 
   const currentLevel = useMemo(() => getCurrentLevel(selection), [selection])
   const focusItem = useMemo(() => getDeepestSelection(selection), [selection])
+  const districtOptions = currentLevel === "district" ? items : selection.district ? [selection.district] : []
+  const sectorOptions = currentLevel === "sector" ? items : selection.sector ? [selection.sector] : []
+  const cellOptions = currentLevel === "cell" ? items : selection.cell ? [selection.cell] : []
+  const villageOptions = currentLevel === "village" ? items : selection.village ? [selection.village] : []
 
   useEffect(() => {
     if (!isOpen) {
@@ -344,6 +348,92 @@ export default function MapFilterPanel({
         village: null,
       })
     }
+  }
+
+  const handleLevelChange = (level, value) => {
+    if (!value) {
+      if (level === "district") {
+        onSelectionChange({
+          district: null,
+          sector: null,
+          cell: null,
+          village: null,
+        })
+        return
+      }
+      if (level === "sector") {
+        onSelectionChange({
+          district: selection.district,
+          sector: null,
+          cell: null,
+          village: null,
+        })
+        return
+      }
+      if (level === "cell") {
+        onSelectionChange({
+          district: selection.district,
+          sector: selection.sector,
+          cell: null,
+          village: null,
+        })
+        return
+      }
+      onSelectionChange({
+        district: selection.district,
+        sector: selection.sector,
+        cell: selection.cell,
+        village: null,
+      })
+      return
+    }
+
+    const sourceItems =
+      level === "district"
+        ? districtOptions
+        : level === "sector"
+          ? sectorOptions
+          : level === "cell"
+            ? cellOptions
+            : villageOptions
+    const nextItem = sourceItems.find((item) => String(item.id) === value)
+    if (!nextItem) {
+      return
+    }
+
+    if (level === "district") {
+      onSelectionChange({
+        district: nextItem,
+        sector: null,
+        cell: null,
+        village: null,
+      })
+      return
+    }
+    if (level === "sector") {
+      onSelectionChange({
+        district: selection.district,
+        sector: nextItem,
+        cell: null,
+        village: null,
+      })
+      return
+    }
+    if (level === "cell") {
+      onSelectionChange({
+        district: selection.district,
+        sector: selection.sector,
+        cell: nextItem,
+        village: null,
+      })
+      return
+    }
+    onSelectionChange({
+      district: selection.district,
+      sector: selection.sector,
+      cell: selection.cell,
+      village: nextItem,
+    })
   }
 
   const activeTrail = [
@@ -493,27 +583,73 @@ export default function MapFilterPanel({
 
             <div className="map-filter-panel__selection-card">
               <h3>Current guide</h3>
-              <div className="map-filter-panel__selection-grid">
-                <article>
+              <div className="map-filter-panel__selection-dropdowns">
+                <label className="map-filter-panel__field">
                   <span>District</span>
-                  <strong>{selection.district?.name || "Any district"}</strong>
-                </article>
-                <article>
+                  <select
+                    className="form-control"
+                    onChange={(event) => handleLevelChange("district", event.target.value)}
+                    value={selection.district?.id || ""}
+                  >
+                    <option value="">Any district</option>
+                    {districtOptions.map((item) => (
+                      <option key={`district-option-${item.id}`} value={item.id}>
+                        {item.name} ({item.available_houses_count})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="map-filter-panel__field">
                   <span>Sector</span>
-                  <strong>{selection.sector?.name || "Any sector"}</strong>
-                </article>
-                <article>
+                  <select
+                    className="form-control"
+                    disabled={!selection.district}
+                    onChange={(event) => handleLevelChange("sector", event.target.value)}
+                    value={selection.sector?.id || ""}
+                  >
+                    <option value="">{selection.district ? "Any sector" : "Select district first"}</option>
+                    {sectorOptions.map((item) => (
+                      <option key={`sector-option-${item.id}`} value={item.id}>
+                        {item.name} ({item.available_houses_count})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="map-filter-panel__field">
                   <span>Cell</span>
-                  <strong>{selection.cell?.name || "Any cell"}</strong>
-                </article>
-                <article>
+                  <select
+                    className="form-control"
+                    disabled={!selection.sector}
+                    onChange={(event) => handleLevelChange("cell", event.target.value)}
+                    value={selection.cell?.id || ""}
+                  >
+                    <option value="">{selection.sector ? "Any cell" : "Select sector first"}</option>
+                    {cellOptions.map((item) => (
+                      <option key={`cell-option-${item.id}`} value={item.id}>
+                        {item.name} ({item.available_houses_count})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="map-filter-panel__field">
                   <span>Village</span>
-                  <strong>{selection.village?.name || "Any village"}</strong>
-                </article>
-                <article>
-                  <span>Pins on map</span>
-                  <strong>{propertyPins.length}</strong>
-                </article>
+                  <select
+                    className="form-control"
+                    disabled={!selection.cell}
+                    onChange={(event) => handleLevelChange("village", event.target.value)}
+                    value={selection.village?.id || ""}
+                  >
+                    <option value="">{selection.cell ? "Any village" : "Select cell first"}</option>
+                    {villageOptions.map((item) => (
+                      <option key={`village-option-${item.id}`} value={item.id}>
+                        {item.name} ({item.available_houses_count})
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
 
               {focusItem?.center_latitude && focusItem?.center_longitude ? (
