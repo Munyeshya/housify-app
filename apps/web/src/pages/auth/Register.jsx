@@ -2,7 +2,7 @@ import { useMemo, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../../context/AuthContext"
-import { getCurrentUser, registerLandlord, registerTenant } from "../../services/api"
+import { getCurrentUser, registerAgent, registerLandlord, registerTenant } from "../../services/api"
 
 const roleDashboardMap = {
   admin: "/admin/dashboard",
@@ -16,6 +16,11 @@ const roleCopy = {
     eyebrow: "Landlord account",
     heading: "Create an account to manage homes and listings.",
     body: "Set up your landlord account to publish available homes, manage rental details, and follow tenant activity from one place.",
+  },
+  agent: {
+    eyebrow: "Public agent account",
+    heading: "Create an account to work with landlords publicly.",
+    body: "Set up a public agent account so landlords can discover you, assign you to homes, and work with you across available rentals.",
   },
   tenant: {
     eyebrow: "Tenant account",
@@ -31,6 +36,7 @@ const initialFormValues = {
   password: "",
   confirmPassword: "",
   display_name: "",
+  bio: "",
 }
 
 function Register() {
@@ -63,6 +69,15 @@ function Register() {
       if (role === "landlord") {
         await registerLandlord({
           display_name: formValues.display_name,
+          email: formValues.email,
+          full_name: formValues.full_name,
+          password: formValues.password,
+          phone_number: formValues.phone_number,
+        })
+      } else if (role === "agent") {
+        await registerAgent({
+          agent_type: "public",
+          bio: formValues.bio,
           email: formValues.email,
           full_name: formValues.full_name,
           password: formValues.password,
@@ -114,6 +129,13 @@ function Register() {
           >
             Landlord
           </button>
+          <button
+            className={`register-role-switch__button${role === "agent" ? " is-active" : ""}`}
+            onClick={() => setRole("agent")}
+            type="button"
+          >
+            Public agent
+          </button>
         </div>
 
         <div className="page-actions">
@@ -143,7 +165,20 @@ function Register() {
               onChange={(event) => updateField("display_name", event.target.value)}
               placeholder="Your business or rental brand name"
               type="text"
-              value={formValues.display_name}
+            value={formValues.display_name}
+          />
+        </label>
+        ) : null}
+
+        {role === "agent" ? (
+          <label>
+            Short bio
+            <textarea
+              className="form-control"
+              onChange={(event) => updateField("bio", event.target.value)}
+              placeholder="Tell landlords what kind of homes or tenants you usually handle"
+              rows={4}
+              value={formValues.bio}
             />
           </label>
         ) : null}
