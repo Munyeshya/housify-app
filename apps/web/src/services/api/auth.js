@@ -37,6 +37,10 @@ export async function registerLandlord(payload) {
   return registerAndLogin(apiEndpoints.auth.registerLandlord, payload)
 }
 
+export async function registerAgent(payload) {
+  return registerAndLogin(apiEndpoints.auth.registerAgent, payload)
+}
+
 export async function logout() {
   try {
     await apiClient.post(apiEndpoints.auth.logout, {})
