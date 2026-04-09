@@ -18,6 +18,25 @@ export async function login(credentials) {
   return response
 }
 
+async function registerAndLogin(endpoint, payload) {
+  await apiClient.post(endpoint, payload, {
+    token: "",
+  })
+
+  return login({
+    email: payload.email,
+    password: payload.password,
+  })
+}
+
+export async function registerTenant(payload) {
+  return registerAndLogin(apiEndpoints.auth.registerTenant, payload)
+}
+
+export async function registerLandlord(payload) {
+  return registerAndLogin(apiEndpoints.auth.registerLandlord, payload)
+}
+
 export async function logout() {
   try {
     await apiClient.post(apiEndpoints.auth.logout, {})
