@@ -1,4 +1,5 @@
 export { default as Login } from "./auth/Login"
+export { default as Register } from "./auth/Register"
 export { default as About } from "./public/About"
 export { default as Contact } from "./public/Contact"
 export { default as Home } from "./public/Home"

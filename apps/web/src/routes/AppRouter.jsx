@@ -8,6 +8,7 @@ import Home from "../pages/public/Home"
 import ListingDetail from "../pages/public/ListingDetail"
 import Listings from "../pages/public/Listings"
 import Login from "../pages/auth/Login"
+import Register from "../pages/auth/Register"
 import LandlordDashboard from "../pages/landlord/Dashboard"
 import TenantDashboard from "../pages/tenant/Dashboard"
 import AgentDashboard from "../pages/agent/Dashboard"
@@ -26,6 +27,7 @@ function AppRouter() {
           <Route element={<Listings />} path="/listings" />
           <Route element={<ListingDetail />} path="/listings/:propertyId" />
           <Route element={<Login />} path="/login" />
+          <Route element={<Register />} path="/register" />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={["landlord", "tenant", "agent", "admin"]} />}>
