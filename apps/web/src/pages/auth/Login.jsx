@@ -50,14 +50,18 @@ function Login() {
   }
 
   return (
-    <section className="page-panel page-panel--auth">
-      <div className="page-copy">
+    <section className="page-panel page-panel--auth auth-page">
+      <div className="page-copy auth-page__copy">
         <p className="eyebrow">Sign in</p>
         <h1>Access your Housify account.</h1>
         <p className="lede">
           Sign in to manage your properties, review your saved homes, follow up
           on tenant activity, or return to your account.
         </p>
+        <div className="auth-page__highlight">
+          <span>Fast access</span>
+          <strong>Save homes, review activity, and step back into your rental flow without losing context.</strong>
+        </div>
         <div className="page-actions">
           <Link className="btn btn-outline-dark" to="/listings">
             Continue browsing rentals
