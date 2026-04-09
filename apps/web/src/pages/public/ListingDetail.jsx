@@ -214,18 +214,6 @@ function ListingDetail() {
 
   return (
     <div className="public-stack">
-      <section className="listing-detail__topbar">
-        <Link className="btn btn-outline-dark" to="/listings">
-          <ArrowRightIcon className="ui-icon ui-icon--tiny" style={{ transform: "rotate(180deg)" }} />
-          Back to listings
-        </Link>
-
-        <a className="btn btn-dark" href={googleMapsUrl} rel="noreferrer" target="_blank">
-          Get directions
-          <ArrowRightIcon className="ui-icon ui-icon--tiny" />
-        </a>
-      </section>
-
       <section className="listing-detail">
         <div className="listing-detail__hero">
           {activeImage ? (
@@ -275,7 +263,13 @@ function ListingDetail() {
         </div>
 
         <div className="listing-detail__body page-panel">
-          <p className="eyebrow">Property details</p>
+          <div className="listing-detail__card-top">
+            <p className="eyebrow">Property details</p>
+            <Link className="listing-detail__back-link" to="/listings">
+              <ArrowRightIcon className="ui-icon ui-icon--tiny" style={{ transform: "rotate(180deg)" }} />
+              Back to listings
+            </Link>
+          </div>
           <div className="listing-detail__heading">
             <div className="listing-detail__price-line">
               <strong>{formatMoney(property.rent_amount, property.currency)}</strong>
