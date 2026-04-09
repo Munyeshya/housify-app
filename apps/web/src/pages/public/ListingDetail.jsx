@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import {
-  ArrowRightIcon,
   BathIcon,
   BedIcon,
   CalendarIcon,
   CarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  EyeIcon,
+  HeartIcon,
   PinIcon,
   WalletIcon,
 } from "../../components/common/Icons"
@@ -164,6 +165,10 @@ function ListingDetail() {
       value: property.available_from || "Available now",
     },
   ]
+  const factsMidpoint = Math.ceil(propertyFacts.length / 2)
+  const factColumns = [propertyFacts.slice(0, factsMidpoint), propertyFacts.slice(factsMidpoint)].filter(
+    (column) => column.length,
+  )
 
   const detailSections = [
     {
@@ -288,35 +293,43 @@ function ListingDetail() {
             </div>
 
             <div className="listing-detail__facts-card">
-              <dl className="listing-detail__facts">
-                {propertyFacts.map((fact) => (
-                  <div key={fact.label}>
-                    <dt>{fact.label}</dt>
-                    <dd>
-                      <span className="listing-detail__fact-icon">{fact.icon}</span>
-                      <div>
-                        <small>{fact.label}</small>
-                        <strong>{fact.value}</strong>
+              <div className="listing-detail__facts-columns">
+                {factColumns.map((column, columnIndex) => (
+                  <dl className="listing-detail__facts" key={`facts-column-${columnIndex}`}>
+                    {column.map((fact) => (
+                      <div key={fact.label}>
+                        <dt>{fact.label}</dt>
+                        <dd>
+                          <span className="listing-detail__fact-icon">{fact.icon}</span>
+                          <div>
+                            <small>{fact.label}</small>
+                            <strong>{fact.value}</strong>
+                          </div>
+                        </dd>
                       </div>
-                    </dd>
-                  </div>
+                    ))}
+                  </dl>
                 ))}
-              </dl>
+              </div>
             </div>
           </section>
 
           <div className="page-actions listing-detail__actions">
             <button
-              className="btn btn-dark"
+              aria-label="Save this home to bookmarks"
+              className="listing-detail__action-icon listing-detail__action-icon--bookmark"
               disabled={isSavingInterest}
               onClick={handleBookmark}
               type="button"
             >
-              {isSavingInterest ? "Saving..." : "Mark interest in this home"}
+              <HeartIcon className="ui-icon" />
             </button>
-            <Link className="btn btn-outline-dark" to="/listings">
-              View more homes
-              <ArrowRightIcon className="ui-icon ui-icon--tiny" />
+            <Link
+              aria-label="View more homes"
+              className="listing-detail__action-icon listing-detail__action-icon--view"
+              to="/listings"
+            >
+              <EyeIcon className="ui-icon" />
             </Link>
           </div>
         </div>
