@@ -213,7 +213,7 @@ function ListingDetail() {
   }
 
   return (
-    <div className="public-stack">
+    <div className="public-stack listing-detail-page">
       <section className="listing-detail">
         <div className="listing-detail__hero">
           {activeImage ? (
