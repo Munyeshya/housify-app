@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
+import { divIcon } from "leaflet"
 import {
   CircleMarker,
   GeoJSON,
   MapContainer,
+  Marker,
   Popup,
   TileLayer,
   Tooltip,
@@ -25,6 +27,13 @@ import { locationsApi } from "../services/api"
 
 const RWANDA_CENTER = [-1.9403, 29.8739]
 const ROOT_ZOOM = 9
+const PROPERTY_PIN_ICON = divIcon({
+  className: "map-filter-panel__property-pin-wrapper",
+  html: '<span class="map-filter-panel__property-pin" aria-hidden="true"></span>',
+  iconSize: [22, 32],
+  iconAnchor: [11, 30],
+  popupAnchor: [0, -24],
+})
 
 const LEVELS = {
   district: {
@@ -620,16 +629,10 @@ export default function MapFilterPanel({
                 const mapsHref = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
 
                 return (
-                  <CircleMarker
+                  <Marker
                     center={[lat, lng]}
-                    fillColor="#ffffff"
-                    fillOpacity={1}
+                    icon={PROPERTY_PIN_ICON}
                     key={`property-pin-${property.id}`}
-                    pathOptions={{
-                      color: "#166534",
-                      weight: 2,
-                    }}
-                    radius={6}
                   >
                     <Popup>
                       <div className="map-filter-panel__property-popup">
@@ -644,7 +647,7 @@ export default function MapFilterPanel({
                         </a>
                       </div>
                     </Popup>
-                  </CircleMarker>
+                  </Marker>
                 )
               })}
             </MapContainer>
