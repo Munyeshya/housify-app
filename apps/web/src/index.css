@@ -1373,6 +1373,15 @@ h3 {
   max-width: 1200px;
 }
 
+.listing-detail__topbar {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  margin-top: 1.1rem;
+  max-width: 1200px;
+}
+
 .listing-detail__hero {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -2105,6 +2114,11 @@ h3 {
   .listing-detail__summary-grid,
   .listing-detail__meta-grid {
     grid-template-columns: 1fr;
+  }
+
+  .listing-detail__topbar {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
