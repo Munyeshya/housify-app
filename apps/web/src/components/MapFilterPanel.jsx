@@ -6,6 +6,7 @@ import {
   TileLayer,
   Tooltip,
   useMap,
+  useMapEvents,
 } from "react-leaflet"
 
 import {
@@ -85,12 +86,91 @@ function fitMarkerFocus(map, items, focusItem, level) {
   map.flyTo(RWANDA_CENTER, ROOT_ZOOM, { duration: 0.65 })
 }
 
-function MapViewportController({ items, focusItem, level }) {
+function getSelectionDepth(selection) {
+  if (selection.village) {
+    return 4
+  }
+  if (selection.cell) {
+    return 3
+  }
+  if (selection.sector) {
+    return 2
+  }
+  if (selection.district) {
+    return 1
+  }
+  return 0
+}
+
+function collapseSelectionForZoom(selection, zoom) {
+  if (zoom <= ROOT_ZOOM + 0.5) {
+    return {
+      district: null,
+      sector: null,
+      cell: null,
+      village: null,
+    }
+  }
+
+  if (zoom <= 11.6) {
+    return {
+      district: selection.district,
+      sector: null,
+      cell: null,
+      village: null,
+    }
+  }
+
+  if (zoom <= 13.2) {
+    return {
+      district: selection.district,
+      sector: selection.sector,
+      cell: null,
+      village: null,
+    }
+  }
+
+  if (zoom <= 14.6) {
+    return {
+      district: selection.district,
+      sector: selection.sector,
+      cell: selection.cell,
+      village: null,
+    }
+  }
+
+  return selection
+}
+
+function selectionsEqual(left, right) {
+  return (
+    left.district?.id === right.district?.id &&
+    left.sector?.id === right.sector?.id &&
+    left.cell?.id === right.cell?.id &&
+    left.village?.id === right.village?.id
+  )
+}
+
+function MapViewportController({ items, focusItem, level, selection, onSelectionChange }) {
   const map = useMap()
+  const selectionDepth = getSelectionDepth(selection)
 
   useEffect(() => {
     fitMarkerFocus(map, items, focusItem, level)
   }, [map, items, focusItem, level])
+
+  useMapEvents({
+    zoomend() {
+      if (!selectionDepth) {
+        return
+      }
+
+      const nextSelection = collapseSelectionForZoom(selection, map.getZoom())
+      if (!selectionsEqual(selection, nextSelection)) {
+        onSelectionChange(nextSelection)
+      }
+    },
+  })
 
   return null
 }
@@ -320,6 +400,8 @@ export default function MapFilterPanel({
                 focusItem={focusItem}
                 items={items}
                 level={currentLevel}
+                onSelectionChange={onSelectionChange}
+                selection={selection}
               />
 
               {items.map((item) => {
