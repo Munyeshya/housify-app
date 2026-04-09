@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-hot-toast"
-import PageBanner from "../../components/PageBanner"
 import {
   ArrowRightIcon,
   BathIcon,
@@ -129,6 +128,10 @@ function ListingDetail() {
 
   const description = property.description || property.short_description || "This home is available for rent."
   const activeImage = gallery[activeImageIndex] || null
+  const googleMapsUrl =
+    property.latitude && property.longitude
+      ? `https://www.google.com/maps/search/?api=1&query=${property.latitude},${property.longitude}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatLocation(property))}`
   const propertyFacts = [
     {
       icon: <PinIcon className="ui-icon ui-icon--muted" />,
@@ -173,6 +176,7 @@ function ListingDetail() {
       ]
         .filter(Boolean)
         .join(", ") || "Detailed area information will be shared by the landlord.",
+      action: googleMapsUrl,
     },
     {
       title: "Utilities",
@@ -210,12 +214,6 @@ function ListingDetail() {
 
   return (
     <div className="public-stack">
-      <PageBanner
-        eyebrow={property.property_type}
-        subtitle={formatLocation(property)}
-        title={property.title}
-      />
-
       <section className="listing-detail">
         <div className="listing-detail__hero">
           {activeImage ? (
@@ -321,6 +319,17 @@ function ListingDetail() {
           <article className="listing-detail__meta-card" key={section.title}>
             <span>{section.title}</span>
             <strong>{section.content}</strong>
+            {section.action ? (
+              <a
+                className="listing-detail__meta-link"
+                href={section.action}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Open in map
+                <ArrowRightIcon className="ui-icon ui-icon--tiny" />
+              </a>
+            ) : null}
           </article>
         ))}
       </section>
