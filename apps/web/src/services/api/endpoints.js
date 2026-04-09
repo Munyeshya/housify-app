@@ -9,6 +9,9 @@ export const apiEndpoints = {
     login: "/accounts/login/",
     logout: "/accounts/logout/",
     me: "/accounts/me/",
+    registerTenant: "/accounts/register/tenant/",
+    registerLandlord: "/accounts/register/landlord/",
+    registerAgent: "/accounts/register/agent/",
   },
   profiles: {
     landlord: "/accounts/profile/landlord/",
