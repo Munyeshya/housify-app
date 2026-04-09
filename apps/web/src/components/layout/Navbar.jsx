@@ -81,14 +81,25 @@ function Navbar() {
                   {link.label}
                 </NavLink>
               ))}
+              {!isAuthenticated ? (
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "app-header__link is-active" : "app-header__link"
+                  }
+                  onClick={closeMobileMenu}
+                  to="/login"
+                >
+                  Sign in
+                </NavLink>
+              ) : null}
               <NavLink
                 className={({ isActive }) =>
                   isActive ? "app-header__action is-active" : "app-header__action"
                 }
                 onClick={closeMobileMenu}
-                to={isAuthenticated ? dashboardPath : "/login"}
+                to={isAuthenticated ? dashboardPath : "/register"}
               >
-                {isAuthenticated ? "Dashboard" : "Sign in"}
+                {isAuthenticated ? "Dashboard" : "Create account"}
               </NavLink>
             </nav>
           </div>

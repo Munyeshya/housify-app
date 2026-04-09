@@ -62,6 +62,9 @@ function Login() {
           <Link className="btn btn-outline-dark" to="/listings">
             Continue browsing rentals
           </Link>
+          <Link className="btn btn-dark" to="/register">
+            Create account
+          </Link>
         </div>
       </div>
 
@@ -89,6 +92,9 @@ function Login() {
         <button className="btn btn-dark" disabled={isSubmitting} type="submit">
           {isSubmitting ? "Signing in..." : "Sign in"}
         </button>
+        <Link className="auth-form__meta-link" to="/register">
+          New to Housify? Create your account
+        </Link>
       </form>
     </section>
   )
