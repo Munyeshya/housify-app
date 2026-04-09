@@ -287,20 +287,22 @@ function ListingDetail() {
               </div>
             </div>
 
-            <dl className="listing-detail__facts">
-              {propertyFacts.map((fact) => (
-                <div key={fact.label}>
-                  <dt>{fact.label}</dt>
-                  <dd>
-                    <span className="listing-detail__fact-icon">{fact.icon}</span>
-                    <div>
-                      <small>{fact.label}</small>
-                      <strong>{fact.value}</strong>
-                    </div>
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <div className="listing-detail__facts-card">
+              <dl className="listing-detail__facts">
+                {propertyFacts.map((fact) => (
+                  <div key={fact.label}>
+                    <dt>{fact.label}</dt>
+                    <dd>
+                      <span className="listing-detail__fact-icon">{fact.icon}</span>
+                      <div>
+                        <small>{fact.label}</small>
+                        <strong>{fact.value}</strong>
+                      </div>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </section>
 
           <div className="page-actions listing-detail__actions">
