@@ -204,7 +204,6 @@ function Listings() {
               </label>
               <select
                 className="form-control"
-                defaultValue=""
                 id="filter-type"
                 name="propertyType"
                 onChange={handleInputChange}
@@ -226,7 +225,6 @@ function Listings() {
               </label>
               <select
                 className="form-control"
-                defaultValue=""
                 id="filter-price"
                 name="budget"
                 onChange={handleInputChange}
