@@ -1633,6 +1633,9 @@ h3 {
 
 .listing-detail__actions {
   border-top: 1px solid var(--color-border);
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   padding-top: 0.2rem;
 }
 
@@ -1642,7 +1645,7 @@ h3 {
   display: inline-flex;
   height: 42px;
   justify-content: center;
-  width: 42px;
+  width: 100%;
 }
 
 .listing-detail__action-icon--bookmark {
