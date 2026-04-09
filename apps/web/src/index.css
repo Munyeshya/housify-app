@@ -1524,11 +1524,15 @@ h3 {
   padding: 0.95rem 1rem;
 }
 
+.listing-detail__facts-columns {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .listing-detail__facts {
   display: grid;
-  column-gap: 1.2rem;
   row-gap: 0.85rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 0;
 }
 
@@ -1538,7 +1542,7 @@ h3 {
   padding: 0 0 0.75rem;
 }
 
-.listing-detail__facts div:nth-last-child(-n + 2) {
+.listing-detail__facts div:last-child {
   border-bottom: 0;
   padding-bottom: 0;
 }
@@ -1630,6 +1634,27 @@ h3 {
 .listing-detail__actions {
   border-top: 1px solid var(--color-border);
   padding-top: 0.2rem;
+}
+
+.listing-detail__action-icon {
+  align-items: center;
+  border-radius: 12px;
+  display: inline-flex;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.listing-detail__action-icon--bookmark {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-white);
+}
+
+.listing-detail__action-icon--view {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
 }
 
 .gallery-grid {
@@ -2136,6 +2161,7 @@ h3 {
     padding-right: 1.25rem;
   }
 
+  .listing-detail__facts-columns,
   .listing-detail__facts {
     grid-template-columns: 1fr;
   }
@@ -2219,13 +2245,9 @@ h3 {
   }
 
   .property-card__stats,
-  .listing-detail__facts {
+  .listing-detail__facts,
+  .listing-detail__facts-columns {
     grid-template-columns: 1fr;
-  }
-
-  .listing-detail__facts div:nth-last-child(-n + 2) {
-    border-bottom: 1px solid #ecefeb;
-    padding-bottom: 0.75rem;
   }
 
   .listing-detail__facts div:last-child {
