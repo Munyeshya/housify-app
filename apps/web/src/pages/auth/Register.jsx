@@ -36,7 +36,6 @@ const initialFormValues = {
   password: "",
   confirmPassword: "",
   display_name: "",
-  bio: "",
 }
 
 function Register() {
@@ -77,7 +76,6 @@ function Register() {
       } else if (role === "agent") {
         await registerAgent({
           agent_type: "public",
-          bio: formValues.bio,
           email: formValues.email,
           full_name: formValues.full_name,
           password: formValues.password,
@@ -168,19 +166,6 @@ function Register() {
             value={formValues.display_name}
           />
         </label>
-        ) : null}
-
-        {role === "agent" ? (
-          <label>
-            Short bio
-            <textarea
-              className="form-control"
-              onChange={(event) => updateField("bio", event.target.value)}
-              placeholder="Tell landlords what kind of homes or tenants you usually handle"
-              rows={4}
-              value={formValues.bio}
-            />
-          </label>
         ) : null}
 
         <label>
