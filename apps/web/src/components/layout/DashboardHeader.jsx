@@ -2,6 +2,13 @@ import { Link } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../../context/AuthContext"
 
+const roleLabelMap = {
+  admin: "Platform administration",
+  agent: "Agent workspace",
+  landlord: "Landlord workspace",
+  tenant: "Tenant workspace",
+}
+
 function DashboardHeader() {
   const { signOut, user } = useAuth()
 
@@ -15,7 +22,7 @@ function DashboardHeader() {
       <div className="container-fluid">
         <div className="dashboard-header__inner">
           <div>
-            <p className="dashboard-header__eyebrow">Housify</p>
+            <p className="dashboard-header__eyebrow">{roleLabelMap[user?.role] || "Housify"}</p>
             <h2>{user?.full_name || user?.email || "Your workspace"}</h2>
           </div>
 
