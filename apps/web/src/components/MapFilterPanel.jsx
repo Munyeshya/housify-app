@@ -428,6 +428,10 @@ export default function MapFilterPanel({
                   <span>Village</span>
                   <strong>{selection.village?.name || "Any village"}</strong>
                 </article>
+                <article>
+                  <span>Pins on map</span>
+                  <strong>{propertyPins.length}</strong>
+                </article>
               </div>
 
               {focusItem?.center_latitude && focusItem?.center_longitude ? (
