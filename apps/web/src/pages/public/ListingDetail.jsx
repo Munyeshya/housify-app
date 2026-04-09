@@ -2,6 +2,15 @@ import { useEffect, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import PageBanner from "../../components/PageBanner"
+import {
+  ArrowRightIcon,
+  BathIcon,
+  BedIcon,
+  CalendarIcon,
+  CarIcon,
+  PinIcon,
+  WalletIcon,
+} from "../../components/common/Icons"
 import { formatLocation, formatMoney, getPropertyCover } from "../../lib/propertyFormatters"
 import { useAuth } from "../../context/AuthContext"
 import { bookmarksApi, propertiesApi } from "../../services/api"
@@ -95,6 +104,54 @@ function ListingDetail() {
   }
 
   const cover = getPropertyCover(property)
+  const description = property.description || property.short_description || "This home is available for rent."
+  const propertyFacts = [
+    {
+      icon: <PinIcon className="ui-icon ui-icon--muted" />,
+      label: "Location",
+      value: formatLocation(property),
+    },
+    {
+      icon: <BedIcon className="ui-icon ui-icon--muted" />,
+      label: "Bedrooms",
+      value: property.bedrooms ?? "-",
+    },
+    {
+      icon: <BathIcon className="ui-icon ui-icon--muted" />,
+      label: "Bathrooms",
+      value: property.bathrooms ?? "-",
+    },
+    {
+      icon: <CarIcon className="ui-icon ui-icon--muted" />,
+      label: "Parking",
+      value: property.parking_spaces ?? "-",
+    },
+    {
+      icon: <WalletIcon className="ui-icon ui-icon--muted" />,
+      label: "Deposit",
+      value: formatMoney(property.security_deposit, property.currency),
+    },
+    {
+      icon: <CalendarIcon className="ui-icon ui-icon--muted" />,
+      label: "Available from",
+      value: property.available_from || "Available now",
+    },
+  ]
+
+  const detailSections = [
+    {
+      title: "Utilities",
+      content: property.utilities_included || "Utilities will be shared by the landlord during booking.",
+    },
+    {
+      title: "House rules",
+      content: property.house_rules || "House rules will be shared after interest is confirmed.",
+    },
+    {
+      title: "Nearby landmarks",
+      content: property.nearby_landmarks || "Nearby landmarks have not been added yet.",
+    },
+  ]
 
   return (
     <div className="public-stack">
@@ -115,57 +172,62 @@ function ListingDetail() {
 
         <div className="listing-detail__body page-panel">
           <p className="eyebrow">Property details</p>
-          <h2>{property.title}</h2>
-          <p className="lede">{property.description || property.short_description}</p>
+          <div className="listing-detail__intro">
+            <div className="listing-detail__heading">
+              <h2>{property.title}</h2>
+              <p>{description}</p>
+            </div>
 
-          <div className="listing-detail__pricing">
-            <strong>{formatMoney(property.rent_amount, property.currency)}</strong>
-            <span>per {property.billing_cycle}</span>
+            <div className="listing-detail__rent-card">
+              <span>Monthly rent</span>
+              <strong>{formatMoney(property.rent_amount, property.currency)}</strong>
+              <small>Charged per {property.billing_cycle}</small>
+            </div>
           </div>
 
-          <dl className="listing-detail__facts">
-            <div>
-              <dt>Location</dt>
-              <dd>{formatLocation(property)}</dd>
+          <section className="listing-detail__section">
+            <div className="listing-detail__section-heading">
+              <div>
+                <p className="eyebrow">Home facts</p>
+                <h3>What this home offers</h3>
+              </div>
             </div>
-            <div>
-              <dt>Bedrooms</dt>
-              <dd>{property.bedrooms ?? "-"}</dd>
-            </div>
-            <div>
-              <dt>Bathrooms</dt>
-              <dd>{property.bathrooms ?? "-"}</dd>
-            </div>
-            <div>
-              <dt>Parking</dt>
-              <dd>{property.parking_spaces ?? "-"}</dd>
-            </div>
-            <div>
-              <dt>Deposit</dt>
-              <dd>{formatMoney(property.security_deposit, property.currency)}</dd>
-            </div>
-            <div>
-              <dt>Available from</dt>
-              <dd>{property.available_from || "Available now"}</dd>
-            </div>
-          </dl>
 
-          <div className="listing-detail__summary-grid">
-            <article>
-              <span>Utilities</span>
-              <strong>{property.utilities_included || "Utilities not listed"}</strong>
-            </article>
-            <article>
-              <span>House rules</span>
-              <strong>{property.house_rules || "House rules will be shared by the landlord"}</strong>
-            </article>
-            <article>
-              <span>Nearby landmarks</span>
-              <strong>{property.nearby_landmarks || "Nearby landmarks not listed"}</strong>
-            </article>
-          </div>
+            <dl className="listing-detail__facts">
+              {propertyFacts.map((fact) => (
+                <div key={fact.label}>
+                  <dt>{fact.label}</dt>
+                  <dd>
+                    <span className="listing-detail__fact-icon">{fact.icon}</span>
+                    <div>
+                      <small>{fact.label}</small>
+                      <strong>{fact.value}</strong>
+                    </div>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
 
-          <div className="page-actions">
+          <section className="listing-detail__section">
+            <div className="listing-detail__section-heading">
+              <div>
+                <p className="eyebrow">Rental summary</p>
+                <h3>Terms and neighborhood details</h3>
+              </div>
+            </div>
+
+            <div className="listing-detail__summary-grid">
+              {detailSections.map((section) => (
+                <article key={section.title}>
+                  <span>{section.title}</span>
+                  <strong>{section.content}</strong>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <div className="page-actions listing-detail__actions">
             <button
               className="btn btn-dark"
               disabled={isSavingInterest}
@@ -175,7 +237,8 @@ function ListingDetail() {
               {isSavingInterest ? "Saving..." : "Mark interest in this home"}
             </button>
             <Link className="btn btn-outline-dark" to="/listings">
-              Back to listings
+              View more homes
+              <ArrowRightIcon className="ui-icon ui-icon--tiny" />
             </Link>
           </div>
         </div>
