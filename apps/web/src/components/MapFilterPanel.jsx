@@ -630,9 +630,9 @@ export default function MapFilterPanel({
 
                 return (
                   <Marker
-                    center={[lat, lng]}
                     icon={PROPERTY_PIN_ICON}
                     key={`property-pin-${property.id}`}
+                    position={[lat, lng]}
                   >
                     <Popup>
                       <div className="map-filter-panel__property-popup">
