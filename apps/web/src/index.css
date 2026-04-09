@@ -1275,6 +1275,35 @@ h3 {
   margin-top: 0.2rem;
 }
 
+.map-filter-panel__property-pin-wrapper {
+  background: transparent;
+  border: 0;
+}
+
+.map-filter-panel__property-pin {
+  background: var(--color-primary);
+  border: 2px solid var(--color-white);
+  border-radius: 999px 999px 999px 0;
+  box-shadow: 0 8px 18px rgba(22, 101, 52, 0.28);
+  display: block;
+  height: 18px;
+  position: relative;
+  transform: rotate(-45deg);
+  width: 18px;
+}
+
+.map-filter-panel__property-pin::before {
+  background: var(--color-white);
+  border-radius: 999px;
+  content: "";
+  height: 6px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+}
+
 .map-filter-panel__actions {
   display: grid;
   gap: 0.55rem;
