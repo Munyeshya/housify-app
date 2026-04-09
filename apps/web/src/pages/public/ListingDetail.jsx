@@ -214,6 +214,18 @@ function ListingDetail() {
 
   return (
     <div className="public-stack">
+      <section className="listing-detail__topbar">
+        <Link className="btn btn-outline-dark" to="/listings">
+          <ArrowRightIcon className="ui-icon ui-icon--tiny" style={{ transform: "rotate(180deg)" }} />
+          Back to listings
+        </Link>
+
+        <a className="btn btn-dark" href={googleMapsUrl} rel="noreferrer" target="_blank">
+          Get directions
+          <ArrowRightIcon className="ui-icon ui-icon--tiny" />
+        </a>
+      </section>
+
       <section className="listing-detail">
         <div className="listing-detail__hero">
           {activeImage ? (
