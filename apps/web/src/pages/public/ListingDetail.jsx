@@ -8,6 +8,8 @@ import {
   BedIcon,
   CalendarIcon,
   CarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   PinIcon,
   WalletIcon,
 } from "../../components/common/Icons"
@@ -23,6 +25,7 @@ function ListingDetail() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSavingInterest, setIsSavingInterest] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
 
   useEffect(() => {
     let isMounted = true
@@ -56,8 +59,29 @@ function ListingDetail() {
       return []
     }
 
-    return property.images?.length ? property.images : []
+    const images = property.images?.length
+      ? property.images.map((image) => ({
+          id: image.id,
+          caption: image.caption,
+          src: image.image_url,
+        }))
+      : []
+
+    const cover = getPropertyCover(property)
+    if (cover && !images.some((image) => image.src === cover)) {
+      images.unshift({
+        id: `cover-${property.id}`,
+        caption: property.title,
+        src: cover,
+      })
+    }
+
+    return images
   }, [property])
+
+  useEffect(() => {
+    setActiveImageIndex(0)
+  }, [propertyId])
 
   async function handleBookmark() {
     if (!isAuthenticated) {
@@ -103,8 +127,8 @@ function ListingDetail() {
     )
   }
 
-  const cover = getPropertyCover(property)
   const description = property.description || property.short_description || "This home is available for rent."
+  const activeImage = gallery[activeImageIndex] || null
   const propertyFacts = [
     {
       icon: <PinIcon className="ui-icon ui-icon--muted" />,
@@ -140,6 +164,17 @@ function ListingDetail() {
 
   const detailSections = [
     {
+      title: "Location details",
+      content: [
+        property.village_area_name,
+        property.cell_area_name,
+        property.sector_area_name,
+        property.district_area_name,
+      ]
+        .filter(Boolean)
+        .join(", ") || "Detailed area information will be shared by the landlord.",
+    },
+    {
       title: "Utilities",
       content: property.utilities_included || "Utilities will be shared by the landlord during booking.",
     },
@@ -153,6 +188,26 @@ function ListingDetail() {
     },
   ]
 
+  function showPreviousImage() {
+    setActiveImageIndex((currentIndex) => {
+      if (!gallery.length) {
+        return currentIndex
+      }
+
+      return currentIndex === 0 ? gallery.length - 1 : currentIndex - 1
+    })
+  }
+
+  function showNextImage() {
+    setActiveImageIndex((currentIndex) => {
+      if (!gallery.length) {
+        return currentIndex
+      }
+
+      return currentIndex === gallery.length - 1 ? 0 : currentIndex + 1
+    })
+  }
+
   return (
     <div className="public-stack">
       <PageBanner
@@ -163,8 +218,47 @@ function ListingDetail() {
 
       <section className="listing-detail">
         <div className="listing-detail__hero">
-          {cover ? (
-            <img alt={property.title} src={cover} />
+          {activeImage ? (
+            <>
+              <img alt={activeImage.caption || property.title} src={activeImage.src} />
+
+              {gallery.length > 1 ? (
+                <>
+                  <div className="listing-detail__hero-controls">
+                    <button
+                      aria-label="Previous image"
+                      className="listing-detail__hero-button"
+                      onClick={showPreviousImage}
+                      type="button"
+                    >
+                      <ChevronLeftIcon className="ui-icon" />
+                    </button>
+                    <button
+                      aria-label="Next image"
+                      className="listing-detail__hero-button"
+                      onClick={showNextImage}
+                      type="button"
+                    >
+                      <ChevronRightIcon className="ui-icon" />
+                    </button>
+                  </div>
+
+                  <div className="listing-detail__hero-thumbs">
+                    {gallery.map((image, index) => (
+                      <button
+                        aria-label={`Show image ${index + 1}`}
+                        className={`listing-detail__hero-thumb${index === activeImageIndex ? " is-active" : ""}`}
+                        key={image.id}
+                        onClick={() => setActiveImageIndex(index)}
+                        type="button"
+                      >
+                        <img alt={image.caption || `${property.title} ${index + 1}`} src={image.src} />
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : null}
+            </>
           ) : (
             <div className="listing-detail__placeholder">No image available</div>
           )}
@@ -172,17 +266,13 @@ function ListingDetail() {
 
         <div className="listing-detail__body page-panel">
           <p className="eyebrow">Property details</p>
-          <div className="listing-detail__intro">
-            <div className="listing-detail__heading">
-              <h2>{property.title}</h2>
-              <p>{description}</p>
-            </div>
-
-            <div className="listing-detail__rent-card">
-              <span>Monthly rent</span>
+          <div className="listing-detail__heading">
+            <div className="listing-detail__price-line">
               <strong>{formatMoney(property.rent_amount, property.currency)}</strong>
-              <small>Charged per {property.billing_cycle}</small>
+              <span>per {property.billing_cycle}</span>
             </div>
+            <h2>{property.title}</h2>
+            <p>{description}</p>
           </div>
 
           <section className="listing-detail__section">
@@ -209,24 +299,6 @@ function ListingDetail() {
             </dl>
           </section>
 
-          <section className="listing-detail__section">
-            <div className="listing-detail__section-heading">
-              <div>
-                <p className="eyebrow">Rental summary</p>
-                <h3>Terms and neighborhood details</h3>
-              </div>
-            </div>
-
-            <div className="listing-detail__summary-grid">
-              {detailSections.map((section) => (
-                <article key={section.title}>
-                  <span>{section.title}</span>
-                  <strong>{section.content}</strong>
-                </article>
-              ))}
-            </div>
-          </section>
-
           <div className="page-actions listing-detail__actions">
             <button
               className="btn btn-dark"
@@ -244,16 +316,14 @@ function ListingDetail() {
         </div>
       </section>
 
-      {gallery.length > 1 ? (
-        <section className="gallery-grid">
-          {gallery.slice(1).map((image) => (
-            <figure className="gallery-card" key={image.id}>
-              <img alt={image.caption || property.title} src={image.image_url} />
-              {image.caption ? <figcaption>{image.caption}</figcaption> : null}
-            </figure>
-          ))}
-        </section>
-      ) : null}
+      <section className="listing-detail__meta-grid">
+        {detailSections.map((section) => (
+          <article className="listing-detail__meta-card" key={section.title}>
+            <span>{section.title}</span>
+            <strong>{section.content}</strong>
+          </article>
+        ))}
+      </section>
     </div>
   )
 }
