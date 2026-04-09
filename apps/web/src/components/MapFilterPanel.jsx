@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import {
   CircleMarker,
+  GeoJSON,
   MapContainer,
   Popup,
   TileLayer,
@@ -15,6 +16,11 @@ import {
   CloseIcon,
   GlobeIcon,
 } from "./common/Icons"
+import {
+  getFeatureCollectionBounds,
+  getGeometryBounds,
+  loadBoundaryCollection,
+} from "../lib/rwandaBoundaries"
 import { locationsApi } from "../services/api"
 
 const RWANDA_CENTER = [-1.9403, 29.8739]
@@ -56,7 +62,25 @@ const LEVELS = {
   },
 }
 
-function fitMarkerFocus(map, items, focusItem, level) {
+function fitMapFocus(map, boundaryCollection, items, focusItem, level) {
+  const focusedBoundary = boundaryCollection?.features?.find(
+    (feature) => feature.properties?.__areaId === focusItem?.id,
+  )
+  const focusedBounds = focusedBoundary ? getGeometryBounds(focusedBoundary.geometry) : null
+  if (focusedBounds) {
+    map.fitBounds(focusedBounds, {
+      maxZoom: level === "district" ? 11 : level === "sector" ? 13 : 15,
+      padding: [36, 36],
+    })
+    return
+  }
+
+  const collectionBounds = getFeatureCollectionBounds(boundaryCollection?.features)
+  if (collectionBounds) {
+    map.fitBounds(collectionBounds, { padding: [40, 40] })
+    return
+  }
+
   const validPoints = items
     .map((item) => [Number.parseFloat(item.center_latitude), Number.parseFloat(item.center_longitude)])
     .filter(([lat, lng]) => Number.isFinite(lat) && Number.isFinite(lng))
@@ -150,13 +174,20 @@ function selectionsEqual(left, right) {
   )
 }
 
-function MapViewportController({ items, focusItem, level, selection, onSelectionChange }) {
+function MapViewportController({
+  boundaryCollection,
+  items,
+  focusItem,
+  level,
+  selection,
+  onSelectionChange,
+}) {
   const map = useMap()
   const selectionDepth = getSelectionDepth(selection)
 
   useEffect(() => {
-    fitMarkerFocus(map, items, focusItem, level)
-  }, [map, items, focusItem, level])
+    fitMapFocus(map, boundaryCollection, items, focusItem, level)
+  }, [boundaryCollection, map, items, focusItem, level])
 
   useMapEvents({
     zoomend() {
@@ -245,6 +276,7 @@ export default function MapFilterPanel({
   onSelectionChange,
   onClearSelection,
 }) {
+  const [boundaryCollection, setBoundaryCollection] = useState(null)
   const [items, setItems] = useState([])
   const [propertyPins, setPropertyPins] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -252,6 +284,7 @@ export default function MapFilterPanel({
 
   const currentLevel = useMemo(() => getCurrentLevel(selection), [selection])
   const focusItem = useMemo(() => getDeepestSelection(selection), [selection])
+  const itemLookup = useMemo(() => new Map(items.map((item) => [item.id, item])), [items])
   const districtOptions = currentLevel === "district" ? items : selection.district ? [selection.district] : []
   const sectorOptions = currentLevel === "sector" ? items : selection.sector ? [selection.sector] : []
   const cellOptions = currentLevel === "cell" ? items : selection.cell ? [selection.cell] : []
@@ -267,6 +300,7 @@ export default function MapFilterPanel({
     async function loadLevel() {
       setIsLoading(true)
       setErrorMessage("")
+      setBoundaryCollection(null)
 
       try {
         const query = {
@@ -285,10 +319,19 @@ export default function MapFilterPanel({
           locationsApi.listPublicMap(query),
         ])
 
+        const nextItems = (Array.isArray(areaResponse) ? areaResponse : []).filter(
+          (item) => Number(item.available_houses_count) > 0,
+        )
+
+        let nextBoundaryCollection = null
+        try {
+          nextBoundaryCollection = await loadBoundaryCollection(currentLevel, selection, nextItems)
+        } catch {
+          nextBoundaryCollection = null
+        }
+
         if (isMounted) {
-          const nextItems = (Array.isArray(areaResponse) ? areaResponse : []).filter(
-            (item) => Number(item.available_houses_count) > 0,
-          )
+          setBoundaryCollection(nextBoundaryCollection)
           setItems(nextItems)
           setPropertyPins(Array.isArray(mapResponse) ? mapResponse : [])
         }
@@ -441,6 +484,20 @@ export default function MapFilterPanel({
     selection.cell,
     selection.village,
   ].filter(Boolean)
+  const hasBoundaryPolygons = Boolean(boundaryCollection?.features?.length)
+
+  const getBoundaryPathOptions = (feature) => {
+    const count = Number(feature.properties?.__availableHousesCount || 0)
+    const isSelected = feature.properties?.__areaId === focusItem?.id
+
+    return {
+      color: isSelected ? "#14532d" : "#166534",
+      fillColor: isSelected ? "#84cc16" : count >= 20 ? "#86efac" : count >= 10 ? "#bbf7d0" : "#dcfce7",
+      fillOpacity: isSelected ? 0.48 : 0.26,
+      opacity: 1,
+      weight: isSelected ? 2.6 : 1.5,
+    }
+  }
 
   return (
     <div className="map-filter-panel">
@@ -486,6 +543,7 @@ export default function MapFilterPanel({
               />
 
               <MapViewportController
+                boundaryCollection={boundaryCollection}
                 focusItem={focusItem}
                 items={items}
                 level={currentLevel}
@@ -493,7 +551,34 @@ export default function MapFilterPanel({
                 selection={selection}
               />
 
-              {items.map((item) => {
+              {hasBoundaryPolygons
+                ? boundaryCollection.features.map((feature) => {
+                    const matchedItem = itemLookup.get(feature.properties?.__areaId)
+                    if (!matchedItem) {
+                      return null
+                    }
+
+                    return (
+                      <GeoJSON
+                        data={feature}
+                        eventHandlers={{
+                          click: () => handleSelectItem(matchedItem),
+                        }}
+                        key={`boundary-${currentLevel}-${matchedItem.id}`}
+                        onEachFeature={(featureData, layer) => {
+                          layer.bindTooltip(
+                            `${featureData.properties?.__areaName}: ${featureData.properties?.__availableHousesCount} available homes`,
+                            {
+                              direction: "top",
+                              sticky: true,
+                            },
+                          )
+                        }}
+                        pathOptions={getBoundaryPathOptions(feature)}
+                      />
+                    )
+                  })
+                : items.map((item) => {
                 const lat = Number.parseFloat(item.center_latitude)
                 const lng = Number.parseFloat(item.center_longitude)
                 if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
@@ -523,7 +608,7 @@ export default function MapFilterPanel({
                     </Tooltip>
                   </CircleMarker>
                 )
-              })}
+                  })}
 
               {propertyPins.map((property) => {
                 const lat = Number.parseFloat(property.latitude)
