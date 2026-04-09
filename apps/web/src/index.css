@@ -2286,6 +2286,435 @@ h3 {
   padding: 0.58rem 0.9rem;
 }
 
+.app-shell {
+  background: #eef2f7;
+}
+
+.app-shell__body {
+  grid-template-columns: 264px 1fr;
+  min-height: calc(100vh - 88px);
+}
+
+.app-shell__content {
+  padding: 1.25rem 0 1.75rem;
+}
+
+.dashboard-header {
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid #d9e1ec;
+  z-index: 35;
+}
+
+.dashboard-header__inner {
+  gap: 1.1rem;
+  min-height: 88px;
+}
+
+.dashboard-header__search {
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #d9e1ec;
+  border-radius: 12px;
+  display: flex;
+  flex: 1;
+  gap: 0.55rem;
+  max-width: 860px;
+  min-height: 46px;
+  padding: 0 0.95rem;
+}
+
+.dashboard-header__search input {
+  background: transparent;
+  border: 0;
+  color: var(--color-text);
+  flex: 1;
+  font-size: 0.86rem;
+  outline: none;
+}
+
+.dashboard-header__icon-button {
+  align-items: center;
+  background: var(--color-white);
+  border: 1px solid #d9e1ec;
+  border-radius: 12px;
+  color: var(--color-text-soft);
+  display: inline-flex;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.dashboard-header__compact-link {
+  align-items: center;
+  background: var(--color-white);
+  border: 1px solid #d9e1ec;
+  border-radius: 12px;
+  color: var(--color-text);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-height: 42px;
+  padding: 0 0.9rem;
+}
+
+.dashboard-header__user {
+  align-items: center;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.dashboard-header__user-copy {
+  display: grid;
+  gap: 0.16rem;
+  text-align: right;
+}
+
+.dashboard-header__user-copy span {
+  color: var(--color-text-soft);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dashboard-header__user-copy strong {
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.dashboard-header__avatar {
+  align-items: center;
+  background: linear-gradient(135deg, #1d4ed8, #5b21b6);
+  border-radius: 14px;
+  color: var(--color-white);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.dashboard-header__signout {
+  min-height: 42px;
+}
+
+.app-sidebar {
+  background: #1f2465;
+  border-right: 0;
+  padding: 0;
+}
+
+.app-sidebar__panel {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.76);
+  min-height: calc(100vh - 88px);
+  padding: 1.25rem 1rem 1.5rem;
+  top: 88px;
+}
+
+.app-sidebar__brand {
+  align-items: center;
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.25rem;
+}
+
+.app-sidebar__brand-mark {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: var(--color-white);
+  display: inline-flex;
+  font-size: 1rem;
+  font-weight: 800;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.app-sidebar__brand strong,
+.app-sidebar__brand span {
+  display: block;
+}
+
+.app-sidebar__brand strong {
+  color: var(--color-white);
+  font-size: 0.94rem;
+  font-weight: 800;
+}
+
+.app-sidebar__brand span {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-top: 0.15rem;
+  text-transform: uppercase;
+}
+
+.app-sidebar__section + .app-sidebar__section {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.app-sidebar__section h2 {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.68rem;
+}
+
+.app-sidebar__link {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.72);
+  gap: 0.6rem;
+}
+
+.app-sidebar__link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+}
+
+.app-sidebar__link.is-active {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-white);
+}
+
+.app-sidebar__link--static {
+  opacity: 0.84;
+}
+
+.dashboard-hero,
+.dashboard-section,
+.tenant-payment-panel,
+.tenant-activity-panel {
+  border: 1px solid #d9e1ec;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.dashboard-hero {
+  align-items: center;
+  background: var(--color-white);
+  border-radius: 18px;
+  padding: 1.15rem 1.25rem;
+}
+
+.dashboard-hero__accent {
+  background: #f0fdf4;
+  border-radius: 12px;
+  color: var(--color-primary);
+  font-size: 0.74rem;
+  min-height: 36px;
+  padding: 0.45rem 0.8rem;
+}
+
+.dashboard-section {
+  border-radius: 18px;
+  gap: 0.9rem;
+  padding: 1rem 1.05rem;
+}
+
+.dashboard-section__heading h3 {
+  font-size: 0.98rem;
+}
+
+.dashboard-stat-card,
+.dashboard-snapshot-card,
+.dashboard-action-card {
+  background: #f8fafc;
+  border: 1px solid #e3e8f0;
+  border-radius: 16px;
+  padding: 0.9rem;
+}
+
+.dashboard-stat-card strong {
+  font-size: 1.38rem;
+}
+
+.dashboard-snapshot-card__header strong {
+  font-size: 1rem;
+}
+
+.dashboard-action-card h4 {
+  font-size: 0.92rem;
+}
+
+.dashboard-action-card p,
+.dashboard-loading .lede {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.tenant-dashboard-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+}
+
+.tenant-payment-panel,
+.tenant-activity-panel {
+  background: var(--color-white);
+  border-radius: 18px;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem 1.05rem;
+}
+
+.tenant-payment-panel__header,
+.tenant-activity-panel__header {
+  align-items: start;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: space-between;
+}
+
+.tenant-payment-panel__header h3,
+.tenant-activity-panel__header h3 {
+  font-size: 0.98rem;
+}
+
+.tenant-payment-panel__icon {
+  align-items: center;
+  background: #eff6ff;
+  border-radius: 12px;
+  color: #2563eb;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.tenant-payment-panel__summary {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tenant-payment-panel__summary div {
+  background: #f8fafc;
+  border: 1px solid #e3e8f0;
+  border-radius: 14px;
+  display: grid;
+  gap: 0.28rem;
+  padding: 0.8rem;
+}
+
+.tenant-payment-panel__summary span,
+.tenant-activity-panel__header span,
+.tenant-activity-row__meta span {
+  color: var(--color-text-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tenant-payment-panel__summary strong,
+.tenant-activity-row__meta strong {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.tenant-payment-form {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tenant-payment-form label {
+  display: grid;
+  font-size: 0.82rem;
+  font-weight: 600;
+  gap: 0.38rem;
+}
+
+.tenant-payment-form__full {
+  grid-column: 1 / -1;
+}
+
+.tenant-payment-form__full textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.tenant-payment-form__footer {
+  align-items: center;
+  display: flex;
+  gap: 0.85rem;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+}
+
+.tenant-payment-form__hint {
+  align-items: center;
+  color: var(--color-text-soft);
+  display: inline-flex;
+  font-size: 0.77rem;
+  gap: 0.45rem;
+  line-height: 1.55;
+  max-width: 30rem;
+}
+
+.tenant-payment-panel__empty,
+.tenant-activity-panel__empty {
+  color: var(--color-text-soft);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.tenant-activity-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.tenant-activity-row {
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e3e8f0;
+  border-radius: 14px;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 0.8rem;
+}
+
+.tenant-activity-row__icon {
+  align-items: center;
+  background: #eef2ff;
+  border-radius: 12px;
+  color: #4f46e5;
+  display: inline-flex;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+
+.tenant-activity-row__body {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.tenant-activity-row__body strong {
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.tenant-activity-row__body span {
+  color: var(--color-text-soft);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.tenant-activity-row__meta {
+  display: grid;
+  gap: 0.18rem;
+  justify-items: end;
+  text-align: right;
+}
+
 @keyframes auth-rise-in {
   from {
     opacity: 0;
@@ -2338,6 +2767,17 @@ h3 {
   .app-sidebar__panel,
   .listing-browser__filters {
     position: static;
+  }
+
+  .tenant-dashboard-grid,
+  .tenant-payment-panel__summary,
+  .tenant-payment-form {
+    grid-template-columns: 1fr;
+  }
+
+  .tenant-payment-form__footer {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .filter-card {
@@ -2446,6 +2886,26 @@ h3 {
     flex-direction: column;
   }
 
+  .dashboard-header__search {
+    max-width: none;
+    width: 100%;
+  }
+
+  .dashboard-header__actions {
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .dashboard-header__compact-link,
+  .dashboard-header__signout,
+  .dashboard-header__user {
+    width: 100%;
+  }
+
+  .dashboard-header__user {
+    justify-content: space-between;
+  }
+
   .app-header__nav {
     align-items: stretch;
     display: none;
@@ -2506,8 +2966,18 @@ h3 {
   .dashboard-snapshot-grid,
   .dashboard-action-grid,
   .listing-detail__facts,
-  .listing-detail__facts-columns {
+  .listing-detail__facts-columns,
+  .tenant-dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tenant-activity-row {
+    grid-template-columns: 1fr;
+  }
+
+  .tenant-activity-row__meta {
+    justify-items: start;
+    text-align: left;
   }
 
   .listing-detail__facts div:last-child {

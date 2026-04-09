@@ -42,6 +42,7 @@ export const apiEndpoints = {
   },
   payments: {
     list: "/payments/",
+    tenantSubmit: "/payments/tenant/submit/",
     adjustments: "/payments/adjustments/",
     adjustmentDecision: (adjustmentId) =>
       `/payments/adjustments/${adjustmentId}/decision/`,

@@ -184,3 +184,79 @@ export function ChevronRightIcon({ className = "ui-icon" }) {
     </svg>
   )
 }
+
+export function GridIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <rect x="4.5" y="4.5" width="6.5" height="6.5" rx="1.2" />
+      <rect x="13" y="4.5" width="6.5" height="6.5" rx="1.2" />
+      <rect x="4.5" y="13" width="6.5" height="6.5" rx="1.2" />
+      <rect x="13" y="13" width="6.5" height="6.5" rx="1.2" />
+    </svg>
+  )
+}
+
+export function BellIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M6.5 16h11" />
+      <path d="M8 16V10a4 4 0 1 1 8 0v6" />
+      <path d="M9.5 18a2.5 2.5 0 0 0 5 0" />
+    </svg>
+  )
+}
+
+export function BuildingIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M5 20V7.5A1.5 1.5 0 0 1 6.5 6h11A1.5 1.5 0 0 1 19 7.5V20" />
+      <path d="M9 10h.01" />
+      <path d="M12 10h.01" />
+      <path d="M15 10h.01" />
+      <path d="M9 13.5h.01" />
+      <path d="M12 13.5h.01" />
+      <path d="M15 13.5h.01" />
+      <path d="M11 20v-3h2v3" />
+    </svg>
+  )
+}
+
+export function UsersIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M8.5 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+      <path d="M16.5 11a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+      <path d="M3.5 18.5a5 5 0 0 1 10 0" />
+      <path d="M14 18.5a4.5 4.5 0 0 1 6 0" />
+    </svg>
+  )
+}
+
+export function ShieldIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M12 3.5 18.5 6v5.5c0 4.1-2.7 7.8-6.5 9-3.8-1.2-6.5-4.9-6.5-9V6L12 3.5Z" />
+      <path d="m9.5 11.8 1.6 1.6 3.4-3.8" />
+    </svg>
+  )
+}
+
+export function CreditCardIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <rect x="3.5" y="6" width="17" height="12" rx="2" />
+      <path d="M3.5 10.2h17" />
+      <path d="M7 14.5h3.5" />
+    </svg>
+  )
+}
+
+export function AlertIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 8v4.5" />
+      <path d="M12 16h.01" />
+    </svg>
+  )
+}
