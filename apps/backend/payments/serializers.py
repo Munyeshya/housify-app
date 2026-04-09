@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from decimal import Decimal
 
 from tenancies.models import Tenancy
 
@@ -155,3 +156,17 @@ class PaymentIntegritySummarySerializer(serializers.Serializer):
     adjustments = PaymentAdjustmentSerializer(many=True)
     effective_amount_paid = serializers.DecimalField(max_digits=12, decimal_places=2)
     effective_outstanding_balance = serializers.DecimalField(max_digits=12, decimal_places=2)
+
+
+class TenantPaymentSubmissionSerializer(serializers.Serializer):
+    tenancy = serializers.PrimaryKeyRelatedField(queryset=Tenancy.objects.select_related("property", "tenant__user"))
+    amount = serializers.DecimalField(max_digits=12, decimal_places=2, min_value=Decimal("0.01"))
+    method = serializers.ChoiceField(choices=Payment._meta.get_field("method").choices)
+    reference = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    notes = serializers.CharField(required=False, allow_blank=True)
+
+
+class TenantPaymentAllocationSerializer(serializers.Serializer):
+    applied_total = serializers.DecimalField(max_digits=12, decimal_places=2)
+    created_future_payment_count = serializers.IntegerField()
+    payments = PaymentSerializer(many=True)

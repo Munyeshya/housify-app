@@ -24,7 +24,10 @@ from .serializers import (
     PaymentCreateSerializer,
     PaymentIntegritySummarySerializer,
     PaymentSerializer,
+    TenantPaymentAllocationSerializer,
+    TenantPaymentSubmissionSerializer,
 )
+from .services import apply_tenant_payment
 
 
 class PaymentListCreateView(generics.ListCreateAPIView):
@@ -274,3 +277,51 @@ class PaymentIntegritySummaryView(APIView):
             "effective_outstanding_balance": effective_outstanding_balance,
         }
         return Response(PaymentIntegritySummarySerializer(payload).data, status=status.HTTP_200_OK)
+
+
+class TenantPaymentCreateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        tenant = get_authenticated_tenant(request)
+        serializer = TenantPaymentSubmissionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        tenancy = serializer.validated_data["tenancy"]
+
+        if tenancy.tenant_id != tenant.id:
+            raise PermissionDenied("Tenants may only pay against their own tenancy.")
+
+        result = apply_tenant_payment(
+            tenant_user=request.user,
+            tenancy=tenancy,
+            amount=serializer.validated_data["amount"],
+            method=serializer.validated_data["method"],
+            reference=serializer.validated_data.get("reference", ""),
+            notes=serializer.validated_data.get("notes", ""),
+        )
+
+        log_security_event(
+            request=request,
+            actor=request.user,
+            event_type=SecurityEventType.PAYMENT_CREATED,
+            success=True,
+            target_type="tenancy",
+            target_id=tenancy.id,
+            metadata={
+                "amount": str(serializer.validated_data["amount"]),
+                "created_future_payment_count": result.created_future_payment_count,
+                "payment_ids": [payment.id for payment in result.payments],
+                "tenancy_id": tenancy.id,
+            },
+        )
+
+        return Response(
+            TenantPaymentAllocationSerializer(
+                {
+                    "applied_total": result.applied_total,
+                    "created_future_payment_count": result.created_future_payment_count,
+                    "payments": result.payments,
+                }
+            ).data,
+            status=status.HTTP_201_CREATED,
+        )
