@@ -89,11 +89,15 @@ function Register() {
   }
 
   return (
-    <section className="page-panel page-panel--auth">
-      <div className="page-copy">
+    <section className="page-panel page-panel--auth auth-page">
+      <div className="page-copy auth-page__copy">
         <p className="eyebrow">{currentCopy.eyebrow}</p>
         <h1>{currentCopy.heading}</h1>
         <p className="lede">{currentCopy.body}</p>
+        <div className="auth-page__highlight">
+          <span>Get started</span>
+          <strong>Choose the account type that matches how you use Housify today, then grow into the rest of the platform later.</strong>
+        </div>
 
         <div className="register-role-switch">
           <button
