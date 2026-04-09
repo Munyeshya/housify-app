@@ -17,6 +17,9 @@ const withQuery = (endpoint, query = {}) => {
 }
 
 export const locationsApi = {
+  listPublicMap(query = {}) {
+    return apiClient.get(withQuery(apiEndpoints.locations.publicMap, query))
+  },
   listDistrictCounts(query = {}) {
     return apiClient.get(withQuery(apiEndpoints.locations.districtCounts, query))
   },
