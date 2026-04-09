@@ -1235,33 +1235,13 @@ h3 {
   gap: 0.35rem;
 }
 
-.map-filter-panel__field span,
-.map-filter-panel__selection-meta span {
+.map-filter-panel__field span {
   color: var(--color-text-soft);
   display: block;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-}
-
-.map-filter-panel__selection-meta {
-  display: grid;
-  gap: 0.75rem;
-  margin-top: 0.85rem;
-}
-
-.map-filter-panel__selection-meta article {
-  background: #f8faf8;
-  border-radius: 12px;
-  padding: 0.7rem;
-}
-
-.map-filter-panel__selection-meta strong {
-  display: block;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  margin-top: 0.35rem;
 }
 
 .map-filter-panel__list {
