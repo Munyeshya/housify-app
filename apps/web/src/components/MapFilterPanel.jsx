@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from "react"
-import { CircleMarker, MapContainer, TileLayer, Tooltip, useMap } from "react-leaflet"
+import {
+  CircleMarker,
+  MapContainer,
+  Popup,
+  TileLayer,
+  Tooltip,
+  useMap,
+} from "react-leaflet"
 
 import {
+  ArrowRightIcon,
   ChevronLeftIcon,
   CloseIcon,
   GlobeIcon,
@@ -159,6 +167,7 @@ export default function MapFilterPanel({
   onClearSelection,
 }) {
   const [items, setItems] = useState([])
+  const [propertyPins, setPropertyPins] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
@@ -177,9 +186,28 @@ export default function MapFilterPanel({
       setErrorMessage("")
 
       try {
-        const response = await LEVELS[currentLevel].load(propertyQuery, selection)
+        const query = {
+          property_type: propertyQuery.property_type,
+          city: propertyQuery.city,
+          district_area: selection.district?.id,
+          sector_area: selection.sector?.id,
+          cell_area: selection.cell?.id,
+          village_area: selection.village?.id,
+          min_rent: propertyQuery.min_rent,
+          max_rent: propertyQuery.max_rent,
+        }
+
+        const [areaResponse, mapResponse] = await Promise.all([
+          LEVELS[currentLevel].load(query, selection),
+          locationsApi.listPublicMap(query),
+        ])
+
         if (isMounted) {
-          setItems(Array.isArray(response) ? response : [])
+          const nextItems = (Array.isArray(areaResponse) ? areaResponse : []).filter(
+            (item) => Number(item.available_houses_count) > 0,
+          )
+          setItems(nextItems)
+          setPropertyPins(Array.isArray(mapResponse) ? mapResponse : [])
         }
       } catch (error) {
         if (isMounted) {
@@ -325,6 +353,44 @@ export default function MapFilterPanel({
                   </CircleMarker>
                 )
               })}
+
+              {propertyPins.map((property) => {
+                const lat = Number.parseFloat(property.latitude)
+                const lng = Number.parseFloat(property.longitude)
+                if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+                  return null
+                }
+
+                const mapsHref = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
+
+                return (
+                  <CircleMarker
+                    center={[lat, lng]}
+                    fillColor="#ffffff"
+                    fillOpacity={1}
+                    key={`property-pin-${property.id}`}
+                    pathOptions={{
+                      color: "#166534",
+                      weight: 2,
+                    }}
+                    radius={6}
+                  >
+                    <Popup>
+                      <div className="map-filter-panel__property-popup">
+                        <strong>{property.title}</strong>
+                        <span>{property.neighborhood || property.city}</span>
+                        <span>
+                          {property.currency} {Number(property.rent_amount).toLocaleString()}
+                        </span>
+                        <a href={mapsHref} rel="noreferrer" target="_blank">
+                          Open in Google Maps
+                          <ArrowRightIcon className="ui-icon ui-icon--tiny" />
+                        </a>
+                      </div>
+                    </Popup>
+                  </CircleMarker>
+                )
+              })}
             </MapContainer>
           </div>
 
@@ -363,6 +429,18 @@ export default function MapFilterPanel({
                   <strong>{selection.village?.name || "Any village"}</strong>
                 </article>
               </div>
+
+              {focusItem?.center_latitude && focusItem?.center_longitude ? (
+                <a
+                  className="map-filter-panel__maps-link"
+                  href={`https://www.google.com/maps/search/?api=1&query=${focusItem.center_latitude},${focusItem.center_longitude}`}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  Follow in Google Maps
+                  <ArrowRightIcon className="ui-icon ui-icon--tiny" />
+                </a>
+              ) : null}
             </div>
 
             <div className="map-filter-panel__list">
