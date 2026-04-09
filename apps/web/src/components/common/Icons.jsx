@@ -71,6 +71,28 @@ export function CarIcon({ className = "ui-icon" }) {
   )
 }
 
+export function CalendarIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M5 6.5h14a1 1 0 0 1 1 1v10A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-10a1 1 0 0 1 1-1Z" />
+      <path d="M8 4.5v4" />
+      <path d="M16 4.5v4" />
+      <path d="M4 9.5h16" />
+    </svg>
+  )
+}
+
+export function WalletIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M5.5 7h13a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 18.5 17h-13A1.5 1.5 0 0 1 4 15.5v-7A1.5 1.5 0 0 1 5.5 7Z" />
+      <path d="M16 12h4" />
+      <path d="M6.5 7V6a1 1 0 0 1 1-1H18" />
+      <circle cx="15.5" cy="12" r="0.8" />
+    </svg>
+  )
+}
+
 export function FilterIcon({ className = "ui-icon" }) {
   return (
     <svg {...iconProps(className)}>
