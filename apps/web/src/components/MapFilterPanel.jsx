@@ -14,7 +14,6 @@ import {
   ChevronLeftIcon,
   CloseIcon,
   GlobeIcon,
-  PinIcon,
 } from "./common/Icons"
 import { locationsApi } from "../services/api"
 
@@ -665,43 +664,15 @@ export default function MapFilterPanel({
               ) : null}
             </div>
 
-            <div className="map-filter-panel__list">
-              <div className="map-filter-panel__list-heading">
-                <h3>{LEVELS[currentLevel].label}</h3>
-                <span>{items.length}</span>
-              </div>
+            {isLoading ? (
+              <p className="map-filter-panel__empty">Loading map areas...</p>
+            ) : null}
 
-              {isLoading ? (
-                <p className="map-filter-panel__empty">Loading map areas...</p>
-              ) : null}
+            {errorMessage ? <p className="map-filter-panel__empty">{errorMessage}</p> : null}
 
-              {errorMessage ? <p className="map-filter-panel__empty">{errorMessage}</p> : null}
-
-              {!isLoading && !errorMessage && !items.length ? (
-                <p className="map-filter-panel__empty">{LEVELS[currentLevel].emptyMessage}</p>
-              ) : null}
-
-              {!isLoading && !errorMessage && items.length ? (
-                <div className="map-filter-panel__items">
-                  {items.map((item) => (
-                    <button
-                      className={`map-filter-panel__item${
-                        focusItem?.id === item.id ? " is-active" : ""
-                      }`}
-                      key={`list-${currentLevel}-${item.id}`}
-                      onClick={() => handleSelectItem(item)}
-                      type="button"
-                    >
-                      <div>
-                        <strong>{item.name}</strong>
-                        <span>{item.available_houses_count} available homes</span>
-                      </div>
-                      <PinIcon className="ui-icon ui-icon--tiny" />
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-            </div>
+            {!isLoading && !errorMessage && !items.length ? (
+              <p className="map-filter-panel__empty">{LEVELS[currentLevel].emptyMessage}</p>
+            ) : null}
 
             <div className="map-filter-panel__actions">
               <button className="btn btn-dark" onClick={onClose} type="button">
