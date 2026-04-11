@@ -1,4 +1,4 @@
-# Housify
+# Housify is good
 
 Monorepo for the Housify platform.
 
