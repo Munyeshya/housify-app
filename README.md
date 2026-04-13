@@ -1,4 +1,4 @@
-# Housify
+# Housification
 
 Monorepo for the Housify platform.
 
