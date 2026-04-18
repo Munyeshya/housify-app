@@ -1,5 +1,7 @@
 import uuid
+import builtins
 
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from accounts.models import LandlordProfile
@@ -169,7 +171,12 @@ class PropertyImage(models.Model):
         on_delete=models.CASCADE,
         related_name="images",
     )
-    image_url = models.URLField()
+    image_url = models.URLField(blank=True)
+    image_file = models.FileField(
+        upload_to="property-images/%Y/%m/%d/",
+        blank=True,
+        null=True,
+    )
     caption = models.CharField(max_length=255, blank=True)
     is_cover = models.BooleanField(default=False)
     sort_order = models.PositiveIntegerField(default=0)
@@ -178,5 +185,29 @@ class PropertyImage(models.Model):
     class Meta:
         ordering = ("sort_order", "id")
 
+    def clean(self):
+        if not self.image_url and not self.image_file:
+            raise ValidationError("Provide either an image URL or an uploaded image file.")
+
+    @builtins.property
+    def image_reference(self):
+        if self.image_file:
+            try:
+                return self.image_file.url
+            except ValueError:
+                return self.image_file.name
+        return self.image_url
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        file_field = self.image_file
+        result = super().delete(*args, **kwargs)
+        if file_field:
+            file_field.delete(save=False)
+        return result
+
     def __str__(self):
-        return self.caption or self.image_url
+        return self.caption or self.image_reference

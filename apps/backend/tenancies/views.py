@@ -15,7 +15,9 @@ from .serializers import TenancyCreateSerializer, TenancySerializer
 
 class TenancyListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Tenancy.objects.select_related("property", "tenant__user", "landlord__user")
+    queryset = Tenancy.objects.select_related("property", "tenant__user", "landlord__user").prefetch_related(
+        "payments"
+    )
 
     def get_queryset(self):
         queryset = super().get_queryset()

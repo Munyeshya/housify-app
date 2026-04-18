@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom"
+import { useEffect, useMemo, useState } from "react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../../context/AuthContext"
-import { BellIcon, SearchIcon } from "../common/Icons"
+import { BellIcon, CloseIcon, MenuIcon, SearchIcon } from "../common/Icons"
+import { getDashboardSearchItems } from "./dashboardNavigation"
 
 const roleLabelMap = {
   admin: "Platform administration",
@@ -10,31 +12,118 @@ const roleLabelMap = {
   tenant: "Tenant workspace",
 }
 
-function DashboardHeader() {
+function DashboardHeader({ isSidebarOpen = false, onToggleSidebar }) {
   const { signOut, user } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [query, setQuery] = useState("")
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
   const initials = (user?.full_name || user?.email || "HU")
     .split(" ")
     .map((part) => part[0])
     .join("")
     .slice(0, 2)
     .toUpperCase()
+  const searchItems = useMemo(() => getDashboardSearchItems(user?.role), [user?.role])
+  const normalizedQuery = query.trim().toLowerCase()
+  const searchResults = useMemo(() => {
+    if (!normalizedQuery) {
+      return searchItems.slice(0, 6)
+    }
+
+    return searchItems
+      .filter((item) => item.matchText.includes(normalizedQuery))
+      .slice(0, 6)
+  }, [normalizedQuery, searchItems])
+
+  useEffect(() => {
+    setQuery("")
+    setIsSearchFocused(false)
+  }, [location.pathname])
 
   async function handleSignOut() {
     await signOut()
     toast.success("You have been signed out.")
   }
 
+  function openResult(item) {
+    navigate(item.to)
+    setQuery("")
+    setIsSearchFocused(false)
+  }
+
+  function handleSearchSubmit(event) {
+    event.preventDefault()
+
+    if (!searchResults.length) {
+      toast.error("No dashboard matches were found for that search.")
+      return
+    }
+
+    openResult(searchResults[0])
+  }
+
   return (
     <header className="dashboard-header border-bottom">
       <div className="container-fluid">
         <div className="dashboard-header__inner">
-          <div className="dashboard-header__search">
-            <SearchIcon className="ui-icon ui-icon--muted" />
-            <input
-              aria-label="Search dashboard"
-              placeholder="Search dashboard"
-              type="search"
-            />
+          <div className="dashboard-header__leading">
+            <button
+              aria-label={isSidebarOpen ? "Close navigation menu" : "Open navigation menu"}
+              className="dashboard-header__menu-button"
+              onClick={onToggleSidebar}
+              type="button"
+            >
+              {isSidebarOpen ? <CloseIcon className="ui-icon" /> : <MenuIcon className="ui-icon" />}
+            </button>
+            <form
+              className="dashboard-header__search"
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) {
+                  setIsSearchFocused(false)
+                }
+              }}
+              onSubmit={handleSearchSubmit}
+            >
+              <SearchIcon className="ui-icon ui-icon--muted" />
+              <input
+                aria-label="Search dashboard"
+                onChange={(event) => setQuery(event.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                placeholder="Search pages, payments, complaints..."
+                type="search"
+                value={query}
+              />
+              {isSearchFocused ? (
+                <div className="dashboard-search-results">
+                  {searchResults.length ? (
+                    searchResults.map((item) => {
+                      const Icon = item.icon
+                      return (
+                        <button
+                          className="dashboard-search-results__item"
+                          key={item.to}
+                          onClick={() => openResult(item)}
+                          type="button"
+                        >
+                          <span className="dashboard-search-results__icon">
+                            {Icon ? <Icon className="ui-icon" /> : <SearchIcon className="ui-icon" />}
+                          </span>
+                          <span className="dashboard-search-results__copy">
+                            <strong>{item.label}</strong>
+                            <small>{item.section}</small>
+                          </span>
+                        </button>
+                      )
+                    })
+                  ) : (
+                    <div className="dashboard-search-results__empty">
+                      No pages match that search.
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </form>
           </div>
 
           <div className="dashboard-header__actions">

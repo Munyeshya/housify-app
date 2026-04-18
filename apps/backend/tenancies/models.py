@@ -13,6 +13,10 @@ class TenancyStatus(models.TextChoices):
     TERMINATED = "terminated", "Terminated"
 
 
+OPEN_TENANCY_STATUSES = {TenancyStatus.PENDING, TenancyStatus.ACTIVE}
+CLOSED_TENANCY_STATUSES = {TenancyStatus.COMPLETED, TenancyStatus.TERMINATED}
+
+
 class Tenancy(models.Model):
     landlord = models.ForeignKey(
         LandlordProfile,
@@ -75,6 +79,12 @@ class Tenancy(models.Model):
             raise ValidationError("Move-out date cannot be earlier than start date.")
 
     def save(self, *args, **kwargs):
+        previous_status = None
+        if self.pk:
+            previous_status = (
+                type(self).objects.filter(pk=self.pk).values_list("status", flat=True).first()
+            )
+
         self.full_clean()
         super().save(*args, **kwargs)
 
@@ -86,6 +96,13 @@ class Tenancy(models.Model):
             self.property.status = PropertyStatus.AVAILABLE
 
         self.property.save(update_fields=["status", "updated_at"])
+
+        if previous_status in OPEN_TENANCY_STATUSES and self.status in CLOSED_TENANCY_STATUSES:
+            has_remaining_open_tenancy = self.tenant.tenancies.filter(
+                status__in=OPEN_TENANCY_STATUSES
+            ).exists()
+            if not has_remaining_open_tenancy:
+                self.tenant.rotate_tenant_identifier()
 
     def __str__(self):
         return f"{self.tenant.user.full_name} - {self.property.title}"

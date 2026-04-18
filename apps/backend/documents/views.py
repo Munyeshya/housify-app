@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, permissions, status
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,6 +29,7 @@ from security.services import log_security_event
 
 class TenantLegalDocumentListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_queryset(self):
         tenant = get_authenticated_tenant(self.request)
@@ -46,7 +48,7 @@ class TenantLegalDocumentListCreateView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=payload)
         serializer.is_valid(raise_exception=True)
         document = serializer.save()
-        response_serializer = TenantLegalDocumentSerializer(document)
+        response_serializer = TenantLegalDocumentSerializer(document, context=self.get_serializer_context())
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -85,7 +87,10 @@ class TenantLegalDocumentAccessView(APIView):
                     "viewer_role": request.user.role,
                 },
             )
-            return Response(TenantLegalDocumentSerializer(document).data, status=status.HTTP_200_OK)
+            return Response(
+                TenantLegalDocumentSerializer(document, context={"request": request}).data,
+                status=status.HTTP_200_OK,
+            )
         elif request.user.role == "landlord":
             landlord = get_authenticated_landlord(request)
             payload["landlord"] = landlord.id
@@ -115,7 +120,10 @@ class TenantLegalDocumentAccessView(APIView):
                 "viewer_role": request.user.role,
             },
         )
-        return Response(TenantLegalDocumentSerializer(document).data, status=status.HTTP_200_OK)
+        return Response(
+            TenantLegalDocumentSerializer(document, context={"request": request}).data,
+            status=status.HTTP_200_OK,
+        )
 
 
 class PlatformDocumentVerificationAccessView(APIView):

@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from documents.models import TenantLegalDocument
+from documents.models import LegalDocumentType, TenantLegalDocument
 
 from .models import AgentProfile, AgentType, LandlordProfile, TenantProfile, User, UserRole
 
@@ -66,9 +66,9 @@ class LandlordRegistrationSerializer(serializers.ModelSerializer):
 
 class TenantRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
-    legal_id_type = serializers.CharField(max_length=100, allow_blank=True, required=False)
+    legal_id_type = serializers.ChoiceField(choices=LegalDocumentType.choices, allow_blank=True, required=False)
     legal_id_number = serializers.CharField(max_length=100, allow_blank=True, required=False)
-    legal_id_document_url = serializers.URLField(allow_blank=True, required=False)
+    legal_id_document_url = serializers.CharField(allow_blank=True, required=False)
 
     class Meta:
         model = User

@@ -30,3 +30,12 @@ web-build/
 Thumbs.db
 .idea/
 .vscode/
+
+# Runtime uploads
+apps/backend/media/
+
+# Map data
+apps/web/public/geojson/
+
+# Embedded reference repos
+grarage-management-frontend/

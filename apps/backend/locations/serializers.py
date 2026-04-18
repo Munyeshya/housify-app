@@ -58,8 +58,14 @@ class PropertyMapPinSerializer(serializers.ModelSerializer):
         )
 
     def get_cover_image_url(self, obj):
+        request = self.context.get("request")
         cover_image = obj.images.filter(is_cover=True).first() or obj.images.first()
-        return cover_image.image_url if cover_image else None
+        if not cover_image:
+            return None
+        reference = cover_image.image_reference
+        if request and reference and reference.startswith("/"):
+            return request.build_absolute_uri(reference)
+        return reference
 
     def get_distance_km(self, obj):
         origin = self.context.get("origin")

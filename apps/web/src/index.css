@@ -2288,11 +2288,20 @@ h3 {
 
 .app-shell {
   background: #eef4ef;
+  position: relative;
 }
 
 .app-shell__body {
   grid-template-columns: 272px 1fr;
   min-height: 100vh;
+}
+
+.app-shell__backdrop {
+  background: rgba(11, 15, 12, 0.45);
+  border: 0;
+  inset: 0;
+  position: fixed;
+  z-index: 39;
 }
 
 .app-shell__workspace {
@@ -2318,6 +2327,27 @@ h3 {
   min-height: 82px;
 }
 
+.dashboard-header__leading {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.dashboard-header__menu-button {
+  align-items: center;
+  background: var(--color-white);
+  border: 1px solid #d6e3d6;
+  border-radius: 12px;
+  color: var(--color-text);
+  display: none;
+  flex-shrink: 0;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
 .dashboard-header__search {
   align-items: center;
   background: var(--color-white);
@@ -2328,6 +2358,7 @@ h3 {
   gap: 0.55rem;
   max-width: 820px;
   min-height: 44px;
+  position: relative;
   padding: 0 0.9rem;
 }
 
@@ -2338,6 +2369,72 @@ h3 {
   flex: 1;
   font-size: 0.84rem;
   outline: none;
+}
+
+.dashboard-search-results {
+  background: var(--color-white);
+  border: 1px solid #d6e3d6;
+  border-radius: 14px;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.09);
+  display: grid;
+  gap: 0.2rem;
+  left: 0;
+  margin-top: 0.4rem;
+  padding: 0.4rem;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.1rem);
+  z-index: 45;
+}
+
+.dashboard-search-results__item {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.65rem 0.7rem;
+  text-align: left;
+}
+
+.dashboard-search-results__item:hover,
+.dashboard-search-results__item:focus {
+  background: #f4faf4;
+}
+
+.dashboard-search-results__icon {
+  align-items: center;
+  background: #eef9f0;
+  border-radius: 10px;
+  color: var(--color-primary);
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+.dashboard-search-results__copy {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.dashboard-search-results__copy strong {
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.dashboard-search-results__copy small,
+.dashboard-search-results__empty {
+  color: var(--color-text-soft);
+  font-size: 0.72rem;
+}
+
+.dashboard-search-results__empty {
+  padding: 0.7rem 0.8rem;
 }
 
 .dashboard-header__icon-button {
@@ -2726,6 +2823,578 @@ h3 {
   text-align: right;
 }
 
+.tenant-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.tenant-page__header {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.tenant-page__header h2 {
+  font-size: 1.16rem;
+}
+
+.tenant-page__stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.tenant-page__actions,
+.tenant-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.tenant-panel {
+  background: var(--color-white);
+  border: 1px solid #d6e3d6;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(20, 83, 45, 0.05);
+  display: grid;
+  gap: 0.95rem;
+  padding: 1rem 1.05rem;
+}
+
+.tenant-panel__header {
+  align-items: start;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: space-between;
+}
+
+.tenant-panel__header h3 {
+  font-size: 0.98rem;
+}
+
+.tenant-empty-state {
+  background: #fbfdfb;
+  border: 1px dashed #d6e3d6;
+  border-radius: 16px;
+  color: var(--color-text-soft);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  padding: 1rem;
+}
+
+.tenant-data-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tenant-reminder-banner {
+  align-items: center;
+  border-radius: 18px;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  display: flex;
+  gap: 0.9rem;
+  padding: 0.95rem 1rem;
+}
+
+.tenant-reminder-banner strong {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.tenant-reminder-banner p,
+.tenant-field-hint {
+  color: var(--color-text-soft);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  margin: 0.22rem 0 0;
+}
+
+.tenant-reminder-banner__icon {
+  align-items: center;
+  border-radius: 12px;
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.tenant-reminder-banner--warning {
+  background: #fffbea;
+  border: 1px solid #facc15;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.18);
+}
+
+.tenant-reminder-banner--warning .tenant-reminder-banner__icon {
+  background: rgba(250, 204, 21, 0.18);
+  color: #a16207;
+}
+
+.tenant-reminder-banner--danger {
+  background: #fff1f2;
+  border: 1px solid #ef4444;
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.16);
+}
+
+.tenant-reminder-banner--danger .tenant-reminder-banner__icon {
+  background: rgba(239, 68, 68, 0.14);
+  color: #b91c1c;
+}
+
+.tenant-overview-grid,
+.tenant-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.tenant-overview-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.tenant-grid--primary {
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+}
+
+.tenant-overview-card {
+  align-items: center;
+  background: var(--color-white);
+  border: 1px solid #d6e3d6;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(20, 83, 45, 0.05);
+  display: flex;
+  gap: 0.85rem;
+  min-height: 92px;
+  padding: 0.9rem 1rem;
+}
+
+.tenant-overview-card__icon,
+.tenant-record-row__icon {
+  align-items: center;
+  background: #eef9f0;
+  border-radius: 12px;
+  color: var(--color-primary);
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.tenant-overview-card span,
+.tenant-detail-grid article span,
+.tenant-note-card span,
+.tenant-bookmark-card__meta span,
+.tenant-chat-view__summary span {
+  color: var(--color-text-soft);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tenant-overview-card strong,
+.tenant-detail-grid article strong,
+.tenant-bookmark-card__meta strong,
+.tenant-chat-view__summary strong {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.tenant-detail-card,
+.tenant-note-card,
+.tenant-thread-item,
+.tenant-chat-view__summary article {
+  background: #fbfdfb;
+  border: 1px solid #e0ebe1;
+  border-radius: 16px;
+}
+
+.tenant-detail-card {
+  display: grid;
+  gap: 0.95rem;
+  padding: 1rem;
+}
+
+.tenant-detail-card__header {
+  align-items: start;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: space-between;
+}
+
+.tenant-detail-card__header h4,
+.tenant-chat-bubble h4,
+.tenant-bookmark-card__body h3 {
+  margin: 0;
+}
+
+.tenant-detail-card__header h4,
+.tenant-bookmark-card__body h3 {
+  font-size: 0.95rem;
+}
+
+.tenant-detail-card__header p,
+.tenant-note-card p,
+.tenant-bookmark-card__body p,
+.tenant-chat-bubble p {
+  color: var(--color-text-soft);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  margin: 0.2rem 0 0;
+}
+
+.tenant-detail-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tenant-detail-grid article {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.tenant-note-card {
+  padding: 0.9rem 1rem;
+}
+
+.tenant-status-pill {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.4rem 0.65rem;
+  white-space: nowrap;
+}
+
+.tenant-status-pill--active,
+.tenant-status-pill--paid,
+.tenant-status-pill--resolved,
+.tenant-status-pill--verified {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tenant-status-pill--pending,
+.tenant-status-pill--partial,
+.tenant-status-pill--submitted,
+.tenant-status-pill--in_review {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.tenant-status-pill--closed,
+.tenant-status-pill--ended {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.tenant-status-pill--rejected,
+.tenant-status-pill--expired,
+.tenant-status-pill--escalated {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.tenant-record-row {
+  align-items: center;
+  background: #fbfdfb;
+  border: 1px solid #e0ebe1;
+  border-radius: 14px;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 0.8rem;
+}
+
+.tenant-record-row__body {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.tenant-record-row__body strong {
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.tenant-record-row__body span {
+  color: var(--color-text-soft);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.tenant-record-row__meta {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: end;
+  text-align: right;
+}
+
+.tenant-history-card {
+  background: #fbfdfb;
+  border: 1px solid #e0ebe1;
+  border-radius: 16px;
+  display: grid;
+  gap: 0.9rem;
+  padding: 0.95rem;
+}
+
+.tenant-history-card__header {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.tenant-history-card__title {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.tenant-history-card__title strong {
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.tenant-history-card__title span,
+.tenant-history-card__meta article small {
+  color: var(--color-text-soft);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.tenant-history-card__meta {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tenant-history-card__meta article {
+  background: var(--color-white);
+  border: 1px solid #e0ebe1;
+  border-radius: 14px;
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.8rem;
+}
+
+.tenant-history-card__meta article span {
+  color: var(--color-text-soft);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tenant-history-card__meta article strong {
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.tenant-form-grid,
+.tenant-complaint-form {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tenant-form-grid label,
+.tenant-complaint-form label {
+  display: grid;
+  font-size: 0.82rem;
+  font-weight: 600;
+  gap: 0.38rem;
+}
+
+.tenant-form-grid__full,
+.tenant-complaint-form__full {
+  grid-column: 1 / -1;
+}
+
+.tenant-form-grid__full textarea,
+.tenant-complaint-form__full textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.tenant-form-grid__footer {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+}
+
+.tenant-bookmark-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tenant-bookmark-card {
+  background: #fbfdfb;
+  border: 1px solid #e0ebe1;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.tenant-bookmark-card__media {
+  aspect-ratio: 4 / 2.5;
+  background: linear-gradient(180deg, rgba(22, 101, 52, 0.08), rgba(22, 101, 52, 0.16));
+}
+
+.tenant-bookmark-card__media img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.tenant-bookmark-card__placeholder {
+  align-items: center;
+  color: var(--color-text-soft);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.tenant-bookmark-card__body {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+.tenant-bookmark-card__body p {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+}
+
+.tenant-bookmark-card__meta {
+  align-items: end;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tenant-bookmark-card__actions {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tenant-complaints-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.tenant-complaints-thread {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+}
+
+.tenant-thread-list,
+.tenant-chat-messages {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.tenant-thread-item {
+  align-items: center;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0.85rem 0.9rem;
+  text-align: left;
+}
+
+.tenant-thread-item.is-active {
+  border-color: #bfd8c2;
+  box-shadow: 0 8px 18px rgba(20, 83, 45, 0.08);
+}
+
+.tenant-thread-item__body {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.tenant-thread-item__body strong {
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.tenant-thread-item__body span {
+  color: var(--color-text-soft);
+  font-size: 0.76rem;
+}
+
+.tenant-thread-item__meta {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.tenant-chat-view {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.tenant-chat-view__summary {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tenant-chat-view__summary article {
+  align-items: start;
+  display: flex;
+  gap: 0.65rem;
+  padding: 0.85rem 0.9rem;
+}
+
+.tenant-chat-bubble {
+  border-radius: 18px;
+  display: grid;
+  gap: 0.45rem;
+  max-width: 80%;
+  padding: 0.95rem 1rem;
+}
+
+.tenant-chat-bubble--self {
+  background: #e9f7ec;
+  border: 1px solid #cde7d2;
+  justify-self: end;
+}
+
+.tenant-chat-bubble--system {
+  background: #fbfdfb;
+  border: 1px solid #e0ebe1;
+  justify-self: start;
+}
+
+.tenant-chat-bubble__meta {
+  align-items: center;
+  display: flex;
+  gap: 0.55rem;
+  justify-content: space-between;
+}
+
+.tenant-chat-bubble__meta strong {
+  font-size: 0.76rem;
+}
+
+.tenant-chat-bubble__meta span {
+  color: var(--color-text-soft);
+  font-size: 0.7rem;
+  text-align: right;
+}
+
 @keyframes auth-rise-in {
   from {
     opacity: 0;
@@ -2771,8 +3440,18 @@ h3 {
   }
 
   .app-sidebar {
-    border-bottom: 1px solid var(--color-border);
     border-right: 0;
+    inset: 0 auto 0 0;
+    max-width: min(320px, calc(100vw - 2.25rem));
+    position: fixed;
+    transform: translateX(-100%);
+    transition: transform 220ms ease;
+    width: 100%;
+    z-index: 40;
+  }
+
+  .app-sidebar.is-open {
+    transform: translateX(0);
   }
 
   .app-sidebar__panel,
@@ -2780,15 +3459,30 @@ h3 {
     position: static;
   }
 
+  .app-sidebar__panel {
+    min-height: 100vh;
+  }
+
   .tenant-dashboard-grid,
+  .tenant-overview-grid,
+  .tenant-grid--primary,
+  .tenant-bookmark-grid,
+  .tenant-chat-view__summary,
   .tenant-payment-panel__summary,
-  .tenant-payment-form {
+  .tenant-payment-form,
+  .tenant-form-grid,
+  .tenant-complaint-form,
+  .tenant-complaints-thread {
     grid-template-columns: 1fr;
   }
 
   .tenant-payment-form__footer {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .tenant-chat-bubble {
+    max-width: 100%;
   }
 
   .filter-card {
@@ -2902,6 +3596,10 @@ h3 {
     width: 100%;
   }
 
+  .dashboard-header__menu-button {
+    display: inline-flex;
+  }
+
   .dashboard-header__actions {
     align-items: stretch;
     width: 100%;
@@ -2957,6 +3655,14 @@ h3 {
     padding: 1.1rem;
   }
 
+  .app-shell__body {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell__workspace {
+    min-width: 0;
+  }
+
   .map-filter-panel__dialog {
     border-radius: 18px;
     top: 0.5rem;
@@ -2978,17 +3684,38 @@ h3 {
   .dashboard-action-grid,
   .listing-detail__facts,
   .listing-detail__facts-columns,
-  .tenant-dashboard-grid {
+  .tenant-dashboard-grid,
+  .tenant-overview-grid,
+  .tenant-bookmark-grid,
+  .tenant-complaints-thread,
+  .tenant-detail-grid,
+  .tenant-form-grid,
+  .tenant-complaint-form {
     grid-template-columns: 1fr;
   }
 
-  .tenant-activity-row {
+  .tenant-activity-row,
+  .tenant-record-row {
     grid-template-columns: 1fr;
   }
 
-  .tenant-activity-row__meta {
+  .tenant-activity-row__meta,
+  .tenant-record-row__meta {
     justify-items: start;
     text-align: left;
+  }
+
+  .tenant-history-card__header,
+  .tenant-history-card__meta {
+    grid-template-columns: 1fr;
+  }
+
+  .tenant-page__header,
+  .tenant-panel__header,
+  .tenant-detail-card__header,
+  .tenant-chat-bubble__meta {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .listing-detail__facts div:last-child {

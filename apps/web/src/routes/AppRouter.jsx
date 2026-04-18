@@ -10,7 +10,13 @@ import Listings from "../pages/public/Listings"
 import Login from "../pages/auth/Login"
 import Register from "../pages/auth/Register"
 import LandlordDashboard from "../pages/landlord/Dashboard"
+import Bookmarks from "../pages/tenant/Bookmarks"
+import Complaints from "../pages/tenant/Complaints"
 import TenantDashboard from "../pages/tenant/Dashboard"
+import Documents from "../pages/tenant/Documents"
+import Payments from "../pages/tenant/Payments"
+import Profile from "../pages/tenant/Profile"
+import Residence from "../pages/tenant/Residence"
 import AgentDashboard from "../pages/agent/Dashboard"
 import AdminDashboard from "../pages/admin/Dashboard"
 import NotFoundPage from "../pages/shared/NotFoundPage"
@@ -38,6 +44,12 @@ function AppRouter() {
 
             <Route element={<ProtectedRoute allowedRoles={["tenant"]} />}>
               <Route element={<TenantDashboard />} path="/tenant/dashboard" />
+              <Route element={<Residence />} path="/tenant/residence" />
+              <Route element={<Payments />} path="/tenant/payments" />
+              <Route element={<Bookmarks />} path="/tenant/bookmarks" />
+              <Route element={<Complaints />} path="/tenant/complaints" />
+              <Route element={<Documents />} path="/tenant/documents" />
+              <Route element={<Profile />} path="/tenant/profile" />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={["agent"]} />}>

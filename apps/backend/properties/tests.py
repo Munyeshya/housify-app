@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
 
 from accounts.models import LandlordProfile, User, UserRole
@@ -146,6 +147,32 @@ class LandlordPropertyManagementApiTests(TestCase):
 
         self.assertEqual(patch_response.status_code, 200)
         self.assertEqual(PropertyImage.objects.get(id=image_id).caption, "Updated front view")
+
+    def test_landlord_can_upload_property_image_file(self):
+        self.client.force_authenticate(user=self.landlord_user)
+        uploaded_file = SimpleUploadedFile(
+            "property-front.jpg",
+            b"fake property image bytes",
+            content_type="image/jpeg",
+        )
+
+        response = self.client.post(
+            f"/api/v1/properties/manage/{self.property.id}/images/",
+            {
+                "image_file": uploaded_file,
+                "caption": "Uploaded front view",
+                "is_cover": True,
+                "sort_order": 1,
+            },
+            format="multipart",
+        )
+
+        image = PropertyImage.objects.get(property=self.property, caption="Uploaded front view")
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(bool(image.image_file))
+        self.assertTrue(response.data["has_uploaded_file"])
+        self.assertIn("/media/property-images/", response.data["image_url"])
 
     def test_landlord_only_sees_own_managed_properties(self):
         Property.objects.create(

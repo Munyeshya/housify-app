@@ -2,7 +2,15 @@ from django.test import TestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
-from .models import AgentProfile, AgentType, LandlordProfile, TenantProfile, User, UserRole
+from .models import (
+    AgentProfile,
+    AgentType,
+    LandlordProfile,
+    TENANT_IDENTIFIER_ALPHABET,
+    TenantProfile,
+    User,
+    UserRole,
+)
 
 
 class AccountsAuthApiTests(TestCase):
@@ -103,6 +111,12 @@ class AccountsAuthApiTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["tenant_identifier"], str(self.tenant_profile.tenant_identifier))
+
+    def test_tenant_identifier_is_short_and_memorable(self):
+        identifier = self.tenant_profile.tenant_identifier
+
+        self.assertRegex(identifier, r"^TNT-[A-Z2-9]{6}$")
+        self.assertTrue(all(character in f"{TENANT_IDENTIFIER_ALPHABET}-" for character in identifier[4:]))
 
     def test_agent_profile_can_be_updated(self):
         self.client.force_authenticate(user=self.agent_user)

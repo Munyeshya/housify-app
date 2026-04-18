@@ -75,6 +75,9 @@ export const apiEndpoints = {
     suspendUser: (userId) => `/security/users/${userId}/suspend/`,
     reactivateUser: (userId) => `/security/users/${userId}/reactivate/`,
   },
+  tenancies: {
+    list: "/tenancies/",
+  },
 }
 
 export const buildApiUrl = (endpoint) =>

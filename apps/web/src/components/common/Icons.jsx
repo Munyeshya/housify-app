@@ -260,3 +260,35 @@ export function AlertIcon({ className = "ui-icon" }) {
     </svg>
   )
 }
+
+export function HomeIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="m4 11.5 8-6.5 8 6.5" />
+      <path d="M6.5 10.8V19h11v-8.2" />
+      <path d="M10 19v-4.5h4V19" />
+    </svg>
+  )
+}
+
+export function DocumentIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <path d="M8 4.5h6l3 3V19a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 19V6a1.5 1.5 0 0 1 1-1.5Z" />
+      <path d="M14 4.5V8h3" />
+      <path d="M9.5 11.5h5" />
+      <path d="M9.5 14.5h5" />
+      <path d="M9.5 17.5h3.5" />
+    </svg>
+  )
+}
+
+export function UserCircleIcon({ className = "ui-icon" }) {
+  return (
+    <svg {...iconProps(className)}>
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="9.5" r="2.4" />
+      <path d="M7.8 17a5.3 5.3 0 0 1 8.4 0" />
+    </svg>
+  )
+}

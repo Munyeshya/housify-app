@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
 from rest_framework.decorators import action
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
@@ -152,6 +153,7 @@ class LandlordPropertyViewSet(ModelViewSet):
 
 class PropertyImageListCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get(self, request, property_id):
         landlord = get_authenticated_landlord(request)
@@ -160,7 +162,10 @@ class PropertyImageListCreateView(APIView):
             id=property_id,
             landlord=landlord,
         )
-        return Response(PropertyImageSerializer(property_obj.images.all(), many=True).data, status=status.HTTP_200_OK)
+        return Response(
+            PropertyImageSerializer(property_obj.images.all(), many=True, context={"request": request}).data,
+            status=status.HTTP_200_OK,
+        )
 
     def post(self, request, property_id):
         landlord = get_authenticated_landlord(request)
@@ -168,11 +173,15 @@ class PropertyImageListCreateView(APIView):
         serializer = PropertyImageCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         image = serializer.save(property=property_obj)
-        return Response(PropertyImageSerializer(image).data, status=status.HTTP_201_CREATED)
+        return Response(
+            PropertyImageSerializer(image, context={"request": request}).data,
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class PropertyImageDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def patch(self, request, image_id):
         landlord = get_authenticated_landlord(request)
@@ -184,7 +193,10 @@ class PropertyImageDetailView(APIView):
         serializer = PropertyImageUpdateSerializer(image, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(PropertyImageSerializer(image).data, status=status.HTTP_200_OK)
+        return Response(
+            PropertyImageSerializer(image, context={"request": request}).data,
+            status=status.HTTP_200_OK,
+        )
 
     def delete(self, request, image_id):
         landlord = get_authenticated_landlord(request)

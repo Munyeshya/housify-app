@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { toast } from "react-hot-toast"
 import { dashboardsApi, paymentsApi } from "../../services/api"
 import { getPaginationMeta, unwrapResults } from "../../services/api/response"
@@ -13,7 +13,8 @@ import {
   DashboardSnapshotGrid,
   DashboardStatGrid,
 } from "../../components/dashboard/DashboardBlocks"
-import { AlertIcon, CreditCardIcon, EyeIcon, WalletIcon } from "../../components/common/Icons"
+import { getPaymentReminderDetails } from "../../components/tenant/TenantWorkspaceBlocks"
+import { AlertIcon, CreditCardIcon, WalletIcon } from "../../components/common/Icons"
 
 const paymentMethodOptions = [
   { label: "Mobile money", value: "mobile_money" },
@@ -88,6 +89,7 @@ function TenantDashboard() {
     })[0]
 
   const recentPayments = payments.slice(0, 5)
+  const paymentReminder = useMemo(() => getPaymentReminderDetails(payableRent), [payableRent])
 
   function handlePaymentFieldChange(event) {
     const { name, value } = event.target
@@ -174,6 +176,24 @@ function TenantDashboard() {
           ]}
         />
       </DashboardSection>
+
+      {paymentReminder ? (
+        <section
+          className={
+            paymentReminder.tone === "danger"
+              ? "tenant-reminder-banner tenant-reminder-banner--danger"
+              : "tenant-reminder-banner tenant-reminder-banner--warning"
+          }
+        >
+          <div className="tenant-reminder-banner__icon">
+            <AlertIcon className="ui-icon" />
+          </div>
+          <div>
+            <strong>{paymentReminder.title}</strong>
+            <p>{paymentReminder.message}</p>
+          </div>
+        </section>
+      ) : null}
 
       <section className="tenant-dashboard-grid">
         <article className="tenant-payment-panel">

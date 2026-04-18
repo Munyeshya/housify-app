@@ -35,9 +35,30 @@ def resolve_property_location_fields(attrs, instance=None):
 
 
 class PropertyImageSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+    image_name = serializers.SerializerMethodField()
+    has_uploaded_file = serializers.SerializerMethodField()
+
     class Meta:
         model = PropertyImage
-        fields = ("id", "image_url", "caption", "is_cover", "sort_order")
+        fields = ("id", "image_url", "image_name", "has_uploaded_file", "caption", "is_cover", "sort_order")
+
+    def get_image_url(self, obj):
+        reference = obj.image_reference
+        request = self.context.get("request")
+        if request and reference and reference.startswith("/"):
+            return request.build_absolute_uri(reference)
+        return reference
+
+    def get_image_name(self, obj):
+        if obj.image_file:
+            return obj.image_file.name.rsplit("/", 1)[-1]
+        if obj.image_url:
+            return obj.image_url.rsplit("/", 1)[-1]
+        return ""
+
+    def get_has_uploaded_file(self, obj):
+        return bool(obj.image_file)
 
 
 class PortfolioSerializer(serializers.ModelSerializer):
@@ -96,7 +117,7 @@ class PropertyListSerializer(serializers.ModelSerializer):
         cover_image = obj.images.filter(is_cover=True).first() or obj.images.first()
         if not cover_image:
             return None
-        return PropertyImageSerializer(cover_image).data
+        return PropertyImageSerializer(cover_image, context=self.context).data
 
 
 class PropertyDetailSerializer(serializers.ModelSerializer):
@@ -209,7 +230,7 @@ class LandlordPropertyListSerializer(serializers.ModelSerializer):
         cover_image = obj.images.filter(is_cover=True).first() or obj.images.first()
         if not cover_image:
             return None
-        return PropertyImageSerializer(cover_image).data
+        return PropertyImageSerializer(cover_image, context=self.context).data
 
 
 class PropertyCreateUpdateSerializer(serializers.ModelSerializer):
@@ -260,12 +281,65 @@ class PropertyPublishSerializer(serializers.Serializer):
 
 
 class PropertyImageCreateSerializer(serializers.ModelSerializer):
+    image_file = serializers.FileField(required=False, allow_null=True)
+    image_url = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = PropertyImage
-        fields = ("image_url", "caption", "is_cover", "sort_order")
+        fields = ("image_url", "image_file", "caption", "is_cover", "sort_order")
+
+    def validate(self, attrs):
+        has_image_url = bool(attrs.get("image_url"))
+        has_image_file = bool(attrs.get("image_file"))
+
+        if has_image_url and has_image_file:
+            raise serializers.ValidationError("Provide either an image URL or an image file, not both.")
+
+        if not has_image_url and not has_image_file:
+            raise serializers.ValidationError("Provide an image URL or upload an image file.")
+
+        return attrs
+
+    def create(self, validated_data):
+        incoming_file = validated_data.get("image_file")
+        incoming_url = validated_data.get("image_url")
+        if incoming_file is not None:
+            validated_data["image_url"] = ""
+        elif incoming_url is not None:
+            validated_data["image_file"] = None
+        return super().create(validated_data)
 
 
 class PropertyImageUpdateSerializer(serializers.ModelSerializer):
+    image_file = serializers.FileField(required=False, allow_null=True)
+    image_url = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = PropertyImage
-        fields = ("caption", "is_cover", "sort_order")
+        fields = ("image_url", "image_file", "caption", "is_cover", "sort_order")
+
+    def validate(self, attrs):
+        has_image_url = bool(attrs.get("image_url"))
+        has_image_file = bool(attrs.get("image_file"))
+
+        if has_image_url and has_image_file:
+            raise serializers.ValidationError("Provide either an image URL or an image file, not both.")
+
+        if not has_image_url and not has_image_file and not self.instance.image_reference:
+            raise serializers.ValidationError("Provide an image URL or upload an image file.")
+
+        return attrs
+
+    def update(self, instance, validated_data):
+        incoming_file = validated_data.get("image_file")
+        incoming_url = validated_data.get("image_url")
+
+        if incoming_file is not None and instance.image_file:
+            instance.image_file.delete(save=False)
+            validated_data["image_url"] = ""
+        elif incoming_url is not None:
+            if instance.image_file:
+                instance.image_file.delete(save=False)
+            validated_data["image_file"] = None
+
+        return super().update(instance, validated_data)

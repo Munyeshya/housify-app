@@ -155,7 +155,7 @@ class TenantHistoryApiTests(TestCase):
             "/api/v1/history/lookup/",
             {
                 "landlord": self.landlord.id,
-                "tenant_identifier": "12345678-1234-1234-1234-123456789012",
+                "tenant_identifier": "TNT-XXXXXX",
             },
             format="json",
         )

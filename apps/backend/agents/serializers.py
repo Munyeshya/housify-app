@@ -118,7 +118,7 @@ class PropertyAgentAssignmentCreateSerializer(serializers.ModelSerializer):
 
 class ManagedTenantSerializer(serializers.ModelSerializer):
     tenant_name = serializers.CharField(source="tenant.user.full_name", read_only=True)
-    tenant_identifier = serializers.UUIDField(source="tenant.tenant_identifier", read_only=True)
+    tenant_identifier = serializers.CharField(source="tenant.tenant_identifier", read_only=True)
     legal_id_type = serializers.SerializerMethodField()
     legal_id_number = serializers.SerializerMethodField()
     legal_id_document_url = serializers.SerializerMethodField()

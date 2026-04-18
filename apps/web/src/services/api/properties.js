@@ -59,9 +59,15 @@ export const propertiesApi = {
     return apiClient.get(apiEndpoints.properties.landlordImages(propertyId))
   },
   createPropertyImage(propertyId, payload) {
+    if (payload instanceof FormData) {
+      return apiClient.post(apiEndpoints.properties.landlordImages(propertyId), payload)
+    }
     return apiClient.post(apiEndpoints.properties.landlordImages(propertyId), payload)
   },
   updatePropertyImage(imageId, payload) {
+    if (payload instanceof FormData) {
+      return apiClient.patch(apiEndpoints.properties.imageDetail(imageId), payload)
+    }
     return apiClient.patch(apiEndpoints.properties.imageDetail(imageId), payload)
   },
   deletePropertyImage(imageId) {

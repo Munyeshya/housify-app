@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
 
 from accounts.models import AgentProfile, AgentType, LandlordProfile, TenantProfile, User, UserRole
@@ -93,6 +94,34 @@ class DocumentsApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(TenantLegalDocument.objects.count(), 1)
         self.assertEqual(self.tenant.legal_id_document_url, "https://example.com/legal-id.pdf")
+
+    def test_tenant_can_upload_legal_document_file(self):
+        self.client.force_authenticate(user=self.tenant.user)
+        uploaded_file = SimpleUploadedFile(
+            "tenant-id.pdf",
+            b"%PDF-1.4 test tenant legal id file",
+            content_type="application/pdf",
+        )
+
+        response = self.client.post(
+            "/api/v1/documents/legal-id/",
+            {
+                "document_type": "National ID",
+                "document_number": "1199980012345678",
+                "document_file": uploaded_file,
+                "issuing_country": "Rwanda",
+                "status": LegalDocumentStatus.SUBMITTED,
+            },
+            format="multipart",
+        )
+
+        self.tenant.refresh_from_db()
+        document = TenantLegalDocument.objects.get(tenant=self.tenant)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(bool(document.document_file))
+        self.assertTrue(self.tenant.legal_id_document_url.startswith("/media/legal-documents/"))
+        self.assertIn("/media/legal-documents/", response.data["document_url"])
 
     def test_landlord_can_view_document_for_current_occupant(self):
         TenantLegalDocument.objects.create(

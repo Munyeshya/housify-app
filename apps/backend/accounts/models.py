@@ -1,8 +1,7 @@
-import uuid
-
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.utils.crypto import get_random_string
 
 
 class UserRole(models.TextChoices):
@@ -15,6 +14,16 @@ class UserRole(models.TextChoices):
 class AgentType(models.TextChoices):
     PRIVATE = "private", "Private"
     PUBLIC = "public", "Public"
+
+
+TENANT_IDENTIFIER_PREFIX = "TNT"
+TENANT_IDENTIFIER_LENGTH = 6
+TENANT_IDENTIFIER_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+
+
+def generate_tenant_identifier():
+    suffix = get_random_string(TENANT_IDENTIFIER_LENGTH, allowed_chars=TENANT_IDENTIFIER_ALPHABET)
+    return f"{TENANT_IDENTIFIER_PREFIX}-{suffix}"
 
 
 class UserManager(BaseUserManager):
@@ -74,10 +83,29 @@ class LandlordProfile(models.Model):
 
 class TenantProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="tenant_profile")
-    tenant_identifier = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    tenant_identifier = models.CharField(max_length=10, unique=True, editable=False, blank=True)
     legal_id_type = models.CharField(max_length=100, blank=True)
     legal_id_number = models.CharField(max_length=100, blank=True)
-    legal_id_document_url = models.URLField(blank=True)
+    legal_id_document_url = models.CharField(max_length=500, blank=True)
+
+    @classmethod
+    def generate_unique_tenant_identifier(cls):
+        for _ in range(32):
+            candidate = generate_tenant_identifier()
+            if not cls.objects.filter(tenant_identifier=candidate).exists():
+                return candidate
+        raise RuntimeError("Could not generate a unique tenant identifier.")
+
+    def rotate_tenant_identifier(self, *, save=True):
+        self.tenant_identifier = self.generate_unique_tenant_identifier()
+        if save:
+            self.save(update_fields=["tenant_identifier"])
+        return self.tenant_identifier
+
+    def save(self, *args, **kwargs):
+        if not self.tenant_identifier:
+            self.tenant_identifier = self.generate_unique_tenant_identifier()
+        super().save(*args, **kwargs)
 
     @property
     def has_legal_id_document(self):
@@ -85,7 +113,7 @@ class TenantProfile(models.Model):
             return True
 
         try:
-            return bool(self.legal_document.document_url)
+            return bool(self.legal_document.document_reference)
         except ObjectDoesNotExist:
             return False
 

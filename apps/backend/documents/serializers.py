@@ -2,12 +2,20 @@ from rest_framework import serializers
 
 from accounts.models import AgentProfile, LandlordProfile, TenantProfile
 
-from .models import LandlordDocumentVerificationAccess, TenantLegalDocument
+from .models import (
+    LandlordDocumentVerificationAccess,
+    LegalDocumentStatus,
+    LegalDocumentType,
+    TenantLegalDocument,
+)
 
 
 class TenantLegalDocumentSerializer(serializers.ModelSerializer):
     tenant_name = serializers.CharField(source="tenant.user.full_name", read_only=True)
-    tenant_identifier = serializers.UUIDField(source="tenant.tenant_identifier", read_only=True)
+    tenant_identifier = serializers.CharField(source="tenant.tenant_identifier", read_only=True)
+    document_url = serializers.SerializerMethodField()
+    document_name = serializers.SerializerMethodField()
+    has_uploaded_file = serializers.SerializerMethodField()
 
     class Meta:
         model = TenantLegalDocument
@@ -19,6 +27,8 @@ class TenantLegalDocumentSerializer(serializers.ModelSerializer):
             "document_type",
             "document_number",
             "document_url",
+            "document_name",
+            "has_uploaded_file",
             "issuing_country",
             "status",
             "expires_on",
@@ -27,9 +37,29 @@ class TenantLegalDocumentSerializer(serializers.ModelSerializer):
             "updated_at",
         )
 
+    def get_document_url(self, obj):
+        reference = obj.document_reference
+        request = self.context.get("request")
+        if request and reference and reference.startswith("/"):
+            return request.build_absolute_uri(reference)
+        return reference
+
+    def get_document_name(self, obj):
+        if obj.document_file:
+            return obj.document_file.name.rsplit("/", 1)[-1]
+        if obj.document_url:
+            return obj.document_url.rsplit("/", 1)[-1]
+        return ""
+
+    def get_has_uploaded_file(self, obj):
+        return bool(obj.document_file)
+
 
 class TenantLegalDocumentUpsertSerializer(serializers.ModelSerializer):
     tenant = serializers.PrimaryKeyRelatedField(queryset=TenantProfile.objects.select_related("user"))
+    document_type = serializers.ChoiceField(choices=LegalDocumentType.choices)
+    document_file = serializers.FileField(required=False, allow_null=True)
+    document_url = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = TenantLegalDocument
@@ -38,26 +68,75 @@ class TenantLegalDocumentUpsertSerializer(serializers.ModelSerializer):
             "document_type",
             "document_number",
             "document_url",
+            "document_file",
             "issuing_country",
             "status",
             "expires_on",
             "notes",
         )
 
+    def validate(self, attrs):
+        tenant = attrs["tenant"]
+        existing_document = TenantLegalDocument.objects.filter(tenant=tenant).first()
+        has_document_url = bool(attrs.get("document_url"))
+        has_document_file = bool(attrs.get("document_file"))
+
+        if has_document_url and has_document_file:
+            raise serializers.ValidationError("Provide either a document URL or a document file, not both.")
+
+        if not has_document_url and not has_document_file and not existing_document:
+            raise serializers.ValidationError("Provide a document URL or upload a document file.")
+
+        return attrs
+
     def create(self, validated_data):
         tenant = validated_data["tenant"]
-        instance, _ = TenantLegalDocument.objects.update_or_create(
-            tenant=tenant,
-            defaults={
-                "document_type": validated_data["document_type"],
-                "document_number": validated_data["document_number"],
-                "document_url": validated_data["document_url"],
-                "issuing_country": validated_data.get("issuing_country", "Rwanda"),
-                "status": validated_data.get("status"),
-                "expires_on": validated_data.get("expires_on"),
-                "notes": validated_data.get("notes", ""),
-            },
-        )
+        existing_document = TenantLegalDocument.objects.filter(tenant=tenant).first()
+        incoming_file = validated_data.get("document_file")
+        incoming_url = validated_data.get("document_url")
+
+        if existing_document and incoming_file and existing_document.document_file:
+            existing_document.document_file.delete(save=False)
+        if existing_document and incoming_url and existing_document.document_file:
+            existing_document.document_file.delete(save=False)
+
+        defaults = {
+            "document_type": validated_data["document_type"],
+            "document_number": validated_data["document_number"],
+            "document_url": (
+                incoming_url
+                if incoming_url is not None
+                else (existing_document.document_url if existing_document else "")
+            ),
+            "document_file": (
+                incoming_file
+                if incoming_file is not None
+                else (existing_document.document_file if existing_document else None)
+            ),
+            "issuing_country": validated_data.get(
+                "issuing_country",
+                existing_document.issuing_country if existing_document else "Rwanda",
+            ),
+            "status": validated_data.get(
+                "status",
+                existing_document.status if existing_document else LegalDocumentStatus.SUBMITTED,
+            ),
+            "expires_on": validated_data.get(
+                "expires_on",
+                existing_document.expires_on if existing_document else None,
+            ),
+            "notes": validated_data.get(
+                "notes",
+                existing_document.notes if existing_document else "",
+            ),
+        }
+
+        if incoming_file is not None:
+            defaults["document_url"] = ""
+        elif incoming_url is not None:
+            defaults["document_file"] = None
+
+        instance, _ = TenantLegalDocument.objects.update_or_create(tenant=tenant, defaults=defaults)
         return instance
 
 

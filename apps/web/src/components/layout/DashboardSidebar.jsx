@@ -1,56 +1,13 @@
 import { NavLink } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
-import {
-  AlertIcon,
-  BuildingIcon,
-  CreditCardIcon,
-  GridIcon,
-  ShieldIcon,
-  UsersIcon,
-} from "../common/Icons"
+import { getDashboardSections } from "./dashboardNavigation"
 
-const roleOverviewLinks = {
-  admin: [
-    { icon: GridIcon, label: "Admin dashboard", to: "/admin/dashboard" },
-    { icon: ShieldIcon, label: "Security overview" },
-    { icon: UsersIcon, label: "Verification access" },
-  ],
-  agent: [
-    { icon: GridIcon, label: "Agent dashboard", to: "/agent/dashboard" },
-    { icon: BuildingIcon, label: "Managed properties" },
-    { icon: AlertIcon, label: "Complaints watch" },
-  ],
-  landlord: [
-    { icon: GridIcon, label: "Landlord dashboard", to: "/landlord/dashboard" },
-    { icon: BuildingIcon, label: "Portfolio activity" },
-    { icon: CreditCardIcon, label: "Rent collection" },
-  ],
-  tenant: [
-    { icon: GridIcon, label: "Tenant dashboard", to: "/tenant/dashboard" },
-    { icon: CreditCardIcon, label: "Rent payments" },
-    { icon: AlertIcon, label: "Complaint status" },
-  ],
-}
-
-function DashboardSidebar() {
+function DashboardSidebar({ isOpen = false, onClose }) {
   const { user } = useAuth()
-  const sections = [
-    {
-      title: "Overview",
-      items: roleOverviewLinks[user?.role] || [],
-    },
-    {
-      title: "Explore",
-      items: [
-        { icon: BuildingIcon, label: "All listings", to: "/listings" },
-        { icon: UsersIcon, label: "About Housify", to: "/about" },
-        { icon: AlertIcon, label: "Contact", to: "/contact" },
-      ],
-    },
-  ]
+  const sections = getDashboardSections(user?.role)
 
   return (
-    <aside className="app-sidebar">
+    <aside className={isOpen ? "app-sidebar is-open" : "app-sidebar"}>
       <div className="app-sidebar__panel">
         <div className="app-sidebar__brand">
           <span className="app-sidebar__brand-mark">H</span>
@@ -81,6 +38,7 @@ function DashboardSidebar() {
                     className={({ isActive }) =>
                       isActive ? "app-sidebar__link is-active" : "app-sidebar__link"
                     }
+                    onClick={onClose}
                     to={item.to}
                   >
                     {Icon ? <Icon className="ui-icon" /> : null}

@@ -25,11 +25,20 @@ class BookmarkedPropertySerializer(serializers.ModelSerializer):
         )
 
     def get_cover_image_url(self, obj):
+        request = self.context.get("request")
         cover_image = next((image for image in obj.images.all() if image.is_cover), None)
         if cover_image:
-            return cover_image.image_url
+            reference = cover_image.image_reference
+            if request and reference and reference.startswith("/"):
+                return request.build_absolute_uri(reference)
+            return reference
         first_image = next(iter(obj.images.all()), None)
-        return first_image.image_url if first_image else None
+        if not first_image:
+            return None
+        reference = first_image.image_reference
+        if request and reference and reference.startswith("/"):
+            return request.build_absolute_uri(reference)
+        return reference
 
 
 class PropertyBookmarkSerializer(serializers.ModelSerializer):

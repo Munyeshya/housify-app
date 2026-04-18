@@ -13,6 +13,11 @@ class LegalDocumentStatus(models.TextChoices):
     EXPIRED = "expired", "Expired"
 
 
+class LegalDocumentType(models.TextChoices):
+    NATIONAL_ID = "National ID", "ID"
+    PASSPORT = "Passport", "Passport"
+
+
 class TenantLegalDocument(models.Model):
     tenant = models.OneToOneField(
         TenantProfile,
@@ -21,7 +26,12 @@ class TenantLegalDocument(models.Model):
     )
     document_type = models.CharField(max_length=100)
     document_number = models.CharField(max_length=100)
-    document_url = models.URLField()
+    document_url = models.URLField(blank=True)
+    document_file = models.FileField(
+        upload_to="legal-documents/%Y/%m/%d/",
+        blank=True,
+        null=True,
+    )
     issuing_country = models.CharField(max_length=100, default="Rwanda")
     status = models.CharField(
         max_length=20,
@@ -39,6 +49,17 @@ class TenantLegalDocument(models.Model):
     def clean(self):
         if self.expires_on and self.expires_on.year < 1900:
             raise ValidationError("Expiry year looks invalid.")
+        if not self.document_url and not self.document_file:
+            raise ValidationError("Provide either a document URL or an uploaded document file.")
+
+    @property
+    def document_reference(self):
+        if self.document_file:
+            try:
+                return self.document_file.url
+            except ValueError:
+                return self.document_file.name
+        return self.document_url
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -46,13 +67,16 @@ class TenantLegalDocument(models.Model):
         TenantProfile.objects.filter(pk=self.tenant_id).update(
             legal_id_type=self.document_type,
             legal_id_number=self.document_number,
-            legal_id_document_url=self.document_url,
+            legal_id_document_url=self.document_reference,
         )
         return result
 
     def delete(self, *args, **kwargs):
         tenant_id = self.tenant_id
+        file_field = self.document_file
         result = super().delete(*args, **kwargs)
+        if file_field:
+            file_field.delete(save=False)
         TenantProfile.objects.filter(pk=tenant_id).update(
             legal_id_type="",
             legal_id_number="",

@@ -64,7 +64,7 @@ class TenantHistoryLookupSerializer(serializers.ModelSerializer):
 
 class TenantHistoryLookupCreateSerializer(serializers.Serializer):
     landlord = serializers.PrimaryKeyRelatedField(queryset=LandlordProfile.objects.select_related("user"))
-    tenant_identifier = serializers.UUIDField()
+    tenant_identifier = serializers.CharField(max_length=64)
     lookup_reason = serializers.CharField(max_length=255, allow_blank=True, required=False)
 
     def validate(self, attrs):
@@ -88,7 +88,7 @@ class TenantHistoryLookupCreateSerializer(serializers.Serializer):
 
 class TenantHistorySummarySerializer(serializers.Serializer):
     tenant_name = serializers.CharField()
-    tenant_identifier = serializers.UUIDField()
+    tenant_identifier = serializers.CharField()
     has_legal_id_document = serializers.BooleanField()
     total_tenancies = serializers.IntegerField()
     active_tenancies = serializers.IntegerField()
