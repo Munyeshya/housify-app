@@ -29,7 +29,12 @@ export const roleOverviewLinks = {
       label: "Landlord dashboard",
       to: "/landlord/dashboard",
     },
-    { icon: BuildingIcon, label: "Portfolio activity" },
+    {
+      icon: BuildingIcon,
+      keywords: ["properties", "photos", "images", "portfolio"],
+      label: "Manage properties",
+      to: "/landlord/properties",
+    },
     { icon: CreditCardIcon, label: "Rent collection" },
   ],
   tenant: [

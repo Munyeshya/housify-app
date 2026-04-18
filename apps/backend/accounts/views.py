@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 
 from .access import get_authenticated_agent, get_authenticated_landlord, get_authenticated_tenant
-from .throttles import LoginRateThrottle
+from .throttles import LoginRateThrottle, RegistrationRateThrottle
 from .serializers import (
     AgentRegistrationSerializer,
     AgentProfileSerializer,
@@ -26,6 +26,7 @@ from security.services import log_security_event
 
 class RegistrationResponseMixin:
     permission_classes = [AllowAny]
+    throttle_classes = [RegistrationRateThrottle]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

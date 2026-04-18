@@ -3,6 +3,7 @@ from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from accounts.access import (
@@ -64,6 +65,8 @@ class TenantLegalDocumentDestroyView(APIView):
 
 class TenantLegalDocumentAccessView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "sensitive_write"
 
     def get(self, request):
         payload = request.query_params.copy()
@@ -128,6 +131,8 @@ class TenantLegalDocumentAccessView(APIView):
 
 class PlatformDocumentVerificationAccessView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def get(self, request):
         ensure_platform_admin(request)
@@ -178,6 +183,8 @@ class LandlordDocumentVerificationAccessStatusView(APIView):
 
 class TenantLegalDocumentVerificationView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "sensitive_write"
 
     def post(self, request):
         landlord = get_authenticated_landlord(request)

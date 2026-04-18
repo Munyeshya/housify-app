@@ -273,3 +273,18 @@ The backend now applies two global API conventions:
 - API errors return a normalized shape:
   - `status_code`
   - `errors` as a list of objects with `field`, `detail`, and `code`
+
+## Public Map Boundary Data
+
+Public map boundaries are now resolved from a configurable base URL in the web app:
+
+- `VITE_GEOJSON_BASE_URL`
+
+If this variable is not set, the app falls back to:
+
+- `/geojson/rwanda`
+
+Recommended setup:
+
+- host large GeoJSON and shapefile zip assets outside Git (object storage/CDN or backend static/media endpoint)
+- point `VITE_GEOJSON_BASE_URL` to that hosted location for both local and deployed environments

@@ -1,6 +1,7 @@
 import shp from "shpjs"
+import { webEnv } from "../config/env"
 
-const GEOJSON_BASE = "/geojson/rwanda"
+const GEOJSON_BASE = webEnv.geoJsonBaseUrl
 
 const boundaryCache = new Map()
 

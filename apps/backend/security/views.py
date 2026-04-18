@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from accounts.access import ensure_platform_admin
@@ -25,6 +26,8 @@ User = get_user_model()
 class SecurityEventListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SecurityEventSerializer
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def get_queryset(self):
         ensure_platform_admin(self.request)
@@ -49,6 +52,8 @@ class SecurityEventListView(generics.ListAPIView):
 
 class SecurityFlagListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def get_queryset(self):
         ensure_platform_admin(self.request)
@@ -82,6 +87,8 @@ class SecurityFlagListCreateView(generics.ListCreateAPIView):
 
 class SecurityFlagDecisionView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def post(self, request, flag_id):
         admin_user = ensure_platform_admin(request)
@@ -101,6 +108,8 @@ class SecurityFlagDecisionView(APIView):
 class SecurityManagedUserListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SecurityManagedUserSerializer
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def get_queryset(self):
         ensure_platform_admin(self.request)
@@ -122,6 +131,8 @@ class SecurityManagedUserListView(generics.ListAPIView):
 
 class SecurityUserSuspendView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def post(self, request, user_id):
         admin_user = ensure_platform_admin(request)
@@ -141,6 +152,8 @@ class SecurityUserSuspendView(APIView):
 
 class SecurityUserReactivateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def post(self, request, user_id):
         admin_user = ensure_platform_admin(request)

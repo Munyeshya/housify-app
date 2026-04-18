@@ -10,6 +10,7 @@ import Listings from "../pages/public/Listings"
 import Login from "../pages/auth/Login"
 import Register from "../pages/auth/Register"
 import LandlordDashboard from "../pages/landlord/Dashboard"
+import LandlordProperties from "../pages/landlord/Properties"
 import Bookmarks from "../pages/tenant/Bookmarks"
 import Complaints from "../pages/tenant/Complaints"
 import TenantDashboard from "../pages/tenant/Dashboard"
@@ -40,6 +41,7 @@ function AppRouter() {
           <Route element={<DashboardLayout />}>
             <Route element={<ProtectedRoute allowedRoles={["landlord"]} />}>
               <Route element={<LandlordDashboard />} path="/landlord/dashboard" />
+              <Route element={<LandlordProperties />} path="/landlord/properties" />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={["tenant"]} />}>

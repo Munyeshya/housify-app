@@ -5,6 +5,7 @@ from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from accounts.access import (
@@ -178,6 +179,8 @@ class PaymentAdjustmentListCreateView(generics.ListCreateAPIView):
 
 class PaymentAdjustmentDecisionView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "admin_actions"
 
     def post(self, request, adjustment_id):
         if not is_admin_user(request.user):
@@ -281,6 +284,8 @@ class PaymentIntegritySummaryView(APIView):
 
 class TenantPaymentCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "sensitive_write"
 
     def post(self, request):
         tenant = get_authenticated_tenant(request)
