@@ -288,3 +288,43 @@ Recommended setup:
 
 - host large GeoJSON and shapefile zip assets outside Git (object storage/CDN or backend static/media endpoint)
 - point `VITE_GEOJSON_BASE_URL` to that hosted location for both local and deployed environments
+
+## Recent Implementation Updates
+
+### Landlord Property Media Workspace (Web)
+
+The landlord dashboard now includes a dedicated property management page:
+
+- route: `/landlord/properties`
+- choose a managed property
+- publish or hide property visibility from public listings
+- upload house photos as files (not only URLs)
+- manage photo caption, cover flag, and sort order
+- update and delete property photos
+
+### Backend Auth and Security Hardening
+
+The backend now includes stronger defaults and controls:
+
+- MariaDB strict mode enabled through database `init_command`
+- secure cookie + HTTPS settings controlled by environment flags
+- CSRF trusted origins support
+- global DRF throttling enabled (`anon`, `user`, `scoped`)
+- scoped throttles added for:
+  - registration
+  - sensitive write actions (document verification requests, tenant payment submission)
+  - admin actions (security and verification control endpoints)
+
+### Key Backend Validation Commands
+
+From `apps/backend`:
+
+- `python manage.py migrate`
+- `python manage.py check`
+- `python manage.py test accounts documents payments properties security --verbosity 2`
+
+### Key Web Validation Command
+
+From `apps/web`:
+
+- `npm run build`
