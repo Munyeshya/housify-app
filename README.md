@@ -289,6 +289,52 @@ Recommended setup:
 - host large GeoJSON and shapefile zip assets outside Git (object storage/CDN or backend static/media endpoint)
 - point `VITE_GEOJSON_BASE_URL` to that hosted location for both local and deployed environments
 
+## Rwanda Map Drill-Down Guide
+
+The public map supports hierarchical drill-down for administrative areas:
+
+- District -> Sector -> Cell -> Village
+
+### Architecture
+
+Use lazy-loading for boundaries instead of one massive file. Load only what is needed at the current level.
+
+Suggested hierarchy:
+
+- level 1: `districts` (initial view)
+- level 2: `sectors_{district_id}`
+- level 3: `cells_{sector_id}`
+- level 4: `villages_{cell_id}`
+
+### Frontend Stack
+
+In `apps/web`, map rendering uses React + Leaflet:
+
+- `react-leaflet`
+- `leaflet`
+
+Install in the web app if needed:
+
+- `npm install react-leaflet leaflet`
+
+### Boundary Data Preparation
+
+Recommended workflow:
+
+1. Get official or trusted boundary sources (for example NISR Rwanda or OCHA Humanitarian Data Exchange).
+2. Convert shapefiles to GeoJSON (for example with Mapshaper).
+3. Split by administrative area so drill-down can fetch smaller files.
+4. Host boundary assets outside Git and point `VITE_GEOJSON_BASE_URL` to that location.
+
+Helpful sources:
+
+- https://www.statistics.gov.rw/
+- https://data.humdata.org/dataset/cod-ab-rwa
+
+### React Rendering Note
+
+When changing geometry collections by level, use a changing `key` on the GeoJSON layer so React/Leaflet remounts correctly between area levels.
+
 ## Recent Implementation Updates
 
 ### Landlord Property Media Workspace (Web)
