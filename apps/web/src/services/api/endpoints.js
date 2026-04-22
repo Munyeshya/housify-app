@@ -40,6 +40,16 @@ export const apiEndpoints = {
     lookups: "/history/lookups/",
     lookup: "/history/lookup/",
   },
+  agents: {
+    available: "/agents/available/",
+    private: "/agents/private/",
+    privateDetail: (agentId) => `/agents/private/${agentId}/`,
+    assignments: "/agents/assignments/",
+    revokeAssignment: (assignmentId) => `/agents/assignments/${assignmentId}/revoke/`,
+    managedProperties: (agentId) => `/agents/${agentId}/properties/`,
+    managedPayments: (agentId) => `/agents/${agentId}/payments/`,
+    managedComplaints: (agentId) => `/agents/${agentId}/complaints/`,
+  },
   payments: {
     list: "/payments/",
     tenantSubmit: "/payments/tenant/submit/",

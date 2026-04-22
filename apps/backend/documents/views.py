@@ -12,6 +12,7 @@ from accounts.access import (
     get_authenticated_landlord,
     get_authenticated_tenant,
 )
+from accounts.models import LandlordProfile
 
 from .models import LandlordDocumentVerificationAccess, TenantLegalDocument
 from .serializers import (
@@ -136,7 +137,10 @@ class PlatformDocumentVerificationAccessView(APIView):
 
     def get(self, request):
         ensure_platform_admin(request)
-        queryset = LandlordDocumentVerificationAccess.objects.select_related("landlord__user", "granted_by")
+        queryset = []
+        for landlord in LandlordProfile.objects.select_related("user").all():
+            access, _ = LandlordDocumentVerificationAccess.objects.get_or_create(landlord=landlord)
+            queryset.append(access)
         serializer = LandlordDocumentVerificationAccessSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 export function formatMoney(value, currency = "RWF") {
   const amount = Number(value || 0)
 

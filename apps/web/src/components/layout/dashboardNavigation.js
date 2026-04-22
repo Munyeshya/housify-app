@@ -14,13 +14,39 @@ import {
 export const roleOverviewLinks = {
   admin: [
     { icon: GridIcon, keywords: ["admin", "overview", "dashboard"], label: "Admin dashboard", to: "/admin/dashboard" },
-    { icon: ShieldIcon, label: "Security overview" },
-    { icon: UsersIcon, label: "Verification access" },
+    {
+      icon: ShieldIcon,
+      keywords: ["security", "events", "flags", "users"],
+      label: "Security operations",
+      to: "/admin/security",
+    },
+    {
+      icon: UsersIcon,
+      keywords: ["verification", "documents", "landlord access"],
+      label: "Verification access",
+      to: "/admin/verification",
+    },
   ],
   agent: [
     { icon: GridIcon, keywords: ["agent", "overview", "dashboard"], label: "Agent dashboard", to: "/agent/dashboard" },
-    { icon: BuildingIcon, label: "Managed properties" },
-    { icon: AlertIcon, label: "Complaints watch" },
+    {
+      icon: BuildingIcon,
+      keywords: ["managed properties", "assigned homes"],
+      label: "Managed properties",
+      to: "/agent/properties",
+    },
+    {
+      icon: CreditCardIcon,
+      keywords: ["managed payments", "payments"],
+      label: "Managed payments",
+      to: "/agent/payments",
+    },
+    {
+      icon: AlertIcon,
+      keywords: ["complaints", "issues"],
+      label: "Complaints watch",
+      to: "/agent/complaints",
+    },
   ],
   landlord: [
     {
@@ -35,7 +61,30 @@ export const roleOverviewLinks = {
       label: "Manage properties",
       to: "/landlord/properties",
     },
-    { icon: CreditCardIcon, label: "Rent collection" },
+    {
+      icon: HomeIcon,
+      keywords: ["tenancies", "assignments", "occupancy"],
+      label: "Tenancies",
+      to: "/landlord/tenancies",
+    },
+    {
+      icon: CreditCardIcon,
+      keywords: ["payments", "rent collection"],
+      label: "Rent collection",
+      to: "/landlord/payments",
+    },
+    {
+      icon: AlertIcon,
+      keywords: ["complaints", "issues"],
+      label: "Complaints",
+      to: "/landlord/complaints",
+    },
+    {
+      icon: UsersIcon,
+      keywords: ["agents", "assignments", "private agent"],
+      label: "Agents",
+      to: "/landlord/agents",
+    },
   ],
   tenant: [
     { icon: GridIcon, keywords: ["tenant", "overview", "dashboard"], label: "Tenant dashboard", to: "/tenant/dashboard" },

@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { clearAuthToken, getAuthToken, getCurrentUser, logout } from "../services/api/auth"
 

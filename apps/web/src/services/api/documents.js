@@ -26,4 +26,16 @@ export const documentsApi = {
   deleteTenantLegalDocument(documentId) {
     return apiClient.delete(apiEndpoints.documents.legalIdDetail(documentId))
   },
+  listVerificationAccess() {
+    return apiClient.get(apiEndpoints.documents.verificationAccess)
+  },
+  updateVerificationAccess(payload) {
+    return apiClient.post(apiEndpoints.documents.verificationAccess, payload)
+  },
+  getMyVerificationAccess() {
+    return apiClient.get(apiEndpoints.documents.myVerificationAccess)
+  },
+  verifyTenantDocument(payload) {
+    return apiClient.post(apiEndpoints.documents.verifyTenantDocument, payload)
+  },
 }

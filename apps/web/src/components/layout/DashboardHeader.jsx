@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useMemo, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../../context/AuthContext"
 import { BellIcon, CloseIcon, MenuIcon, SearchIcon } from "../common/Icons"
@@ -15,7 +15,6 @@ const roleLabelMap = {
 function DashboardHeader({ isSidebarOpen = false, onToggleSidebar }) {
   const { signOut, user } = useAuth()
   const navigate = useNavigate()
-  const location = useLocation()
   const [query, setQuery] = useState("")
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const initials = (user?.full_name || user?.email || "HU")
@@ -35,11 +34,6 @@ function DashboardHeader({ isSidebarOpen = false, onToggleSidebar }) {
       .filter((item) => item.matchText.includes(normalizedQuery))
       .slice(0, 6)
   }, [normalizedQuery, searchItems])
-
-  useEffect(() => {
-    setQuery("")
-    setIsSearchFocused(false)
-  }, [location.pathname])
 
   async function handleSignOut() {
     await signOut()

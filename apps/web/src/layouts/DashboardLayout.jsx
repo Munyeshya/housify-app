@@ -1,15 +1,10 @@
-import { useEffect, useState } from "react"
-import { Outlet, useLocation } from "react-router-dom"
+import { useState } from "react"
+import { Outlet } from "react-router-dom"
 import DashboardHeader from "../components/layout/DashboardHeader"
 import DashboardSidebar from "../components/layout/DashboardSidebar"
 
 function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const location = useLocation()
-
-  useEffect(() => {
-    setIsSidebarOpen(false)
-  }, [location.pathname])
 
   return (
     <div className="app-shell">

@@ -13,6 +13,7 @@ User = get_user_model()
 
 
 class AgentIdentitySerializer(serializers.ModelSerializer):
+    profile_id = serializers.IntegerField(source="id", read_only=True)
     id = serializers.IntegerField(source="user.id", read_only=True)
     full_name = serializers.CharField(source="user.full_name", read_only=True)
     email = serializers.CharField(source="user.email", read_only=True)
@@ -21,7 +22,7 @@ class AgentIdentitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AgentProfile
-        fields = ("id", "full_name", "email", "phone_number", "type", "bio")
+        fields = ("profile_id", "id", "full_name", "email", "phone_number", "type", "bio")
 
 
 class PrivateAgentCreateSerializer(serializers.ModelSerializer):

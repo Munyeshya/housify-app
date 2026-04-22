@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 function formatLabel(label) {
   return label.replace(/_/g, " ")
 }
